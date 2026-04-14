@@ -60,7 +60,7 @@ auth.users (Supabase Auth)
 |------|------|------|------|
 | id | uuid | PK | |
 | profile_id | uuid | FK → profiles ON DELETE CASCADE, NOT NULL | |
-| user_id | uuid | FK → auth.users | 已注册则关联 |
+| user_id | uuid | FK → auth.users, NULL | 已注册则关联，未注册为 NULL |
 | invited_email | text | | 邀请邮箱 |
 | display_name | text | | 在家庭中的显示名 |
 | role | text | DEFAULT 'viewer', CHECK in ('admin','editor','viewer') | |
@@ -145,8 +145,22 @@ CREATE POLICY "Profile owner manages family" ON family_members
     )
   );
 
+-- 允许插入 family_members 记录（邀请流程，user_id 可为 NULL）
+CREATE POLICY "Profile owner can invite members" ON family_members
+  FOR INSERT WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.id = family_members.profile_id
+      AND profiles.user_id = auth.uid()
+    )
+  );
+
+-- 允许插入 user_id IS NULL 的记录（未注册用户的邀请）
+CREATE POLICY "Invite unregistered users" ON family_members
+  FOR INSERT WITH CHECK (user_id IS NULL);
+
 CREATE POLICY "Members see own record" ON family_members
-  FOR SELECT USING (user_id = auth.uid());
+  FOR SELECT USING (user_id = auth.uid() OR user_id IS NULL);
 
 -- reminders: 仅本人
 ALTER TABLE reminders ENABLE ROW LEVEL SECURITY;

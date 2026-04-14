@@ -8,23 +8,57 @@
 
 ---
 
-## Sprint 1: 项目基础 + 认证
+## Sprint 0: 项目骨架初始化
 
-### S1.T1 — 项目脚手架初始化
+### S0.T1 — 初始化 Next.js 项目
 - 依赖: 无
 - 文件: 项目根目录
 - 操作:
   1. `pnpm create next-app@latest . --typescript --tailwind --eslint --app --src-dir=false --import-alias="@/*"`
-  2. 安装依赖: `pnpm add @supabase/supabase-js @supabase/ssr`
-  3. 安装开发依赖: `pnpm add -D vitest @testing-library/react @testing-library/jest-dom jsdom`
-  4. 配置 vitest.config.ts
-  5. 配置 path aliases 确认生效
-  6. 更新 .env.local.example (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY placeholder)
-  7. 确保 .gitignore 包含 .env.local
-- 验证: `pnpm dev` 启动无报错, `pnpm test` 可运行
+  2. 初始化 Git（如果尚未初始化）：`git init`，初始 commit
+  3. 确保 .gitignore 包含 .env.local, .next, node_modules
+- 验证: `pnpm dev` 启动无报错，能看到默认 Next.js 页面
 
-### S1.T2 — shadcn/ui 初始化 + 基础组件
-- 依赖: S1.T1
+### S0.T2 — 安装核心依赖
+- 依赖: S0.T1
+- 文件: package.json
+- 操作:
+  1. `pnpm add @supabase/supabase-js @supabase/ssr`
+  2. `pnpm add -D vitest @testing-library/react @testing-library/jest-dom jsdom @testing-library/user-event`
+  3. `pnpm add exifr jszip archiver` (EXIF 提取、ZIP 处理、文件压缩)
+  4. `pnpm add @tanstack/react-virtual` (时间线虚拟滚动)
+  5. `pnpm add lunar-javascript` (农历转换)
+- 验证: `pnpm install` 成功，package.json 包含所有依赖
+
+### S0.T3 — 配置测试环境
+- 依赖: S0.T1
+- 文件: vitest.config.ts, tests/setup.ts
+- 操作:
+  1. 创建 vitest.config.ts，配置 @testing-library/jest-dom
+  2. 创建 tests/setup.ts 配置 React Testing Library
+  3. 创建 tests/unit/.gitkeep 和 tests/e2e/.gitkeep
+  4. 创建测试示例 tests/unit/example.test.ts 确认环境正常
+- 验证: `pnpm test` 可运行且测试通过
+
+### S0.T4 — 配置 Supabase 环境
+- 依赖: S0.T1
+- 文件: .env.local.example, supabase/migrations/001_initial_schema.sql
+- 操作:
+  1. 创建 .env.local.example:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+     ```
+  2. 创建 supabase/migrations/001_initial_schema.sql，包含完整 Schema（profiles, memories, family_members, reminders 表）
+  3. 包含所有 RLS 策略和 Storage bucket 定义
+- 验证: SQL 文件语法正确，migration 文件可被 supabase CLI 读取
+
+---
+
+## Sprint 1: 项目基础 + 认证
+
+### S1.T1 — shadcn/ui 初始化 + 基础组件
+- 依赖: S0.T1
 - 文件: components/ui/
 - 操作:
   1. `pnpm dlx shadcn@latest init` (选 stone 色系, zinc neutral)
@@ -62,7 +96,7 @@
 - 验证: TypeScript 编译通过, 无 any 类型
 
 ### S1.T6 — 注册页面
-- 依赖: S1.T3, S1.T2
+- 依赖: S1.T4, S1.T1
 - 文件: app/(auth)/layout.tsx, app/(auth)/register/page.tsx
 - 操作:
   1. Auth layout: 居中卡片布局, 品牌 logo, 温暖色调背景
@@ -84,7 +118,7 @@
 - 验证: 组件渲染测试; 手动测试登录 → 跳转 dashboard
 
 ### S1.T8 — 主布局框架
-- 依赖: S1.T7, S1.T2
+- 依赖: S1.T6, S1.T1
 - 文件: app/(main)/layout.tsx, components/layout/Sidebar.tsx, components/layout/MobileNav.tsx, components/layout/Header.tsx, components/layout/UserMenu.tsx
 - 操作:
   1. (main) layout: 读取 session, 未登录 redirect
@@ -99,7 +133,7 @@
 ## Sprint 2: 逝者档案 CRUD
 
 ### S2.T1 — ProfileForm 组件
-- 依赖: S1.T5, S1.T2
+- 依赖: S1.T1
 - 文件: components/profile/ProfileForm.tsx
 - 操作:
   1. 表单字段: 姓名(必填), 头像上传, 关系(下拉选择), 物种(人/宠物), 生日, 去世日期, 一句话描述
@@ -110,7 +144,7 @@
 - 验证: 组件渲染测试; 表单校验测试 (姓名为空, 日期矛盾)
 
 ### S2.T2 — 创建档案页面
-- 依赖: S2.T1
+- 依赖: S2.T1, S1.T3
 - 文件: app/(main)/profile/new/page.tsx
 - 操作:
   1. 页面标题: "为 TA 建一个记忆空间"
@@ -146,7 +180,7 @@
 ## Sprint 3: 记忆上传
 
 ### S3.T1 — UploadZone 组件
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: components/upload/UploadZone.tsx
 - 操作:
   1. 拖拽区域 + 点击选择文件
@@ -204,6 +238,17 @@
   4. 上传完成后可继续上传更多, 或跳转时间线
 - 验证: 上传 1 张照片 → Storage 有文件 + DB 有记录; 批量上传 5 个混合文件 → 全部成功
 
+### S3.T6 — DatePicker 组件
+- 依赖: S1.T1
+- 文件: components/upload/DatePicker.tsx
+- 操作:
+  1. 日期输入组件，支持手动选择日期
+  2. 支持精度选择: 精确到日 / 只知道月 / 只知道年 / 不确定
+  3. "不确定"时返回 null，memory_date_precision = 'unknown'
+  4. 批量模式: 可对多个无日期文件统一指定日期
+  5. 嵌入 UploadPage 的文件列表中，每个文件可单独指定日期
+- 验证: 组件测试: 各精度选项正确; 不确定选项返回正确值
+
 ---
 
 ## Sprint 4: 时间线视图 (核心功能)
@@ -220,7 +265,7 @@
 - 验证: 单元测试: 10 条 memories → 正确分组; 筛选生效
 
 ### S4.T2 — TimelineItem 组件
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: components/timeline/TimelineItem.tsx
 - 操作:
   1. 根据 memory.type 渲染不同预览:
@@ -273,7 +318,7 @@
 ## Sprint 5: 素材详情 + 注释
 
 ### S5.T1 — PhotoViewer 组件
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: components/memory/PhotoViewer.tsx
 - 操作:
   1. 全屏照片查看
@@ -283,7 +328,7 @@
 - 验证: 照片正确显示; 缩放流畅
 
 ### S5.T2 — AudioPlayer 组件
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: components/memory/AudioPlayer.tsx
 - 操作:
   1. 自定义音频播放器 (不用浏览器默认)
@@ -293,7 +338,7 @@
 - 验证: 音频播放正常; 波形渲染; 进度拖拽
 
 ### S5.T3 — VideoPlayer 组件
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: components/memory/VideoPlayer.tsx
 - 操作:
   1. HTML5 video + 自定义控件
@@ -302,7 +347,7 @@
 - 验证: 视频播放正常; 全屏可用
 
 ### S5.T4 — TextViewer 组件
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: components/memory/TextViewer.tsx
 - 操作:
   1. 聊天记录格式: 消息气泡样式 (逝者的消息在左, 用户的在右)
@@ -312,7 +357,7 @@
 - 验证: 聊天格式渲染正确; 长文本折叠生效
 
 ### S5.T5 — AnnotationEditor + SourceBadge
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: components/memory/AnnotationEditor.tsx, components/memory/SourceBadge.tsx
 - 操作:
   1. AnnotationEditor: textarea + 保存按钮, 自动保存 (debounce 1s)
@@ -339,7 +384,7 @@
 ## Sprint 6: 家庭协作
 
 ### S6.T1 — InviteDialog 组件
-- 依赖: S1.T2, S1.T4
+- 依赖: S1.T1, S1.T4
 - 文件: components/family/InviteDialog.tsx
 - 操作:
   1. Dialog: 输入邀请人邮箱 (可选) + 选择角色 (查看者/编辑者)
@@ -376,7 +421,7 @@
 ## Sprint 7: 纪念日提醒 + 微信导入
 
 ### S7.T1 — ReminderForm + ReminderList
-- 依赖: S1.T2, S1.T4
+- 依赖: S1.T1, S1.T4
 - 文件: components/reminders/ReminderForm.tsx, components/reminders/ReminderList.tsx, app/(main)/profile/[profileId]/reminders/page.tsx
 - 操作:
   1. ReminderForm: 标题 + 日期 + 循环(一次/每年/农历每年) + 开关
@@ -450,7 +495,7 @@
 - 验证: 导出 ZIP → 解压后文件完整 + metadata.json 正确
 
 ### S8.T3 — 首页 (Landing Page)
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: app/page.tsx
 - 操作:
   1. 未登录: Landing page
@@ -462,7 +507,7 @@
 - 验证: 未登录看到 landing; 已登录跳转 dashboard
 
 ### S8.T4 — 全局 Loading + Error 状态
-- 依赖: S1.T2
+- 依赖: S1.T1
 - 文件: app/(main)/loading.tsx, app/(main)/error.tsx, components/common/*.tsx
 - 操作:
   1. loading.tsx: Skeleton 占位符 (不是简单 spinner)
