@@ -38,11 +38,14 @@ MVP 形态：中文 Web 应用（PWA-ready）。
 - 数据库 migration 文件放在 supabase/migrations/ 目录
 
 ### 测试规则
-- 每个工具函数必须有单元测试
+- 每个工具函数（lib/utils/*）必须有单元测试
+- 每个 Server Action 必须有集成测试
 - 每个页面组件必须有基本渲染测试
 - 测试文件与源文件同目录，命名 *.test.ts(x)
 - 测试先写（TDD），红-绿-重构
 - 禁止修改测试断言来通过测试——修复源码
+- 禁止 mock Supabase client——使用 Supabase 本地开发环境
+- 禁止跳过测试直接提交——pre-commit hook 必须通过
 
 ### Git 规则
 - Commit message 格式: `type(scope): description`
@@ -114,6 +117,198 @@ ego-memory-anchor/
 ├── playwright.config.ts
 └── package.json
 ```
+
+## Testing Pipeline
+
+### 测试分层
+
+| 层级 | 工具 | 覆盖率目标 | 何时写 |
+|------|------|----------|--------|
+| 单元测试 | Vitest + @testing-library/react | 工具函数 100%, Server Actions 80% | 实现前 (TDD) |
+| 集成测试 | Vitest + 真实 Supabase | 核心数据流 | 实现后立即 |
+| E2E | Playwright | 核心用户流程 (5 条) | Sprint 末尾 |
+
+### 测试金字塔
+
+```
+┌─────────────────────────────────────┐
+│     E2E 测试 (Playwright) - 5 条核心流程)     │  10%
+├─────────────────────────────────────┤
+│     集成测试 (Vitest + Supabase 本地)        │  30%
+├─────────────────────────────────────┤
+│     单元测试 (Vitest) — 工具函数 100%       │  60%
+└─────────────────────────────────────┘
+```
+
+### TDD 强制流程
+
+```
+每个工具函数 / Server Action 必须遵循:
+1. RED: 先写测试，定义预期行为（必填）
+2. RUN: 运行测试，确认失败
+3. GREEN: 写最少量代码让测试通过
+4. REFACTOR: 清理代码，测试仍通过
+```
+
+### Pre-commit Hook (ECC)
+
+每次 git commit 前自动执行:
+```bash
+pnpm test --run
+```
+如果测试失败，commit 被阻止。**严禁使用 `--no-verify` 绕过。**
+
+### axe-core 无障碍测试
+
+所有 E2E 测试必须包含无障碍检查:
+```typescript
+import AxeBuilder from '@axe-core/playwright';
+
+test('页面无障碍', async ({ page }) => {
+  await page.goto('/profile/test-profile-id');
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+});
+```
+
+### 测试 Fixtures 目录
+
+```
+tests/
+├── fixtures/                    # 测试数据
+│   ├── sample-photo.jpg       # 真实但无隐私信息
+│   ├── sample-video.mp4       # < 5MB
+│   ├── sample-audio.m4a       # < 1MB
+│   └── wechat-export-sample.txt  # mock 微信导出格式
+├── unit/                      # Vitest 单元测试
+└── e2e/                       # Playwright E2E 测试
+    └── visual/                # 截图基准 (screenshot snapshots)
+```
+
+### Server Action 测试清单
+
+每个 Server Action 必须覆盖以下场景:
+
+| Server Action | 必须测试的场景 |
+|--------------|--------------|
+| `createProfile` | 正常创建 / 姓名为空拒绝 / 未登录 rejection |
+| `updateProfile` | 正常更新 / 无权限 rejection |
+| `deleteProfile` | 正常删除 / 非 owner rejection |
+| `createMemory` | 正常创建 / RLS 隔离 / 批量创建 |
+| `createAnnotation` | 正常添加 / viewer 权限拒绝 |
+| `createInvitation` | 生成链接 / 角色验证 |
+| `acceptInvitation` | 有效 token / 过期 token / 已使用 token |
+
+### Playwright E2E 核心流程 (必须覆盖)
+
+```
+1. 注册 → 登录 → 登出
+2. 创建档案 → 上传照片 → 时间线显示
+3. 添加注释 → 验证持久化
+4. 邀请家人 → 接受邀请 → 共同编辑
+5. 未登录访问受保护页面 → 重定向
+```
+
+### 测试禁止
+
+- ❌ 禁止 mock Supabase client（用 supabase start 本地实例）
+- ❌ 禁止修改测试断言来通过测试
+- ❌ 禁止跳过测试提交
+- ❌ E2E 不测试边界情况（留给单元测试）
+- ❌ 不在测试中 hardcode secrets
+
+## UI Design System
+
+### 设计原则
+- **整体风格**: 温暖、克制、留白充足，参考 Linear.app 的简洁感 + Notion 的温暖感
+- **情感基调**: 安静陪伴，不是科技炫酷
+- **组件库**: 所有 UI 组件使用 shadcn/ui，不从零手写
+
+### shadcn/ui 组件映射
+
+| 用途 | shadcn/ui 组件 | 定制说明 |
+|------|---------------|---------|
+| 按钮 | `Button` | variant: default/secondary/ghost/destructive |
+| 卡片 | `Card` | 加暖色悬浮 shadow-sm hover:shadow-md |
+| 表单输入 | `Input`, `Textarea`, `Select` | — |
+| 确认弹窗 | `AlertDialog` | 删除操作专用 |
+| 通知 | `Toast` (Sonner) | — |
+| 头像 | `Avatar` | — |
+| 标签 | `Badge` | 类型标签用不同颜色 variant |
+| 日期选择 | `Calendar` + `Popover` | 扩展农历支持 |
+| 加载占位 | `Skeleton` | — |
+| 分隔线 | `Separator` | — |
+| 下拉菜单 | `DropdownMenu` | Navbar 用户菜单 |
+| 筛选 Tabs | `Tabs` | 时间线类型筛选 |
+| 弹窗 | `Dialog` | 邀请、上传等 |
+
+### 色彩系统 (CSS Variables in globals.css)
+
+```css
+/* 暖色调色板 — 避免纯黑纯白 */
+--background: 30 20% 98%;        /* 暖白 stone-50 */
+--foreground: 30 10% 15%;         /* 暖黑 stone-900 */
+--muted: 30 15% 94%;             /* 浅暖灰 stone-100 */
+--muted-foreground: 30 10% 45%;  /* 中灰 stone-500 */
+--primary: 25 60% 45%;           /* 暖棕/琥珀 amber-700 */
+--primary-foreground: 30 20% 98%;
+--accent: 30 15% 92%;             /* 淡暖灰 stone-50 */
+--accent-foreground: 30 10% 20%;
+--destructive: 0 72% 51%;        /* 红色 — 仅用于删除 */
+--border: 30 15% 88%;             /* 边框 stone-200 */
+--ring: 25 60% 45%;               /* focus ring 同 primary */
+```
+
+### 字体
+
+- **中文**: system-ui (苹方 / 思源黑体)
+- **英文/数字**: Inter (通过 next/font)
+- **标题**: text-2xl font-semibold tracking-tight
+- **正文**: text-base leading-relaxed
+- **辅助文字**: text-sm text-muted-foreground
+
+### 间距节奏
+
+| 场景 | 间距 |
+|------|------|
+| 页面内边距 | px-4 sm:px-6 lg:px-8 |
+| 卡片内边距 | p-6 (24px) |
+| 卡片间距 | gap-4 sm:gap-6 |
+| 区块间距 | space-y-8 (32px) |
+| 表单字段间距 | space-y-4 |
+| 页面最大宽度 | max-w-4xl mx-auto (时间线), max-w-lg mx-auto (表单) |
+
+### 圆角
+
+- 卡片: rounded-xl
+- 按钮: rounded-lg
+- 输入框: rounded-md
+- 头像: rounded-full
+
+### 阴影
+
+- 卡片悬停: hover:shadow-md transition-shadow
+- 弹窗: shadow-xl
+- **禁止**: shadow-2xl 及更大阴影
+
+### 动效
+
+- 所有过渡: transition-all duration-200 ease-in-out
+- 页面切换: 无动画 (instant)
+- 列表项加载: stagger fade-in (每项延迟 50ms)
+- Toast: 从右上角滑入, 3秒自动消失
+- **禁止**: bounce, shake, spin, scale-bounce 等注意力抢夺型动效
+
+### 空状态设计
+
+居中布局:
+```
+[图标 64px]
+[标题 text-lg]
+[描述 text-sm text-muted-foreground]
+[CTA 按钮]
+```
+文案示例: "这里还没有记忆，你可以随时添加"
 
 ## 关键设计决策记录
 - **为什么 Web 不是 App**: DPM 振荡理论要求用户自由进出，app 打开关闭天然符合；家庭协作零摩擦（分享链接）；迭代速度快

@@ -561,3 +561,89 @@
 每个任务遵循 TDD: 先写测试 → 运行失败 → 实现代码 → 测试通过 → 重构。
 完成一个任务后 commit，message 格式: `feat(scope): S.T - 简短描述`。
 完成整个 Sprint 后，运行全部测试确认无回归。
+
+## Sprint QA 步骤 (每个 Sprint 末尾执行)
+
+完成一个 Sprint 后，必须执行以下 QA 步骤再 commit:
+
+```
+### Sprint-N QA Checklist
+1. $ pnpm test --run          # 全部单元测试通过
+2. $ pnpm test:e2e             # E2E 测试通过 (Playwright 已配置后)
+3. $ pnpm build                # 生产构建成功
+4. git commit "chore(sprint-n): complete sprint n QA"
+```
+
+### 工具函数测试优先级 (必须 TDD)
+
+| 优先级 | 文件 | 测试用例数 | 何时完成 |
+|--------|------|----------|---------|
+| P0 | lib/utils/wechat-parser.ts | 8+ | Sprint 7 前 |
+| P0 | lib/utils/exif.ts | 4+ | Sprint 3 前 |
+| P0 | lib/utils/thumbnail.ts | 3+ | Sprint 3 前 |
+| P1 | lib/utils/date.ts | 4+ | Sprint 7 前 |
+| P1 | lib/utils/file.ts | 3+ | Sprint 3 前 |
+
+### E2E 测试 Fixtures (Sprint 1 末尾前创建)
+
+```
+tests/fixtures/
+├── sample-photo.jpg    # 真实照片，无隐私，< 5MB
+├── sample-video.mp4     # 测试视频，< 5MB
+├── sample-audio.m4a    # 测试音频，< 1MB
+└── wechat-export-sample.txt  # 符合微信导出格式的 mock 数据
+```
+
+### Playwright 截图基准 (Sprint 4 末尾前配置)
+
+```typescript
+// tests/e2e/visual-screenshots.spec.ts
+const keyPages = [
+  { name: 'landing', path: '/' },
+  { name: 'login', path: '/login' },
+  { name: 'dashboard-empty', path: '/dashboard' },
+  { name: 'timeline', path: '/profile/test-id' },
+  { name: 'upload', path: '/profile/test-id/upload' },
+];
+
+for (const page of keyPages) {
+  test(`screenshot: ${page.name}`, async ({ page: p }) => {
+    await p.goto(page.path);
+    await p.setViewportSize({ width: 1440, height: 900 });
+    await p.screenshot({ path: `screenshots/${page.name}-desktop.png`, fullPage: true });
+    await p.setViewportSize({ width: 375, height: 812 });
+    await p.screenshot({ path: `screenshots/${page.name}-mobile.png`, fullPage: true });
+  });
+}
+```
+
+### axe-core 无障碍测试 (E2E 测试必须包含)
+
+每个 E2E spec 文件的每个 test 中:
+```typescript
+const accessibilityResults = await new AxeBuilder({ page }).analyze();
+expect(accessibilityResults.violations).toEqual([]);
+```
+
+### Server Action 测试清单
+
+| Sprint | Server Action | 测试场景 |
+|--------|-------------|---------|
+| Sprint 1 | createProfile | 正常/字段校验/未登录 |
+| Sprint 2 | createMemory | 正常/RLS/批量 |
+| Sprint 3 | createAnnotation | 正常/权限 |
+| Sprint 6 | createInvitation | 生成/角色 |
+| Sprint 6 | acceptInvitation | 有效/过期/已使用 |
+
+## E2E 核心流程 (5 条必须覆盖)
+
+```typescript
+// tests/e2e/core-flows.spec.ts
+
+test('1. 注册 → 登录 → 登出', async ({ page }) => { ... });
+test('2. 创建档案 → 上传照片 → 时间线显示', async ({ page }) => { ... });
+test('3. 添加注释 → 验证持久化', async ({ page }) => { ... });
+test('4. 邀请家人 → 接受邀请 → 共同编辑', async ({ page }) => { ... });
+test('5. 未登录访问 → 重定向', async ({ page }) => { ... });
+```
+

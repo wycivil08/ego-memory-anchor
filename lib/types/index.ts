@@ -140,3 +140,71 @@ export interface MemoryFilters {
     end: string
   }
 }
+
+// Family Member types
+export type FamilyRole = 'admin' | 'editor' | 'viewer'
+
+export const FAMILY_ROLE_LABELS: Record<FamilyRole, string> = {
+  admin: '管理员',
+  editor: '编辑',
+  viewer: '查看',
+}
+
+export interface FamilyMember {
+  id: string
+  profile_id: string
+  user_id: string | null
+  invited_email: string | null
+  display_name: string | null
+  role: FamilyRole
+  invite_token: string | null
+  invited_by: string
+  invited_at: string
+  accepted_at: string | null
+  deleted_at: string | null
+}
+
+export interface FamilyMemberWithUser extends FamilyMember {
+  user_email?: string
+  user_name?: string
+  user_avatar_url?: string
+}
+
+export interface InviteDetails {
+  id: string
+  profile_id: string
+  role: FamilyRole
+  invited_email: string | null
+  invited_at: string
+  profile_name: string
+  profile_avatar_path: string | null
+}
+
+// Reminder types
+export type Recurrence = 'once' | 'yearly' | 'lunar_yearly'
+
+export const RECURRENCE_LABELS: Record<Recurrence, string> = {
+  once: '一次性',
+  yearly: '每年',
+  lunar_yearly: '农历每年',
+}
+
+export interface Reminder {
+  id: string
+  profile_id: string
+  user_id: string
+  title: string
+  reminder_date: string
+  recurrence: Recurrence
+  enabled: boolean
+  created_at: string
+}
+
+export interface CreateReminderInput {
+  profile_id: string
+  title: string
+  reminder_date: string
+  recurrence: Recurrence
+}
+
+export type UpdateReminderInput = Partial<CreateReminderInput>
