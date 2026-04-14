@@ -81,4 +81,4 @@ export interface CreateProfileInput {
   description?: string | null
 }
 
-export interface UpdateProfileInput extends Partial<CreateProfileInput> {}
+export type UpdateProfileInput = Partial<CreateProfileInput>

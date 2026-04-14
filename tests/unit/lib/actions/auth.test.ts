@@ -15,7 +15,7 @@ vi.mocked(createClient).mockResolvedValue({
     signUp: mockSignUp,
     signOut: mockSignOut,
   },
-} as any)
+} as unknown as Awaited<ReturnType<typeof createClient>>)
 
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
@@ -107,8 +107,8 @@ describe('signInWithPassword', () => {
 
     try {
       await signInWithPassword({ error: null, success: false }, formData)
-    } catch (e: any) {
-      expect(e.message).toBe('REDIRECT: testing redirect')
+    } catch (e: unknown) {
+      expect((e as Error).message).toBe('REDIRECT: testing redirect')
     }
   })
 })
@@ -235,8 +235,8 @@ describe('logout', () => {
 
     try {
       await logout()
-    } catch (e: any) {
-      expect(e.message).toBe('REDIRECT: testing redirect')
+    } catch (e: unknown) {
+      expect((e as Error).message).toBe('REDIRECT: testing redirect')
     }
 
     expect(mockSignOut).toHaveBeenCalled()
