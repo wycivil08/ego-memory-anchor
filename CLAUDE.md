@@ -75,37 +75,37 @@ ego-memory-anchor/
 ├── planning/                      # 原始 agent 输出（不编辑）
 │   ├── 6-detailed-plan.md
 │   └── 6-detailed-plan-B.md
-├── src/
-│   ├── app/                      # Next.js App Router pages
-│   │   ├── (auth)/              # Auth routes (login, register, callback)
-│   │   ├── (main)/              # Authenticated routes
-│   │   │   ├── dashboard/       # Profile list
-│   │   │   ├── profile/         # Profile CRUD + timeline + memories
-│   │   │   └── settings/        # User settings
-│   │   ├── page.tsx             # Landing page
-│   │   └── layout.tsx           # Root layout
-│   ├── components/
-│   │   ├── ui/                 # shadcn/ui components
-│   │   ├── timeline/           # Timeline-related components
-│   │   ├── memory/              # Memory display components
-│   │   ├── upload/              # Upload-related components
-│   │   ├── profile/             # Profile components
-│   │   ├── family/              # Family collaboration components
-│   │   └── reminders/           # Reminder components
-│   ├── lib/
-│   │   ├── supabase/           # Supabase client setup
-│   │   ├── actions/            # Server Actions
-│   │   ├── utils/              # Utility functions
-│   │   └── types/              # TypeScript type definitions
-│   └── middleware.ts           # Next.js middleware (auth)
+├── app/                        # Next.js App Router pages (no src/ prefix)
+│   ├── (auth)/                # Auth routes (login, register, callback)
+│   ├── (main)/                # Authenticated routes
+│   │   ├── dashboard/         # Profile list
+│   │   ├── profile/          # Profile CRUD + timeline + memories
+│   │   └── settings/         # User settings
+│   ├── page.tsx              # Landing page
+│   ├── layout.tsx            # Root layout
+│   └── globals.css            # Tailwind base styles
+├── components/                # 应用组件（不在 src/ 下）
+│   ├── ui/                   # shadcn/ui components
+│   ├── timeline/            # Timeline-related components
+│   ├── memory/              # Memory display components
+│   ├── upload/              # Upload-related components
+│   ├── profile/             # Profile components
+│   ├── family/              # Family collaboration components
+│   └── reminders/           # Reminder components
+├── lib/                     # 业务逻辑
+│   ├── supabase/           # Supabase client setup
+│   ├── actions/            # Server Actions
+│   ├── utils/              # Utility functions
+│   └── types/              # TypeScript type definitions
+├── src/                     # 占位目录（保留以备未来扩展）
 ├── supabase/
-│   ├── migrations/             # SQL migrations
-│   └── seed.sql               # Dev seed data
-├── public/                    # Static assets
+│   ├── migrations/          # SQL migrations
+│   └── seed.sql            # Dev seed data
+├── public/                   # Static assets
 │   └── icons/
 ├── tests/
-│   ├── unit/                  # Unit tests
-│   └── e2e/                   # E2E tests
+│   ├── unit/               # Unit tests
+│   └── e2e/                # E2E tests
 ├── .env.local.example
 ├── next.config.ts
 ├── tailwind.config.ts
