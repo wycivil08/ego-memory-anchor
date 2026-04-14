@@ -2,16 +2,7 @@
 
 import { useCallback, useState, useRef } from 'react'
 import type { MemoryType } from '@/lib/types'
-import { validateFile, getMemoryType, formatFileSize } from '@/lib/utils/file'
-
-// File size limits in bytes (matching DESIGN.md 4.1)
-const MAX_FILE_SIZE: Record<MemoryType, number> = {
-  photo: 50 * 1024 * 1024, // 50MB
-  video: 500 * 1024 * 1024, // 500MB
-  audio: 100 * 1024 * 1024, // 100MB
-  text: 50 * 1024 * 1024, // 50MB
-  document: 50 * 1024 * 1024, // 50MB
-}
+import { validateFile, getMemoryType } from '@/lib/utils/file'
 
 // File type validation
 interface FileValidation {
