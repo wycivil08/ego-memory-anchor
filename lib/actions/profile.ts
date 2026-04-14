@@ -86,8 +86,9 @@ export async function createProfile(
   }
 
   // Prepare profile data
-  const profileData: CreateProfileInput = {
+  const profileData = {
     name: name.trim(),
+    user_id: user.id,
     relationship: relationship as CreateProfileInput['relationship'],
     species: species as CreateProfileInput['species'],
     birth_date: birthDate || null,
@@ -259,29 +260,70 @@ export async function getProfiles(): Promise<ProfileWithMemoryCount[]> {
     return []
   }
 
-  // Get profiles owned by user or where user is a family member
-  const { data: profiles, error } = await supabase
+  // Query 1: Get profiles owned by user
+  const { data: ownedProfiles, error: ownedError } = await supabase
     .from('profiles')
     .select(`
       *,
       memories:memories(count)
     `)
     .is('deleted_at', null)
-    .or(`user_id.eq.${user.id},family_members.user_id.eq.${user.id}`)
-    .order('created_at', { ascending: false })
+    .eq('user_id', user.id)
 
-  if (error) {
-    console.error('Error fetching profiles:', error)
+  if (ownedError) {
+    console.error('Error fetching owned profiles:', ownedError)
     return []
   }
 
-  // Transform to include memory_count
-  return (profiles || []).map((profile) => ({
-    ...profile,
-    memory_count: Array.isArray(profile.memories)
-      ? profile.memories[0]?.count || 0
-      : 0,
-  })) as ProfileWithMemoryCount[]
+  // Query 2: Get profile IDs where user is a family member (accepted)
+  const { data: familyMemberships } = await supabase
+    .from('family_members')
+    .select('profile_id')
+    .eq('user_id', user.id)
+    .is('deleted_at', null)
+    .not('accepted_at', 'is', null)
+
+  const familyProfileIds = familyMemberships?.map((m) => m.profile_id) || []
+
+  // Query 3: Get family member profiles (not owned by user)
+  let familyProfiles: ProfileWithMemoryCount[] = []
+  if (familyProfileIds.length > 0) {
+    const { data: fp, error: fpError } = await supabase
+      .from('profiles')
+      .select(`
+        *,
+        memories:memories(count)
+      `)
+      .is('deleted_at', null)
+      .in('id', familyProfileIds)
+      .neq('user_id', user.id)
+
+    if (fpError) {
+      console.error('Error fetching family profiles:', fpError)
+    } else if (fp) {
+      familyProfiles = fp.map((profile) => ({
+        ...profile,
+        memory_count: Array.isArray(profile.memories)
+          ? (profile.memories as unknown as { count: number }[])[0]?.count || 0
+          : 0,
+      })) as ProfileWithMemoryCount[]
+    }
+  }
+
+  // Combine and deduplicate
+  const allProfiles = [...ownedProfiles || [], ...familyProfiles]
+
+  // Transform to include memory_count and sort
+  return allProfiles
+    .map((profile) => ({
+      ...profile,
+      memory_count: Array.isArray(profile.memories)
+        ? (profile.memories as unknown as { count: number }[])[0]?.count || 0
+        : 0,
+    }))
+    .sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    ) as ProfileWithMemoryCount[]
 }
 
 export async function getProfileById(
