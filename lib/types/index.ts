@@ -82,3 +82,54 @@ export interface CreateProfileInput {
 }
 
 export type UpdateProfileInput = Partial<CreateProfileInput>
+
+// Memory types
+export type MemoryType = 'photo' | 'video' | 'audio' | 'text' | 'document'
+
+export type DatePrecision = 'day' | 'month' | 'year' | 'unknown'
+
+export interface Memory {
+  id: string
+  profile_id: string
+  contributor_id: string
+  type: MemoryType
+  file_path: string | null
+  thumbnail_path: string | null
+  content: string | null
+  memory_date: string | null
+  memory_date_precision: DatePrecision
+  tags: string[]
+  annotation: string | null
+  source_label: string
+  exif_data: Record<string, unknown> | null
+  file_size: number | null
+  mime_type: string | null
+  sort_order: number | null
+  created_at: string
+  updated_at: string
+}
+
+export interface CreateMemoryInput {
+  profile_id: string
+  type: MemoryType
+  file_path?: string | null
+  thumbnail_path?: string | null
+  content?: string | null
+  memory_date?: string | null
+  memory_date_precision?: DatePrecision
+  tags?: string[]
+  annotation?: string | null
+  source_label?: string
+  exif_data?: Record<string, unknown> | null
+  file_size?: number | null
+  mime_type?: string | null
+}
+
+export interface MemoryFilters {
+  type?: MemoryType
+  tags?: string[]
+  dateRange?: {
+    start: string
+    end: string
+  }
+}
