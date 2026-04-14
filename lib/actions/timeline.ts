@@ -14,16 +14,11 @@ export async function fetchTimelineDataAction(
   const supabase = await createClient()
 
   // Build query
+  // Note: contributor field joins auth.users which is not accessible via PostgREST
+  // For MVP, we omit contributor info from the query - can be added later via a view
   let query = supabase
     .from('memories')
-    .select(`
-      *,
-      contributor:auth.users!memories_contributor_id_fkey (
-        id,
-        email,
-        user_metadata
-      )
-    `, { count: 'exact' })
+    .select('*', { count: 'exact' })
     .eq('profile_id', profileId)
     .order('memory_date', { ascending: false, nullsFirst: false })
     .order('created_at', { ascending: false })

@@ -67,7 +67,35 @@ export async function uploadThumbnail(
 }
 
 /**
+ * Get a signed URL for a file in Supabase Storage (bucket is private).
+ * Signed URLs expire after 1 hour by default.
+ *
+ * @param bucket - Storage bucket name
+ * @param path - Path within bucket
+ * @param expiresIn - URL expiration time in seconds (default: 3600 = 1 hour)
+ * @returns Signed URL string
+ */
+export async function getSignedUrl(
+  bucket: string,
+  path: string,
+  expiresIn: number = 3600
+): Promise<string> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .createSignedUrl(path, expiresIn)
+
+  if (error || !data) {
+    throw new Error(error?.message ?? 'Failed to create signed URL')
+  }
+
+  return data.signedUrl
+}
+
+/**
  * Get the public URL for a file in Supabase Storage.
+ * Note: Only works for public buckets. For private buckets, use getSignedUrl() instead.
  *
  * @param bucket - Storage bucket name
  * @param path - Path within bucket

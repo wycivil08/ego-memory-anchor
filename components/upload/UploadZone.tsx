@@ -195,8 +195,6 @@ export function UploadZone({
         onChange={handleFileSelect}
         className="hidden"
         disabled={disabled}
-        // @ts-expect-error - webkitdirectory is not in TypeScript types but supported
-        webkitdirectory=""
       />
 
       {/* Drop zone */}
