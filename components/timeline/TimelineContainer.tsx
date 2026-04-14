@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState, useCallback, useTransition } from 'react'
+import { useEffect, useState, useCallback, useTransition, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Timeline } from '@/components/timeline/Timeline'
 import { TimelineEmpty } from '@/components/timeline/TimelineEmpty'
-import { groupMemoriesByDate, type Memory, type TimelineGroup, type TimelineFilters as TimelineFiltersType, type MemoryType, applyFilters, getAllTags } from '@/lib/utils/timeline'
+import { groupMemoriesByDate, type Memory, type TimelineGroup, type TimelineFilters as TimelineFiltersType, type MemoryType } from '@/lib/utils/timeline'
 import { fetchTimelineDataAction } from '@/lib/actions/timeline'
 import type { ProfileWithMemoryCount } from '@/lib/types'
 
@@ -22,14 +22,13 @@ export function TimelineContainer({ profileId, profile, initialMemories }: Timel
   const [hasMore, setHasMore] = useState(false)
   const [page, setPage] = useState(0)
   const [isLoading, setIsLoading] = useState(!initialMemories)
-  const [totalCount, setTotalCount] = useState(0)
 
-  // Parse filters from search params
-  const filters: TimelineFiltersType = {
+  // Parse filters from search params with useMemo
+  const filters = useMemo((): TimelineFiltersType => ({
     type: (searchParams.get('type') as MemoryType | 'all') || 'all',
     tags: searchParams.get('tags')?.split(',').filter(Boolean) || [],
     quickDateRange: (searchParams.get('quickRange') as TimelineFiltersType['quickDateRange']) || 'all',
-  }
+  }), [searchParams])
 
   // Fetch memories with current filters
   const fetchMemories = useCallback(
@@ -49,7 +48,6 @@ export function TimelineContainer({ profileId, profile, initialMemories }: Timel
           }
 
           setHasMore(result.hasMore)
-          setTotalCount(result.totalCount)
         } catch (error) {
           console.error('Error fetching timeline data:', error)
         } finally {

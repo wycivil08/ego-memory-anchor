@@ -67,24 +67,6 @@ function WaveformIcon({ className }: { className?: string }) {
   )
 }
 
-// Get icon for memory type
-function getTypeIcon(type: Memory['type']) {
-  switch (type) {
-    case 'photo':
-      return PhotoIcon
-    case 'video':
-      return VideoIcon
-    case 'audio':
-      return AudioIcon
-    case 'text':
-      return TextIcon
-    case 'document':
-      return DocumentIcon
-    default:
-      return PhotoIcon
-  }
-}
-
 // SourceBadge component
 function SourceBadge({ label }: { label: string }) {
   return (
@@ -94,14 +76,17 @@ function SourceBadge({ label }: { label: string }) {
   )
 }
 
-// Memory type badge
+// Memory type badge with inline icon rendering
 function TypeBadge({ type }: { type: Memory['type'] }) {
-  const Icon = getTypeIcon(type)
   const label = MEMORY_TYPE_LABELS[type]
 
   return (
     <span className="inline-flex items-center gap-1 text-xs text-stone-500">
-      <Icon className="h-3 w-3" />
+      {type === 'photo' && <PhotoIcon className="h-3 w-3" />}
+      {type === 'video' && <VideoIcon className="h-3 w-3" />}
+      {type === 'audio' && <AudioIcon className="h-3 w-3" />}
+      {type === 'text' && <TextIcon className="h-3 w-3" />}
+      {type === 'document' && <DocumentIcon className="h-3 w-3" />}
       {label}
     </span>
   )
@@ -113,7 +98,6 @@ function ContributorAvatar({ memory }: { memory: Memory }) {
 
   if (!contributor) return null
 
-  // Only show if different from profile owner (family member)
   return (
     <div className="relative h-5 w-5 flex-shrink-0">
       {contributor.avatarUrl ? (
@@ -168,9 +152,6 @@ function MediaPreview({ memory }: { memory: Memory }) {
 
 // Audio preview
 function AudioPreview({ memory }: { memory: Memory }) {
-  // In a real app, we'd show waveform visualization
-  // For now, show a placeholder with duration if available
-
   return (
     <div className="flex h-full w-full flex-col items-center justify-center rounded-lg bg-gradient-to-br from-stone-100 to-stone-50 p-4">
       <div className="mb-2 flex items-center justify-center">
@@ -212,7 +193,6 @@ function DocumentPreview({ memory }: { memory: Memory }) {
 export function TimelineItem({ memory, profileId, className }: TimelineItemProps) {
   const href = `/profile/${profileId}/memory/${memory.id}`
   const dateLabel = formatMemoryDate(memory.memory_date, memory.memory_date_precision)
-  const TypeIcon = getTypeIcon(memory.type)
   const hasAnnotation = !!memory.annotation
   const annotationPreview = memory.annotation ? truncateText(memory.annotation, 50) : null
 

@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { getProfileById } from '@/lib/actions/profile'
-import { fetchTimelineDataAction, fetchAllMemoriesForTagsAction } from '@/lib/actions/timeline'
+import { fetchAllMemoriesForTagsAction } from '@/lib/actions/timeline'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { TimelineContainer } from '@/components/timeline/TimelineContainer'
 import { TimelineFilters } from '@/components/timeline/TimelineFilters'

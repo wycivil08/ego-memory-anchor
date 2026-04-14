@@ -135,17 +135,6 @@ export function Timeline({ groups, profileId, hasMore, onLoadMore, isLoading }: 
     }
   }, [virtualItems, hasMore, onLoadMore, isLoading, rows.length])
 
-  // Calculate sticky headers
-  const getStickyYear = (index: number): string | null => {
-    // Find the most recent year header above or at this index
-    for (let i = index; i >= 0; i--) {
-      if (rows[i].type === 'year-header') {
-        return rows[i].yearLabel || null
-      }
-    }
-    return null
-  }
-
   if (rows.length === 0) {
     return <TimelineEmpty profileId={profileId} />
   }
