@@ -6,7 +6,8 @@ import { useParams, useRouter } from 'next/navigation'
 import type { UploadProgressItem, UploadStatus } from '@/components/upload/UploadProgress'
 import { UploadZone } from '@/components/upload/UploadZone'
 import { BatchUploadList } from '@/components/upload/BatchUploadList'
-import { extractExifDate } from '@/lib/utils/exif'
+import { extractExifDate, extractExifData } from '@/lib/utils/exif'
+import { uploadMemoryFile } from '@/lib/actions/upload'
 
 // Upload state
 interface UploadState {
@@ -59,6 +60,11 @@ function uploadReducer(state: UploadState, action: UploadAction): UploadState {
   }
 }
 
+// Generate unique memory ID
+function generateMemoryId(): string {
+  return crypto.randomUUID()
+}
+
 export default function UploadPage() {
   const params = useParams()
   const router = useRouter()
@@ -72,6 +78,8 @@ export default function UploadPage() {
   // Process a single file upload
   const processFile = useCallback(
     async (item: UploadProgressItem) => {
+      const memoryId = generateMemoryId()
+
       try {
         // Update status to uploading
         dispatch({
@@ -80,56 +88,69 @@ export default function UploadPage() {
           updates: { status: 'uploading', progress: 0 },
         })
 
-        // Step 1: Extract EXIF date if available
+        // Step 1: Extract EXIF date and data for photos/videos
         let memoryDate: string | undefined
+        let exifData: Record<string, unknown> | undefined
+
         if (item.memoryType === 'photo' || item.memoryType === 'video') {
           try {
             const exifDate = await extractExifDate(item.file)
             if (exifDate) {
               memoryDate = exifDate.toISOString().split('T')[0]
             }
+            exifData = await extractExifData(item.file)
           } catch {
-            // Ignore EXIF errors
+            // Ignore EXIF errors silently
           }
         }
 
-        // Step 2: Generate thumbnail (simulated for now)
+        // Step 2: Upload file to Supabase Storage via server action
+        const filePath = `${profileId}/${memoryId}/${item.file.name}`
+
+        // Update progress to indicate upload started
         dispatch({
           type: 'UPDATE_ITEM',
           id: item.id,
-          updates: { progress: 30 },
+          updates: { progress: 20 },
         })
 
-        // Step 3: Simulate upload progress
-        for (let progress = 30; progress <= 80; progress += 10) {
-          await new Promise((resolve) => setTimeout(resolve, 200))
+        const uploadResult = await uploadMemoryFile(
+          'memories',
+          profileId,
+          memoryId,
+          item.file.name,
+          item.file
+        )
+
+        if (!uploadResult.success) {
           dispatch({
             type: 'UPDATE_ITEM',
             id: item.id,
-            updates: { progress },
+            updates: {
+              status: 'error',
+              error: uploadResult.error || '上传失败',
+            },
           })
+          return
         }
 
-        // Step 4: Update to processing
         dispatch({
           type: 'UPDATE_ITEM',
           id: item.id,
           updates: { status: 'processing', progress: 85 },
         })
 
-        // Step 5: Simulate processing
-        await new Promise((resolve) => setTimeout(resolve, 500))
-
-        // Step 6: Call server action to create memory record
+        // Step 3: Call server action to create memory record
         const { createMemory } = await import('@/lib/actions/memory')
         const result = await createMemory({
           profile_id: profileId,
           type: item.memoryType,
-          file_path: `memories/${profileId}/${item.id}/${item.file.name}`,
-          thumbnail_path: `thumbnails/${profileId}/${item.id}/${item.file.name}`,
-          memory_date: memoryDate,
+          file_path: filePath,
+          file_name: item.file.name,
           file_size: item.file.size,
           mime_type: item.file.type,
+          memory_date: memoryDate,
+          exif_data: exifData,
         })
 
         if (result.success) {
@@ -144,7 +165,7 @@ export default function UploadPage() {
             id: item.id,
             updates: {
               status: 'error',
-              error: result.error || '上传失败',
+              error: result.error || '保存记忆失败',
             },
           })
         }
@@ -222,7 +243,7 @@ export default function UploadPage() {
     [state.items, processFilesWithConcurrency]
   )
 
-  // Check if profile exists (we'll do a simple redirect if not)
+  // Check if profile exists (redirect if not)
   if (!profileId) {
     router.push('/dashboard')
     return null

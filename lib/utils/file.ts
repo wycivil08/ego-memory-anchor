@@ -9,8 +9,8 @@ const FILE_SIZE_LIMITS: Record<MemoryType, number> = {
   document: 50 * 1024 * 1024, // 50MB
 }
 
-// MIME type mappings
-const MIME_TYPE_MAP: Record<MemoryType, string[]> = {
+// MIME type mappings (exported for use in UploadZone)
+export const MIME_TYPE_MAP: Record<MemoryType, string[]> = {
   photo: ['image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp'],
   video: ['video/mp4', 'video/quicktime', 'video/webm', 'video/x-msvideo'],
   audio: ['audio/mpeg', 'audio/mp4', 'audio/wav', 'audio/ogg', 'audio/webm'],
