@@ -49,7 +49,7 @@ async function validateProfileAccess(profileId: string): Promise<{ valid: boolea
     .select('role')
     .eq('profile_id', profileId)
     .eq('user_id', user.id)
-    .eq('accepted_at', null)
+    .not('accepted_at', 'is', null)
     .single()
 
   // If not accepted yet, no access
@@ -90,16 +90,19 @@ export async function createMemory(
     contributor_id: user.id,
     type: data.type,
     file_path: data.file_path || null,
+    file_name: data.file_name || null,
+    file_size: data.file_size || null,
+    mime_type: data.mime_type || null,
     thumbnail_path: data.thumbnail_path || null,
+    duration_seconds: data.duration_seconds || null,
     content: data.content || null,
     memory_date: data.memory_date || null,
     memory_date_precision: data.memory_date_precision || 'day',
     tags: data.tags || [],
     annotation: data.annotation || null,
     source_label: data.source_label || '原始记录',
+    import_source: data.import_source || 'upload',
     exif_data: data.exif_data || null,
-    file_size: data.file_size || null,
-    mime_type: data.mime_type || null,
   }
 
   const { data: memory, error } = await supabase
@@ -157,16 +160,19 @@ export async function createMemoryBatch(
     contributor_id: user.id,
     type: data.type,
     file_path: data.file_path || null,
+    file_name: data.file_name || null,
+    file_size: data.file_size || null,
+    mime_type: data.mime_type || null,
     thumbnail_path: data.thumbnail_path || null,
+    duration_seconds: data.duration_seconds || null,
     content: data.content || null,
     memory_date: data.memory_date || null,
     memory_date_precision: data.memory_date_precision || 'day',
     tags: data.tags || [],
     annotation: data.annotation || null,
     source_label: data.source_label || '原始记录',
+    import_source: data.import_source || 'upload',
     exif_data: data.exif_data || null,
-    file_size: data.file_size || null,
-    mime_type: data.mime_type || null,
   }))
 
   const { data: insertedMemories, error } = await supabase

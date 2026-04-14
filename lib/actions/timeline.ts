@@ -1,8 +1,8 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import type { Memory, ProfileWithMemoryCount, MemoryType } from '@/lib/types'
-import type { TimelineFilters, TimelineGroup } from '@/lib/utils/timeline'
+import type { ProfileWithMemoryCount, Memory } from '@/lib/types'
+import type { TimelineFilters, TimelineGroup, MemoryWithContributor } from '@/lib/utils/timeline'
 import { groupMemoriesByDate, TIMELINE_PAGE_SIZE } from '@/lib/utils/timeline'
 
 export async function fetchTimelineDataAction(
@@ -10,7 +10,7 @@ export async function fetchTimelineDataAction(
   _profile: ProfileWithMemoryCount,
   filters?: TimelineFilters,
   page: number = 0
-): Promise<{ memories: Memory[]; hasMore: boolean; totalCount: number }> {
+): Promise<{ memories: MemoryWithContributor[]; hasMore: boolean; totalCount: number }> {
   const supabase = await createClient()
 
   // Build query
@@ -46,14 +46,15 @@ export async function fetchTimelineDataAction(
   }
 
   // Transform memories to ensure proper types
-  const transformedMemories: Memory[] = (memories || []).map((m) => {
+  const transformedMemories: MemoryWithContributor[] = (memories || []).map((m) => {
     const memory = m as unknown as Record<string, unknown>
     return {
       ...memory,
       tags: Array.isArray(memory.tags) ? memory.tags as string[] : [],
       memory_date_precision: (memory.memory_date_precision as Memory['memory_date_precision']) || 'day',
       source_label: (memory.source_label as string) || '原始记录',
-    } as Memory
+      import_source: (memory.import_source as 'upload' | 'wechat_import') || 'upload',
+    } as MemoryWithContributor
   })
 
   // Apply tag and date filters in memory (since we can't do these easily in Supabase query)

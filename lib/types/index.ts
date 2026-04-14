@@ -94,35 +94,42 @@ export interface Memory {
   contributor_id: string
   type: MemoryType
   file_path: string | null
+  file_name: string | null
+  file_size: number | null
+  mime_type: string | null
   thumbnail_path: string | null
+  duration_seconds: number | null
   content: string | null
   memory_date: string | null
   memory_date_precision: DatePrecision
   tags: string[]
   annotation: string | null
   source_label: string
+  import_source: 'upload' | 'wechat_import'
   exif_data: Record<string, unknown> | null
-  file_size: number | null
-  mime_type: string | null
   sort_order: number | null
   created_at: string
   updated_at: string
+  deleted_at: string | null
 }
 
 export interface CreateMemoryInput {
   profile_id: string
   type: MemoryType
   file_path?: string | null
+  file_name?: string | null
+  file_size?: number | null
+  mime_type?: string | null
   thumbnail_path?: string | null
+  duration_seconds?: number | null
   content?: string | null
   memory_date?: string | null
   memory_date_precision?: DatePrecision
   tags?: string[]
   annotation?: string | null
   source_label?: string
+  import_source?: 'upload' | 'wechat_import'
   exif_data?: Record<string, unknown> | null
-  file_size?: number | null
-  mime_type?: string | null
 }
 
 export interface MemoryFilters {

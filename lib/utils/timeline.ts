@@ -1,28 +1,37 @@
-// Memory types
+// Re-export types from lib/types
+import type { Memory, DatePrecision } from '@/lib/types'
+export type { Memory, DatePrecision }
+export type { CreateMemoryInput, MemoryFilters, ProfileWithMemoryCount } from '@/lib/types'
+
+// Memory types for timeline
 export type MemoryType = 'photo' | 'video' | 'audio' | 'text' | 'document'
 
 export type MemoryDatePrecision = 'day' | 'month' | 'year' | 'unknown'
 
-// Memory entity from database
-export interface Memory {
+// Extended Memory with contributor join (used in timeline queries)
+export interface MemoryWithContributor {
   id: string
   profile_id: string
   contributor_id: string
   type: MemoryType
   file_path: string | null
+  file_name: string | null
+  file_size: number | null
+  mime_type: string | null
   thumbnail_path: string | null
+  duration_seconds: number | null
   content: string | null
   memory_date: string | null
   memory_date_precision: MemoryDatePrecision
   tags: string[]
   annotation: string | null
   source_label: string
+  import_source: 'upload' | 'wechat_import'
   exif_data: Record<string, unknown> | null
-  file_size: number | null
-  mime_type: string | null
   sort_order: number | null
   created_at: string
   updated_at: string
+  deleted_at: string | null
   // Joined data
   contributor?: {
     id: string
@@ -302,7 +311,7 @@ export interface MemoryContributor {
   avatarUrl: string | null
 }
 
-export function getMemoryContributor(memory: Memory): MemoryContributor | null {
+export function getMemoryContributor(memory: MemoryWithContributor): MemoryContributor | null {
   if (!memory.contributor) return null
 
   return {
