@@ -201,7 +201,7 @@ describe('Family Actions', () => {
         select: vi.fn().mockImplementation(() => ({
           eq: vi.fn().mockImplementation(() => ({
             eq: vi.fn().mockImplementation(() => ({
-              not: vi.fn().mockImplementation(() => ({
+              is: vi.fn().mockImplementation(() => ({
                 single: vi.fn().mockResolvedValue({ data: null, error: 'Not found' }),
               })),
             })),

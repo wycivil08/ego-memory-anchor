@@ -102,28 +102,37 @@ export async function getFamilyMembers(
     return []
   }
 
-  // For accepted members with user_id, fetch user info
-  const membersWithUser: FamilyMemberWithUser[] = []
+  // Batch fetch user data for all members with user_id (fixes N+1 query)
+  const userIds = (members || [])
+    .map((m) => m.user_id)
+    .filter((id): id is string => id !== null)
 
-  for (const member of members || []) {
-    let memberWithUser: FamilyMemberWithUser = { ...member }
+  let userMap: Record<string, { email?: string; user_metadata?: { name?: string; avatar_url?: string } }> = {}
 
-    if (member.user_id) {
-      const { data: userData } = await supabase
-        .from('users')
-        .select('email, user_metadata')
-        .eq('id', member.user_id)
-        .single()
+  if (userIds.length > 0) {
+    const { data: users } = await supabase
+      .from('users')
+      .select('id, email, user_metadata')
+      .in('id', userIds)
 
-      if (userData) {
-        memberWithUser.user_email = userData.email
-        memberWithUser.user_name = userData.user_metadata?.name || null
-        memberWithUser.user_avatar_url = userData.user_metadata?.avatar_url || null
-      }
+    if (users) {
+      userMap = Object.fromEntries(users.map((u) => [u.id, u]))
+    }
+  }
+
+  // Map user data to members
+  const membersWithUser: FamilyMemberWithUser[] = (members || []).map((member) => {
+    const memberWithUser: FamilyMemberWithUser = { ...member }
+    const userData = member.user_id ? userMap[member.user_id] : undefined
+
+    if (userData) {
+      memberWithUser.user_email = userData.email
+      memberWithUser.user_name = userData.user_metadata?.name
+      memberWithUser.user_avatar_url = userData.user_metadata?.avatar_url || undefined
     }
 
-    membersWithUser.push(memberWithUser)
-  }
+    return memberWithUser
+  })
 
   return membersWithUser as FamilyMemberWithUser[]
 }
@@ -152,7 +161,7 @@ export async function updateMemberRole(
     .select('id, role, invited_by')
     .eq('id', memberId)
     .eq('profile_id', profileId)
-    .not('deleted_at', 'is', null)
+    .is('deleted_at', null)
     .single()
 
   if (fetchError || !member) {
@@ -200,7 +209,7 @@ export async function removeMember(
     .select('id, user_id')
     .eq('id', memberId)
     .eq('profile_id', profileId)
-    .not('deleted_at', 'is', null)
+    .is('deleted_at', null)
     .single()
 
   if (fetchError || !member) {

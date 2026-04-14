@@ -210,8 +210,26 @@ CREATE POLICY "Users can update own avatar" ON storage.objects
     AND (storage.foldername(name))[1] = auth.uid()::text
   );
 
-CREATE POLICY "Anyone can read avatars" ON storage.objects
-  FOR SELECT USING (bucket_id = 'avatars');
+CREATE POLICY "Users can read own avatar" ON storage.objects
+  FOR SELECT USING (
+    bucket_id = 'avatars'
+    AND (storage.foldername(name))[1] = auth.uid()::text
+  );
+
+CREATE POLICY "Family members can view avatar" ON storage.objects
+  FOR SELECT USING (
+    bucket_id = 'avatars'
+    AND EXISTS (
+      SELECT 1 FROM profiles
+      WHERE profiles.avatar_path = 'avatars/' || storage.foldername(name)::text
+      AND EXISTS (
+        SELECT 1 FROM family_members
+        WHERE family_members.profile_id = profiles.id
+        AND family_members.user_id = auth.uid()
+        AND family_members.accepted_at IS NOT NULL
+      )
+    )
+  );
 
 -- Memories storage policies handled via RLS on memories table
 

@@ -137,25 +137,26 @@ export async function createMemoryBatch(
     return { memories: [], errors: ['请先登录'] }
   }
 
-  const memories: Memory[] = []
   const errors: string[] = []
+  const validData: CreateMemoryInput[] = []
 
-  // Validate all profiles first
+  // Validate all profiles first - separate valid and invalid items
   for (const data of dataArray) {
     const access = await validateProfileAccess(data.profile_id)
     if (!access.valid) {
       errors.push(`文件 ${data.file_path || data.content?.slice(0, 20)}: ${access.error}`)
-      continue
+    } else {
+      validData.push(data)
     }
   }
 
-  // If any validation errors, return early
-  if (errors.length > 0 && memories.length === 0) {
+  // If no valid items to insert, return errors only
+  if (validData.length === 0) {
     return { memories: [], errors }
   }
 
-  // Prepare batch insert data
-  const insertData = dataArray.map((data) => ({
+  // Prepare batch insert data for valid items only
+  const insertData = validData.map((data) => ({
     profile_id: data.profile_id,
     contributor_id: user.id,
     type: data.type,
@@ -186,12 +187,12 @@ export async function createMemoryBatch(
   }
 
   // Revalidate paths for all affected profiles
-  const uniqueProfileIds = [...new Set(dataArray.map((d) => d.profile_id))]
+  const uniqueProfileIds = [...new Set(validData.map((d) => d.profile_id))]
   uniqueProfileIds.forEach((profileId) => {
     revalidatePath(`/profile/${profileId}`)
   })
 
-  return { memories: (insertedMemories || []) as Memory[], errors: [] }
+  return { memories: (insertedMemories || []) as Memory[], errors }
 }
 
 export async function getMemoriesByProfile(
