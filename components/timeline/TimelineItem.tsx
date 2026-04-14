@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { MEMORY_TYPE_LABELS, formatMemoryDate, truncateText, getMemoryContributor, type Memory } from '@/lib/utils/timeline'
+import { SourceBadge } from '@/components/memory/SourceBadge'
 
 interface TimelineItemProps {
   memory: Memory
@@ -67,14 +68,7 @@ function WaveformIcon({ className }: { className?: string }) {
   )
 }
 
-// SourceBadge component
-function SourceBadge({ label }: { label: string }) {
-  return (
-    <span className="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs text-amber-600 ring-1 ring-amber-100">
-      {label}
-    </span>
-  )
-}
+// SourceBadge component is now in components/memory/SourceBadge.tsx
 
 // Memory type badge with inline icon rendering
 function TypeBadge({ type }: { type: Memory['type'] }) {

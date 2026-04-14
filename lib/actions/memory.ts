@@ -326,3 +326,129 @@ export async function deleteMemory(
   revalidatePath(`/profile/${memory.profile_id}`)
   return { error: null, success: true }
 }
+
+export async function getMemoryById(
+  memoryId: string
+): Promise<{ memory: Memory | null; error: string | null }> {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { memory: null, error: '请先登录' }
+  }
+
+  // Get memory - fetch without joins first to get the profile_id
+  const { data: memory, error: fetchError } = await supabase
+    .from('memories')
+    .select('*')
+    .eq('id', memoryId)
+    .single()
+
+  if (fetchError || !memory) {
+    return { memory: null, error: '记忆不存在' }
+  }
+
+  // Now check access using the profile_id
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id, user_id')
+    .eq('id', (memory as Memory).profile_id)
+    .single()
+
+  if (!profile) {
+    return { memory: null, error: '无权限访问此记忆' }
+  }
+
+  // Owner has full access
+  if (profile.user_id === user.id) {
+    return { memory: memory as Memory, error: null }
+  }
+
+  // Check if user is a family member with access
+  const { data: familyMember } = await supabase
+    .from('family_members')
+    .select('role')
+    .eq('profile_id', (memory as Memory).profile_id)
+    .eq('user_id', user.id)
+    .not('accepted_at', 'is', null)
+    .single()
+
+  if (!familyMember) {
+    return { memory: null, error: '您没有权限查看此记忆' }
+  }
+
+  return { memory: memory as Memory, error: null }
+}
+
+export type UpdateAnnotationState = {
+  error: string | null
+  success: boolean
+}
+
+export async function updateMemoryAnnotation(
+  memoryId: string,
+  annotation: string
+): Promise<UpdateAnnotationState> {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { error: '请先登录', success: false }
+  }
+
+  // Get memory with profile info
+  const { data: memory, error: fetchError } = await supabase
+    .from('memories')
+    .select('id, profile_id, profiles!inner(user_id)')
+    .eq('id', memoryId)
+    .single()
+
+  if (fetchError || !memory) {
+    return { error: '记忆不存在', success: false }
+  }
+
+  // Check if user is the profile owner or an editor/admin family member
+  const profiles = memory.profiles as unknown as { user_id: string }[] | null
+  const profile = profiles?.[0]
+
+  let canEdit = false
+
+  if (profile && profile.user_id === user.id) {
+    canEdit = true
+  } else if (profile) {
+    // Check if user is a family member with edit role
+    const { data: familyMember } = await supabase
+      .from('family_members')
+      .select('role')
+      .eq('profile_id', memory.profile_id)
+      .eq('user_id', user.id)
+      .not('accepted_at', 'is', null)
+      .single()
+
+    canEdit = familyMember?.role === 'admin' || familyMember?.role === 'editor'
+  }
+
+  if (!canEdit) {
+    return { error: '您没有权限编辑此记忆', success: false }
+  }
+
+  // Update the annotation
+  const { error: updateError } = await supabase
+    .from('memories')
+    .update({ annotation, updated_at: new Date().toISOString() })
+    .eq('id', memoryId)
+
+  if (updateError) {
+    console.error('Error updating annotation:', updateError)
+    return { error: '更新注释失败，请稍后重试', success: false }
+  }
+
+  revalidatePath(`/profile/${memory.profile_id}/memory/${memoryId}`)
+  return { error: null, success: true }
+}
