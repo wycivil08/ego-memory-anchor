@@ -1,6 +1,21 @@
 import { createClient } from '@/lib/supabase/server'
 
 /**
+ * Sanitize filename to remove potentially problematic characters.
+ * Only allows alphanumeric, dots, dashes, and underscores.
+ */
+function sanitizeFilename(filename: string): string {
+  // Remove path separators and problematic characters
+  const sanitized = filename
+    .replace(/[/\\:*?"<>|]/g, '_')
+    .replace(/\s+/g, '_')
+    .replace(/_{2,}/g, '_')
+    .replace(/^\.+/, '') // Remove leading dots
+    .substring(0, 200) // Limit length
+  return sanitized || 'file'
+}
+
+/**
  * Upload a file to Supabase Storage.
  *
  * @param bucket - Storage bucket name (e.g., 'memories', 'avatars')
@@ -21,7 +36,13 @@ export async function uploadFile(
   // Report initial progress
   onProgress?.(0)
 
-  const { data, error } = await supabase.storage.from(bucket).upload(path, file, {
+  // Sanitize the filename in the path
+  const pathParts = path.split('/')
+  const filename = pathParts.pop() || 'file'
+  const sanitizedFilename = sanitizeFilename(filename)
+  const sanitizedPath = [...pathParts, sanitizedFilename].join('/')
+
+  const { data, error } = await supabase.storage.from(bucket).upload(sanitizedPath, file, {
     cacheControl: '3600',
     upsert: false,
   })
