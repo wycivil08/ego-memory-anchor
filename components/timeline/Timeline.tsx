@@ -38,10 +38,10 @@ export function Timeline({ groups, profileId, hasMore, onLoadMore, isLoading }: 
   useEffect(() => {
     const updateColumns = () => {
       const width = window.innerWidth
-      if (width < 640) {
-        setColumns(1) // Mobile: single column
+      if (width < 768) {
+        setColumns(1) // Mobile: single column (matches Tailwind sm: breakpoint)
       } else if (width < 1024) {
-        setColumns(2) // Tablet: double column
+        setColumns(2) // Tablet: double column (matches Tailwind lg: breakpoint)
       } else {
         setColumns(3) // Desktop: triple column
       }
