@@ -111,10 +111,13 @@ function ContributorAvatar({ memory }: { memory: Memory }) {
 
 // Photo/Video preview
 function MediaPreview({ memory }: { memory: Memory }) {
+  const getMemoryUrl = (path: string) =>
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/memories/${path}`
+
   const thumbnailUrl = memory.thumbnail_path
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${memory.thumbnail_path}`
+    ? getMemoryUrl(memory.thumbnail_path)
     : memory.file_path
-      ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${memory.file_path}`
+      ? getMemoryUrl(memory.file_path)
       : null
 
   if (!thumbnailUrl) {
@@ -126,11 +129,11 @@ function MediaPreview({ memory }: { memory: Memory }) {
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-lg bg-stone-100">
+    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-[#f0f0f0] max-h-[60vh]">
       <img
         src={thumbnailUrl}
         alt=""
-        className="h-full w-full object-cover"
+        className="w-full h-auto max-h-[60vh] object-contain"
         loading="lazy"
       />
       {memory.type === 'video' && (
@@ -199,7 +202,7 @@ export function TimelineItem({ memory, profileId, className }: TimelineItemProps
       )}
     >
       {/* Preview area */}
-      <div className="relative mb-3 aspect-[4/3] overflow-hidden rounded-lg bg-stone-50">
+      <div className="relative mb-3 flex w-full justify-center overflow-hidden rounded-lg bg-stone-50 border border-stone-100">
         {memory.type === 'photo' && <MediaPreview memory={memory} />}
         {memory.type === 'video' && <MediaPreview memory={memory} />}
         {memory.type === 'audio' && <AudioPreview memory={memory} />}

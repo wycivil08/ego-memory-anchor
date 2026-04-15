@@ -28,9 +28,9 @@ export async function uploadMemoryFile(
     const filePath = `${profileId}/${memoryId}/${fileName}`
 
     // Upload to Supabase Storage
-    await uploadFile(bucket, filePath, file)
+    const uploadedPath = await uploadFile(bucket, filePath, file)
 
-    return { error: null, success: true, filePath }
+    return { error: null, success: true, filePath: uploadedPath }
   } catch (error) {
     console.error('Upload error:', error)
     return {

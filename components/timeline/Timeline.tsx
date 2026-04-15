@@ -117,7 +117,7 @@ export function Timeline({ groups, profileId, hasMore, onLoadMore, isLoading }: 
       const row = rows[index]
       if (row.type === 'year-header') return 48
       if (row.type === 'month-header') return 36
-      return 280 // Memory card height
+      return 400 // More accurate base estimate for single/auto-height items
     },
     overscan: 5,
     getItemKey: (index) => rows[index].key,
@@ -197,6 +197,8 @@ export function Timeline({ groups, profileId, hasMore, onLoadMore, isLoading }: 
           return (
             <div
               key={virtualItem.key}
+              ref={virtualizer.measureElement}
+              data-index={virtualItem.index}
               style={{
                 position: 'absolute',
                 top: 0,

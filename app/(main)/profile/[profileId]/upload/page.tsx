@@ -7,6 +7,7 @@ import type { UploadProgressItem, UploadStatus } from '@/components/upload/Uploa
 import { UploadZone } from '@/components/upload/UploadZone'
 import { BatchUploadList } from '@/components/upload/BatchUploadList'
 import { extractExifDate, extractExifData } from '@/lib/utils/exif'
+import { generateThumbnail } from '@/lib/utils/thumbnail'
 import { uploadMemoryFile } from '@/lib/actions/upload'
 
 // Upload state
@@ -134,6 +135,29 @@ export default function UploadPage() {
           return
         }
 
+        // Step 2.5: Generate and upload thumbnail for photos and videos
+        let thumbnailPath: string | undefined
+        if (item.memoryType === 'photo' || item.memoryType === 'video') {
+          try {
+            const thumbBlob = await generateThumbnail(item.file, 400)
+            if (thumbBlob) {
+              const thumbFile = new File([thumbBlob], 'thumbnail.jpg', { type: 'image/jpeg' })
+              const thumbResult = await uploadMemoryFile(
+                'memories',
+                profileId,
+                memoryId,
+                'thumbnail.jpg',
+                thumbFile
+              )
+              if (thumbResult.success && thumbResult.filePath) {
+                thumbnailPath = thumbResult.filePath
+              }
+            }
+          } catch (e) {
+            console.error('Failed to generate thumbnail', e)
+          }
+        }
+
         dispatch({
           type: 'UPDATE_ITEM',
           id: item.id,
@@ -145,12 +169,13 @@ export default function UploadPage() {
         const result = await createMemory({
           profile_id: profileId,
           type: item.memoryType,
-          file_path: filePath,
+          file_path: uploadResult.filePath!,
           file_name: item.file.name,
           file_size: item.file.size,
           mime_type: item.file.type,
           memory_date: memoryDate,
           exif_data: exifData,
+          thumbnail_path: thumbnailPath,
         })
 
         if (result.success) {
