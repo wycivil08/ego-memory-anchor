@@ -1,6 +1,33 @@
 # TASKS.md — ego-memory-anchor V2 MVP 开发任务
 
-格式: ID: S{sprint}.T{task}, 标注 [V2] 为新增任务
+格式: ID: S{sprint}.T{task}, 标注 [V2] 为新增任务, 标注 [BUGFIX] 为 bug 修复
+
+---
+
+## Phase 0: Critical Bug Fixes（优先于所有开发）
+
+### P0.T1 [BUGFIX] — Storage Bucket 配置修复
+- **问题**: `supabase/migrations/001_initial_schema.sql` 中 buckets 设置为 `public: false`，但代码中所有地方都在构造 `public/` URL
+- **影响**: 上传成功，但图片预览失败
+- **操作**:
+  1. 修改 migration，将 `avatars` 和 `memories` bucket 设为 `public: true`
+  2. `supabase db push` 到本地和 production
+  3. 验证图片加载正常
+- **验证**: 本地 preview + Vercel preview 都能正常显示图片
+- **提交**: `fix(storage): set buckets public:true to enable image preview`
+
+### P0.T2 [BUGFIX] — Server Action 测试架构修复
+- **问题**: V1 实现的 Server Action 测试使用 `vi.mock()` mock 了 Supabase client，违反"禁止 mock Supabase client"规则
+- **影响**: 162 个"通过"的测试实际上没有测试任何真实的数据库操作
+- **涉及文件**:
+  - `tests/unit/lib/actions/memory.test.ts` → 改用真实 Supabase + UUID cleanup
+  - `tests/unit/lib/actions/family.test.ts` → 改用真实 Supabase + UUID cleanup
+  - `tests/unit/lib/actions/reminder.test.ts` → 改用真实 Supabase + UUID cleanup
+  - `tests/unit/lib/actions/auth.test.ts` → 改用真实 Supabase + UUID cleanup
+- **不需改造**:
+  - `tests/unit/lib/utils/storage.test.ts` → 保留 mock（测试 URL 构造）
+  - `tests/unit/lib/supabase/middleware.test.ts` → 保留 mock（Edge Runtime）
+- **提交**: `test: refactor Server Action tests to use real Supabase client`
 
 ---
 

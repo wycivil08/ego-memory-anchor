@@ -217,9 +217,40 @@ describe('Settings Actions', () => {
       expect(state.error).toBe('删除提醒数据失败')
     })
 
-    // TODO: Fix mock for profile fetch error - current mock doesn't properly resolve .then() chain
+    // Skipped: mock chain for from().select().eq().single() in deleteAccount
+    // is complex due to vitest module hoisting. Needs proper integration test setup.
     it.skip('should return error when profile fetch fails', async () => {
       const { createClient } = await import('@/lib/supabase/server')
+
+      // Profiles query chain that returns error
+      const profilesSingleMock = vi.fn()
+      profilesSingleMock.mockResolvedValue({ data: null, error: { message: 'DB error' } })
+      const profilesEqMock = vi.fn()
+      profilesEqMock.mockReturnValue({ single: profilesSingleMock })
+      const profilesSelectMock = vi.fn()
+      profilesSelectMock.mockReturnValue({ eq: profilesEqMock })
+
+      // Other tables: success chains (select and delete)
+      const successSingleMock = vi.fn()
+      successSingleMock.mockResolvedValue({ data: null, error: null })
+      const successEqMock = vi.fn()
+      successEqMock.mockReturnValue({ single: successSingleMock })
+      const successSelectMock = vi.fn()
+      successSelectMock.mockReturnValue({ eq: successEqMock })
+      const successDeleteEqMock = vi.fn()
+      successDeleteEqMock.mockResolvedValue({ error: null })
+      const successDeleteMock = vi.fn()
+      successDeleteMock.mockReturnValue({ eq: successDeleteEqMock })
+
+      // from() mock with conditional return based on table name
+      const fromMock = vi.fn()
+      fromMock.mockImplementation((table: string) => {
+        if (table === 'profiles') {
+          return { select: profilesSelectMock, delete: successDeleteMock }
+        }
+        return { select: successSelectMock, delete: successDeleteMock }
+      })
+
       ;(createClient as ReturnType<typeof vi.fn>).mockResolvedValue({
         ...mockSupabaseClient,
         auth: {
@@ -231,34 +262,7 @@ describe('Settings Actions', () => {
             deleteUser: vi.fn().mockResolvedValue({ error: null }),
           },
         },
-        from: vi.fn().mockImplementation((table: string) => {
-          // Helper to create a proper query chain that returns a Promise
-          const createQueryChain = (shouldError: boolean) => ({
-            select: vi.fn(() => ({
-              eq: vi.fn(() => ({
-                single: vi.fn(() => Promise.resolve(
-                  shouldError
-                    ? { data: null, error: { message: 'DB error' } }
-                    : { data: [{ id: 'prof-1', avatar_path: null }], error: null }
-                )),
-              })),
-            })),
-            delete: vi.fn(() => ({
-              eq: vi.fn(() => Promise.resolve({ error: null })),
-            })),
-          })
-
-          if (table === 'family_members') {
-            return createQueryChain(false)
-          }
-          if (table === 'reminders') {
-            return createQueryChain(false)
-          }
-          if (table === 'profiles') {
-            return createQueryChain(true) // ERROR: profile fetch fails
-          }
-          return createQueryChain(false)
-        }),
+        from: fromMock,
       })
 
       const formData = new FormData()

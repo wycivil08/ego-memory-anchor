@@ -154,7 +154,9 @@ CREATE POLICY "Users manage own consents" ON privacy_consents
 | `memories` | ✅ true | 所有上传的媒体文件 | 500MB |
 | `avatars` | ✅ true | 逝者头像 | 5MB |
 
-路径规范: `{profile_id}/{memory_id}/{uuid}.{ext}`
+**安全说明：** UUID 路径提供"模糊安全"（security through obscurity），真正的安全边界是 Supabase RLS 策略。即使 bucket 设为 public，RLS 仍然限制用户只能访问授权的档案数据。
+
+**Migration 同步：** `supabase/migrations/001_initial_schema.sql` 中的 buckets 配置必须与本文档一致。如有不一致，以本文档为准并修复 migration。
 
 ---
 

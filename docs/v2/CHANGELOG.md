@@ -51,7 +51,7 @@
 
 ### 总任务数
 
-**V1: 41 tasks → V2: 50 tasks**
+**V1: 41 tasks → V2: 53 tasks**
 
 ---
 
@@ -172,3 +172,42 @@ interface ProfileCardProps {
 ├── metadata.json      # 档案+素材元数据+注释
 └── README.txt        # "这是你从忆锚导出的全部数据..."
 ```
+
+---
+
+## Bug Fixes
+
+### Storage Bucket 配置修复
+
+**问题：** `supabase/migrations/001_initial_schema.sql` 中 buckets 设置为 `public: false`，但代码中所有地方都在构造 `public/` URL。
+
+**影响：** 上传成功，但图片预览失败（bucket 私有时 public URL 无效）。
+
+**修复：** 将 buckets 设为 `public: true`：
+```sql
+VALUES
+  ('avatars', 'avatars', true, 5242880, ...),
+  ('memories', 'memories', true, 524288000, ...)
+```
+
+**安全说明：** v2 设计中 UUID 路径作为"模糊安全"（security through obscurity），真正的安全边界是 Supabase RLS 策略。Bucket public 不意味着数据完全开放——RLS 仍然限制用户只能访问授权的档案。
+
+### Server Action 测试架构修复
+
+**问题：** V1 实现的 Server Action 测试大量使用 `vi.mock()` mock 了 Supabase client，违反 CLAUDE.md 中"禁止 mock Supabase client"规则。
+
+**影响：** 162 个"通过"的测试实际上没有测试任何真实的数据库操作。
+
+**修复：** 改为使用真实 Supabase client + UUID + afterAll 清理策略。
+
+**涉及文件需改造（6个文件使用 vi.mock）：**
+| 文件 | 类型 | 改造方式 |
+|------|------|---------|
+| `tests/unit/lib/actions/memory.test.ts` | Server Action | 改用真实 Supabase + UUID cleanup |
+| `tests/unit/lib/actions/family.test.ts` | Server Action | 改用真实 Supabase + UUID cleanup |
+| `tests/unit/lib/actions/reminder.test.ts` | Server Action | 改用真实 Supabase + UUID cleanup |
+| `tests/unit/lib/actions/auth.test.ts` | Server Action | 改用真实 Supabase + UUID cleanup |
+| `tests/unit/lib/utils/storage.test.ts` | 工具函数 | 可保留 mock（测试 URL 构造，不调用 Supabase） |
+| `tests/unit/lib/supabase/middleware.test.ts` | Middleware | 可保留 mock（Edge Runtime 无法连接本地 Supabase） |
+
+**说明：** `storage.test.ts` 和 `middleware.test.ts` 的 mock 是合理的——前者测试 URL 构造逻辑，后者运行在 Edge Runtime 上下文。主要改造对象是 4 个 Server Action 测试文件。

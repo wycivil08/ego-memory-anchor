@@ -240,10 +240,42 @@ ego-memory-anchor/
 ### 测试分层
 | 层级 | 工具 | 覆盖率目标 | 何时写 |
 |------|------|----------|------|
-| 单元测试 | Vitest + RTL | 工具函数 100%, Actions 80% | 实现前 (TDD) |
-| 集成测试 | Vitest + 真实 Supabase | 核心数据流 | 实现后立即 |
+| 单元测试 | Vitest + jsdom | 工具函数 100% | 实现前 (TDD) |
+| 集成测试 | Vitest + 真实 Supabase | Server Actions 80% | 实现后立即 |
 | E2E | Playwright | 核心用户流程 (5条) | Sprint 末尾 |
 | 视觉截图 | Playwright | 关键页面 | UI Sprint 末尾 |
+
+### Supabase 测试架构（MVP 简化版）
+
+**环境架构：**
+```
+本地开发/测试: supabase start (:54321) — 共用同一实例
+CI/CD: supabase start + db push + vitest
+生产: Supabase Cloud
+```
+
+**测试隔离策略（UUID + afterAll 清理）：**
+```typescript
+// 每个测试创建随机 UUID 数据，afterAll 清理
+const testProfileId = crypto.randomUUID()
+const testUserId = crypto.randomUUID()
+
+afterAll(async () => {
+  // 清理测试数据（按依赖顺序反向删除）
+  await supabase.from('memories').delete().eq('profile_id', testProfileId)
+  await supabase.from('family_members').delete().eq('profile_id', testProfileId)
+  await supabase.from('profiles').delete().eq('id', testProfileId)
+})
+```
+
+**禁止 mock Supabase client：**
+- ✅ 工具函数测试：纯函数，无需 Supabase client
+- ❌ Server Action 测试：禁止 vi.mock('@/lib/supabase/server')，必须用真实 client
+- ✅ 组件测试：可用 jsdom + mock data
+
+**为什么不用 pgTAP Transaction Rollback：**
+- pgTAP 需要 `CREATE EXTENSION pgtap`，增加 CI 配置复杂度
+- MVP 阶段 UUID + afterAll 清理足够，且真实反映了生产环境的 data flow
 
 ### TDD 强制流程
 ```

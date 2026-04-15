@@ -366,9 +366,8 @@ describe('Memory Actions', () => {
       expect(result.error).toBe('您没有权限删除此记忆')
     })
 
-    it.skip('should delete memory successfully when user is owner', async () => {
-      // Skipped due to complex mock setup with revalidatePath
-      // The deleteMemory function itself works correctly
+    it('should delete memory successfully when user is owner', async () => {
+      // revalidatePath is mocked at module level
       const { createClient } = await import('@/lib/supabase/server')
       ;(createClient as ReturnType<typeof vi.fn>).mockResolvedValue({
         ...mockSupabaseClient,
