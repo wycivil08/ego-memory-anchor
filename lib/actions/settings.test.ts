@@ -217,26 +217,18 @@ describe('Settings Actions', () => {
       expect(state.error).toBe('删除提醒数据失败')
     })
 
-    // Skipped: mock chain for from().select().eq().single() in deleteAccount
-    // is complex due to vitest module hoisting. Needs proper integration test setup.
-    it.skip('should return error when profile fetch fails', async () => {
+    // Fixed: removed .single() from mock chain to match actual implementation
+    // which uses .select().eq() without .single()
+    it('should return error when profile fetch fails', async () => {
       const { createClient } = await import('@/lib/supabase/server')
 
-      // Profiles query chain that returns error
-      const profilesSingleMock = vi.fn()
-      profilesSingleMock.mockResolvedValue({ data: null, error: { message: 'DB error' } })
+      // Profiles query chain that returns error (select + eq, no .single())
       const profilesEqMock = vi.fn()
-      profilesEqMock.mockReturnValue({ single: profilesSingleMock })
+      profilesEqMock.mockResolvedValue({ data: null, error: { message: 'DB error' } })
       const profilesSelectMock = vi.fn()
       profilesSelectMock.mockReturnValue({ eq: profilesEqMock })
 
-      // Other tables: success chains (select and delete)
-      const successSingleMock = vi.fn()
-      successSingleMock.mockResolvedValue({ data: null, error: null })
-      const successEqMock = vi.fn()
-      successEqMock.mockReturnValue({ single: successSingleMock })
-      const successSelectMock = vi.fn()
-      successSelectMock.mockReturnValue({ eq: successEqMock })
+      // Other tables: success chains (delete only - they don't use select in this flow)
       const successDeleteEqMock = vi.fn()
       successDeleteEqMock.mockResolvedValue({ error: null })
       const successDeleteMock = vi.fn()
@@ -248,7 +240,8 @@ describe('Settings Actions', () => {
         if (table === 'profiles') {
           return { select: profilesSelectMock, delete: successDeleteMock }
         }
-        return { select: successSelectMock, delete: successDeleteMock }
+        // reminders and family_members only use delete().eq()
+        return { delete: successDeleteMock }
       })
 
       ;(createClient as ReturnType<typeof vi.fn>).mockResolvedValue({
