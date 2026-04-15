@@ -193,8 +193,8 @@ CREATE POLICY "Users manage own reminders" ON reminders
 -- ============================================================
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 VALUES
-  ('avatars', 'avatars', false, 5242880, ARRAY['image/jpeg', 'image/png', 'image/heic', 'image/webp']),
-  ('memories', 'memories', false, 524288000, ARRAY['image/jpeg', 'image/png', 'image/heic', 'image/webp', 'video/mp4', 'video/quicktime', 'audio/mpeg', 'audio/m4a', 'audio/ogg', 'application/pdf'])
+  ('avatars', 'avatars', true, 5242880, ARRAY['image/jpeg', 'image/png', 'image/heic', 'image/webp']),
+  ('memories', 'memories', true, 524288000, ARRAY['image/jpeg', 'image/png', 'image/heic', 'image/webp', 'video/mp4', 'video/quicktime', 'audio/mpeg', 'audio/m4a', 'audio/ogg', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])
 ON CONFLICT (id) DO NOTHING;
 
 -- Storage RLS

@@ -2,16 +2,19 @@ import { createClient } from '@/lib/supabase/server'
 
 /**
  * Sanitize filename to remove potentially problematic characters.
- * Only allows alphanumeric, dots, dashes, and underscores.
+ * Supabase Storage API does not URL-encode special characters in file paths,
+ * so only alphanumeric, dots, hyphens, and underscores are allowed.
+ * Anything else is replaced with underscore.
  */
 function sanitizeFilename(filename: string): string {
-  // Remove path separators and problematic characters
+  // Replace any character that is not alphanumeric, dot, hyphen, or underscore
   const sanitized = filename
-    .replace(/[/\\:*?"<>|]/g, '_')
-    .replace(/\s+/g, '_')
-    .replace(/_{2,}/g, '_')
-    .replace(/^\.+/, '') // Remove leading dots
-    .substring(0, 200) // Limit length
+    .replace(/[^a-zA-Z0-9._-]/g, '_')  // Remove ALL special chars including ()@# Chinese etc
+    .replace(/_+/g, '_')               // Collapse multiple underscores
+    .replace(/^_+/, '')                // Remove leading underscores
+    .replace(/_+$/, '')                // Remove trailing underscores
+    .replace(/\.+/g, '.')              // Collapse multiple dots
+    .substring(0, 200)                 // Limit length
   return sanitized || 'file'
 }
 
