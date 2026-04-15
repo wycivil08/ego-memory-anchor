@@ -49,6 +49,9 @@ export function ValueProps() {
   return (
     <section className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <h2 className="sr-only text-2xl font-semibold tracking-tight text-stone-900 sm:text-3xl">
+          核心功能
+        </h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           {features.map((feature, index) => (
             <Card

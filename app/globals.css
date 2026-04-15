@@ -6,7 +6,7 @@
   --foreground: #292524; /* stone-800 */
   --card: #ffffff;
   --card-foreground: #292524;
-  --primary: #d97706; /* amber-600 - warm accent */
+  --primary: #b45309; /* amber-700 - warm accent, WCAG AA contrast */
   --primary-foreground: #ffffff;
   --muted: #f5f5f4; /* stone-100 */
   --muted-foreground: #78716c; /* stone-500 */
@@ -16,7 +16,7 @@
   --destructive-foreground: #ffffff;
   --border: #e7e5e4; /* stone-200 */
   --input: #e7e5e4; /* stone-200 */
-  --ring: #d97706; /* amber-600 */
+  --ring: #b45309; /* amber-700 */
 }
 
 @theme inline {

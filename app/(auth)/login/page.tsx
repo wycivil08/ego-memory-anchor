@@ -77,7 +77,7 @@ export default function LoginPage() {
           没有账号？{' '}
           <Link
             href="/register"
-            className="text-amber-600 hover:text-amber-700 font-medium transition-colors duration-150"
+            className="text-amber-700 hover:text-amber-800 font-medium transition-colors duration-150"
           >
             去注册
           </Link>

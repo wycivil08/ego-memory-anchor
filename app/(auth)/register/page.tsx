@@ -43,7 +43,7 @@ export default function RegisterPage() {
             已有账号？{' '}
             <Link
               href="/login"
-              className="text-amber-600 hover:text-amber-700 font-medium transition-colors duration-150"
+              className="text-amber-700 hover:text-amber-800 font-medium transition-colors duration-150"
             >
               去登录
             </Link>
@@ -138,7 +138,7 @@ export default function RegisterPage() {
                 我已阅读并同意
                 <Link
                   href="/privacy"
-                  className="text-amber-600 hover:text-amber-700 underline underline-offset-2 mx-0.5"
+                  className="text-amber-700 hover:text-amber-800 underline underline-offset-2 mx-0.5"
                   target="_blank"
                 >
                   《隐私政策》
@@ -146,7 +146,7 @@ export default function RegisterPage() {
                 和
                 <Link
                   href="/terms"
-                  className="text-amber-600 hover:text-amber-700 underline underline-offset-2 mx-0.5"
+                  className="text-amber-700 hover:text-amber-800 underline underline-offset-2 mx-0.5"
                   target="_blank"
                 >
                   《用户协议》
@@ -175,7 +175,7 @@ export default function RegisterPage() {
           已有账号？{' '}
           <Link
             href="/login"
-            className="text-amber-600 hover:text-amber-700 font-medium transition-colors duration-150"
+            className="text-amber-700 hover:text-amber-800 font-medium transition-colors duration-150"
           >
             去登录
           </Link>

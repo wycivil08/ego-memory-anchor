@@ -14,7 +14,7 @@ export function HeroSection() {
             <h1 className="text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl lg:text-6xl">
               永不丢失
               <br />
-              <span className="text-amber-600">关于 TA 的真实记忆</span>
+              <span className="text-amber-700">关于 TA 的真实记忆</span>
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-stone-600 sm:text-xl">
               一站式聚合照片、视频、语音、文字，
@@ -25,7 +25,7 @@ export function HeroSection() {
               <Link href="/register">
                 <Button
                   size="lg"
-                  className="h-12 px-8 bg-amber-600 hover:bg-amber-700 text-white rounded-lg"
+                  className="h-12 px-8 bg-amber-700 hover:bg-amber-800 text-white rounded-lg"
                 >
                   开始守护记忆
                 </Button>
