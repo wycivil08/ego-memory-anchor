@@ -340,6 +340,34 @@ pnpm test:e2e            # Playwright E2E（配置后）
 | 新增依赖 | 汇报后执行 |
 | UI 视觉调整 | 可自主，但建议截图确认 |
 
+### Agent 自主性授权
+
+**以下操作 Agent 无需汇报，自主完成：**
+- 修复 bug（分析后直接修，最多尝试 3 次）
+- 重构（不改变功能只改结构）
+- 写测试、跑测试、调测试
+- 提交代码（符合 commit 规范）
+- 部署到 Vercel Preview
+- 使用 Playwright/puppeteer 自主验证 UI
+
+**以下操作必须汇报：**
+- 删除文件（非 tmp/build/cache）
+- 修改 migration 文件
+- 添加新依赖
+- 修改 RLS 策略
+- 修改认证/授权逻辑
+
+**调试流程：Auto-fix then Report**
+```
+发现 bug → 分析原因 → 尝试修复（最多 3 次）
+→ 修复成功 → 跑测试验证 → 自动部署 → 汇报（含截图）
+→ 失败 2 次 → 停止并汇报给用户
+```
+
+### 参考文档
+
+详细工作流参见 `docs/AUTONOMOUS_WORKFLOW.md`
+
 ### Sprint 汇报格式
 
 每个 Sprint 完成时，Claude Code 应汇报：
