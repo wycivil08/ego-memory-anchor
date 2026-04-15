@@ -1,0 +1,7 @@
+export { HeroSection } from './HeroSection'
+export { ValueProps } from './ValueProps'
+export { HowItWorks } from './HowItWorks'
+export { FounderStory } from './FounderStory'
+export { PrivacyPledge } from './PrivacyPledge'
+export { CTABanner } from './CTABanner'
+export { Footer } from './Footer'
