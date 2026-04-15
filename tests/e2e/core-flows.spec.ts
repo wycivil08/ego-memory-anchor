@@ -332,7 +332,7 @@ test.describe('E2E Core Flows', () => {
 
     test('should allow access to landing page without redirect', async ({ page }) => {
       await page.goto('/')
-      await expect(page.getByText('忆锚')).toBeVisible()
+      await expect(page.getByRole('link', { name: '忆锚' })).toBeVisible()
     })
   })
 

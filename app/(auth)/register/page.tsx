@@ -56,9 +56,9 @@ export default function RegisterPage() {
   return (
     <Card className="shadow-sm border-stone-200 rounded-xl">
       <CardHeader className="space-y-1 pb-6">
-        <CardTitle className="text-2xl font-medium text-stone-800">
+        <h1 className="text-2xl font-semibold text-stone-800">
           创建账号
-        </CardTitle>
+        </h1>
         <CardDescription className="text-stone-500">
           注册忆锚，守护真实记忆
         </CardDescription>
