@@ -67,38 +67,44 @@ test.describe('E2E Core Flows', () => {
     })
 
     test('should login with valid credentials', async ({ page }) => {
-      // This test assumes a user already exists
-      // In real E2E, you'd use a seeded test user or create one first
+      // This test uses pre-seeded test user
       await page.goto('/login')
       await checkAccessibility(page, '/login')
 
-      // Fill login form - using placeholder credentials
-      // In actual E2E with Supabase local, you'd create and login with real test user
-      await page.getByLabel('邮箱').fill('test@example.com')
-      await page.getByLabel('密码').fill('TestPass123')
+      // Fill login form with seeded test user
+      await page.getByLabel('邮箱').fill('seed1@test.com')
+      await page.getByLabel('密码').fill('SeedTest123')
       await page.getByRole('button', { name: '登录' }).click()
 
-      // Should show error for invalid credentials
-      await expect(page.getByRole('alert')).toBeVisible()
+      // Should redirect to dashboard on success
+      await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 })
     })
 
     test('should logout via user menu', async ({ page }) => {
-      // Login first
+      // Login first with seeded user
       await page.goto('/login')
+      await page.getByLabel('邮箱').fill('seed1@test.com')
+      await page.getByLabel('密码').fill('SeedTest123')
+      await page.getByRole('button', { name: '登录' }).click()
+      await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 })
 
-      // Note: This test would require a pre-authenticated state
-      // For E2E, typically use storageState to persist login
+      // Then logout via user menu - click user menu button (has avatar div with user initial)
+      await page.locator('button[class*="rounded-lg"][class*="px-3"]').first().click()
+      await page.getByRole('button', { name: '退出登录' }).click()
+
+      // Should redirect to login page
+      await expect(page).toHaveURL(/\/login/, { timeout: 5000 })
     })
   })
 
   test.describe('Flow 2: Create Profile → Upload Photo → Timeline Display', () => {
     test('should create a new profile', async ({ page }) => {
-      // Login first (assumes authenticated state - would use storageState in CI)
+      // Login first with seeded user
       await page.goto('/login')
-      // In a real E2E test, you'd either:
-      // 1. Use storageState to persist authentication
-      // 2. Seed a test user in the database
-      // 3. Use Supabase test helpers
+      await page.getByLabel('邮箱').fill('seed1@test.com')
+      await page.getByLabel('密码').fill('SeedTest123')
+      await page.getByRole('button', { name: '登录' }).click()
+      await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 })
 
       // Navigate to create profile page
       await page.goto('/profile/new')
