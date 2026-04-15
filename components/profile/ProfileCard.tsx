@@ -11,6 +11,7 @@ export function ProfileCard({ profile }: ProfileCardProps) {
     id,
     name,
     avatar_path,
+    cover_photo_path,
     relationship,
     birth_date,
     death_date,
@@ -53,22 +54,42 @@ export function ProfileCard({ profile }: ProfileCardProps) {
     ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${avatar_path}`
     : null
 
+  // Get cover photo URL
+  const coverPhotoUrl = cover_photo_path
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${cover_photo_path}`
+    : null
+
   return (
     <Link
       href={`/profile/${id}`}
-      className="group block rounded-xl border border-stone-200 bg-white p-5 shadow-sm transition-all duration-150 hover:border-stone-300 hover:shadow-md"
+      className="group block rounded-xl border border-stone-200 bg-white p-5 shadow-sm transition-all duration-150 hover:border-stone-300 hover:shadow-md overflow-hidden relative"
     >
-      <div className="flex items-start gap-4">
+      {/* Cover Photo Background */}
+      {coverPhotoUrl ? (
+        <div className="absolute inset-0 h-24 overflow-hidden">
+          <img
+            src={coverPhotoUrl}
+            alt=""
+            className="h-full w-full object-cover brightness-50 saturate-50"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-white" />
+        </div>
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-50 to-stone-50" />
+      )}
+
+      {/* Content - positioned above the cover gradient */}
+      <div className="relative flex items-start gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
           {avatarUrl ? (
             <img
               src={avatarUrl}
               alt={`${name}的头像`}
-              className="h-16 w-16 rounded-full object-cover ring-2 ring-stone-100"
+              className="h-16 w-16 rounded-full object-cover ring-2 ring-white shadow-md"
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600 text-xl font-medium ring-2 ring-stone-100">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600 text-xl font-medium ring-2 ring-white shadow-md">
               {name.charAt(0)}
             </div>
           )}
@@ -81,7 +102,7 @@ export function ProfileCard({ profile }: ProfileCardProps) {
             <h3 className="text-lg font-medium text-stone-800 truncate">
               {name}
             </h3>
-            <span className="flex-shrink-0 rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-500">
+            <span className="flex-shrink-0 rounded-full bg-white/90 px-2 py-0.5 text-xs text-stone-600 shadow-sm">
               {relationshipLabel}
             </span>
           </div>
@@ -122,7 +143,7 @@ export function ProfileCard({ profile }: ProfileCardProps) {
         </div>
 
         {/* Arrow indicator */}
-        <div className="flex-shrink-0 self-center text-stone-300 transition-colors group-hover:text-stone-400">
+        <div className="flex-shrink-0 self-center text-stone-400 transition-colors group-hover:text-stone-500">
           <svg
             className="h-5 w-5"
             fill="none"

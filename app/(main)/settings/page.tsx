@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { getProfilesForExport } from '@/lib/actions/export'
 import { SettingsClient } from '@/components/settings/SettingsClient'
-import { ExportProgress } from '@/components/export/ExportProgress'
+import { ExportButton } from '@/components/settings/ExportButton'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -29,13 +29,13 @@ export default async function SettingsPage() {
         </p>
       </div>
 
+      {/* Data Export - Most Prominent Position (Trust Signal) */}
+      <div className="max-w-2xl mb-8">
+        <ExportButton profiles={profiles} />
+      </div>
+
       {/* Settings Sections */}
       <SettingsClient profiles={profiles} />
-
-      {/* Export Progress - rendered separately since it's a client component */}
-      <div className="mt-6 max-w-2xl">
-        <ExportProgress profiles={profiles} />
-      </div>
     </div>
   )
 }

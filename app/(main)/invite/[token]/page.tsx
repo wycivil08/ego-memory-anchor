@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { getInviteByToken, acceptInvite } from '@/lib/actions/family'
 import { Button } from '@/components/ui/button'
@@ -8,6 +9,33 @@ import type { AcceptInviteState } from '@/lib/actions/family'
 
 interface InvitePageProps {
   params: Promise<{ token: string }>
+}
+
+// Dynamic OG metadata for invite link preview
+export async function generateMetadata({ params }: InvitePageProps): Promise<Metadata> {
+  const { token } = await params
+  const invite = await getInviteByToken(token)
+
+  if (!invite) {
+    return {
+      title: '邀请链接已失效 - 忆锚',
+    }
+  }
+
+  return {
+    title: `邀请你共同守护 ${invite.profile_name} 的记忆`,
+    description: `我在整理${invite.profile_name}的照片和录音，邀请你一起来补充。点击链接加入忆锚记忆空间。`,
+    openGraph: {
+      title: `邀请你共同守护 ${invite.profile_name} 的记忆`,
+      description: `我在整理${invite.profile_name}的照片和录音，邀请你一起来补充。点击链接加入忆锚记忆空间。`,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary',
+      title: `邀请你共同守护 ${invite.profile_name} 的记忆`,
+      description: `我在整理${invite.profile_name}的照片和录音，邀请你一起来补充。点击链接加入忆锚记忆空间。`,
+    },
+  }
 }
 
 export default async function InvitePage({ params }: InvitePageProps) {
@@ -53,6 +81,11 @@ export default async function InvitePage({ params }: InvitePageProps) {
     return acceptInvite(token)
   }
 
+  // Construct avatar URL if avatar_path exists
+  const avatarUrl = invite.profile_avatar_path
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${invite.profile_avatar_path}`
+    : null
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-50 px-4">
       <Card className="w-full max-w-md shadow-sm border-stone-200 rounded-xl">
@@ -67,10 +100,10 @@ export default async function InvitePage({ params }: InvitePageProps) {
         <CardContent className="space-y-6">
           {/* Memory space info */}
           <div className="rounded-lg bg-stone-100 p-4 text-center">
-            <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-amber-100 flex items-center justify-center">
-              {invite.profile_avatar_path ? (
+            <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-amber-100 flex items-center justify-center overflow-hidden">
+              {avatarUrl ? (
                 <img
-                  src={invite.profile_avatar_path}
+                  src={avatarUrl}
                   alt={invite.profile_name}
                   className="w-full h-full object-cover rounded-full"
                 />

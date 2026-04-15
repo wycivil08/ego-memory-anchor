@@ -1,11 +1,12 @@
 'use client'
 
-import { useCallback, useReducer } from 'react'
+import { useCallback, useReducer, useState } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import type { UploadProgressItem, UploadStatus } from '@/components/upload/UploadProgress'
 import { UploadZone } from '@/components/upload/UploadZone'
 import { BatchUploadList } from '@/components/upload/BatchUploadList'
+import { PrivacyConsentDialog, useUploadConsent } from '@/components/upload/PrivacyConsentDialog'
 import { extractExifDate, extractExifData } from '@/lib/utils/exif'
 import { generateThumbnail } from '@/lib/utils/thumbnail'
 import { uploadMemoryFile } from '@/lib/actions/upload'
@@ -70,6 +71,10 @@ export default function UploadPage() {
   const params = useParams()
   const router = useRouter()
   const profileId = params.profileId as string
+
+  const hasConsented = useUploadConsent()
+  const [showConsentDialog, setShowConsentDialog] = useState(!hasConsented)
+  const [isUploadEnabled, setIsUploadEnabled] = useState(hasConsented)
 
   const [state, dispatch] = useReducer(uploadReducer, {
     items: [],
@@ -234,6 +239,12 @@ export default function UploadPage() {
   // Handle files selected from UploadZone
   const handleFilesSelected = useCallback(
     (files: Array<{ file: File; memoryType: 'photo' | 'video' | 'audio' | 'text' | 'document' }>) => {
+      // Check consent before processing files
+      if (!isUploadEnabled) {
+        setShowConsentDialog(true)
+        return
+      }
+
       const uploadItems: UploadProgressItem[] = files.map((f) => ({
         id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         file: f.file,
@@ -249,8 +260,14 @@ export default function UploadPage() {
         processFilesWithConcurrency(uploadItems, 3)
       }, 0)
     },
-    [processFilesWithConcurrency]
+    [processFilesWithConcurrency, isUploadEnabled]
   )
+
+  // Handle consent given
+  const handleConsentGiven = useCallback(() => {
+    setIsUploadEnabled(true)
+    setShowConsentDialog(false)
+  }, [])
 
   // Handle retry
   const handleRetry = useCallback(
@@ -321,9 +338,12 @@ export default function UploadPage() {
             <UploadZone
               onFilesSelected={handleFilesSelected}
               maxFiles={100}
-              disabled={state.isUploading}
+              disabled={state.isUploading || !isUploadEnabled}
             />
           )}
+
+          {/* Privacy Consent Dialog */}
+          <PrivacyConsentDialog onConsentGiven={handleConsentGiven} />
 
           {/* Upload Progress */}
           {state.items.length > 0 && (

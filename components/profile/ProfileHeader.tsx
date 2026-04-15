@@ -44,32 +44,58 @@ export function ProfileHeader({ profile, className }: ProfileHeaderProps) {
     ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${profile.avatar_path}`
     : null
 
+  // Get cover photo URL
+  const coverPhotoUrl = profile.cover_photo_path
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${profile.cover_photo_path}`
+    : null
+
+  // Fallback cover gradient
+  const hasCustomCover = !!coverPhotoUrl
+
   return (
-    <div className={`bg-gradient-to-b from-amber-50 to-stone-50 border-b border-stone-200 ${className || ''}`}>
-      <div className="p-6 lg:p-8">
+    <div className={`relative overflow-hidden ${className || ''}`}>
+      {/* Cover Photo Banner */}
+      <div className="h-40 lg:h-48 relative">
+        {hasCustomCover ? (
+          <>
+            <img
+              src={coverPhotoUrl}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+            {/* Gradient overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+          </>
+        ) : (
+          <div className="h-full bg-gradient-to-b from-amber-100 via-amber-50 to-stone-50" />
+        )}
+      </div>
+
+      {/* Header Content - positioned to overlap the cover photo */}
+      <div className="relative px-6 lg:px-8 -mt-16">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-          {/* Avatar */}
+          {/* Avatar - positioned to overlap the cover photo */}
           <div className="flex-shrink-0">
             {avatarUrl ? (
               <img
                 src={avatarUrl}
                 alt={`${profile.name}的头像`}
-                className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-md"
+                className="h-24 w-24 rounded-full object-cover ring-4 ring-white shadow-lg"
               />
             ) : (
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-amber-100 text-amber-600 text-3xl font-medium ring-4 ring-white shadow-md">
+              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-amber-100 text-amber-600 text-3xl font-medium ring-4 ring-white shadow-lg">
                 {profile.name.charAt(0)}
               </div>
             )}
           </div>
 
           {/* Info */}
-          <div className="flex-1">
+          <div className="flex-1 lg:pt-4">
             <div className="flex flex-wrap items-center gap-3">
               <h1 className="text-2xl font-medium text-stone-800">
                 {profile.name}
               </h1>
-              <span className="rounded-full bg-white px-3 py-1 text-sm text-stone-600 shadow-sm">
+              <span className="rounded-full bg-white/90 px-3 py-1 text-sm text-stone-600 shadow-sm">
                 {relationshipLabel}
               </span>
             </div>
@@ -92,7 +118,7 @@ export function ProfileHeader({ profile, className }: ProfileHeaderProps) {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-wrap gap-2 lg:flex-nowrap">
+          <div className="flex flex-wrap gap-2 lg:flex-nowrap lg:pt-4">
             <Link href={`/profile/${profile.id}/upload`}>
               <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-xl transition-colors duration-150">
                 <svg

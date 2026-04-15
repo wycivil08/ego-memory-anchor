@@ -43,6 +43,7 @@ export async function createProfile(
   const deathDate = formData.get('death_date') as string | null
   const description = formData.get('description') as string | null
   const species = formData.get('species') as string || 'human'
+  const coverPhotoPath = formData.get('cover_photo_path') as string | null
 
   // Validate required fields
   if (!name || name.trim().length === 0) {
@@ -94,6 +95,7 @@ export async function createProfile(
     birth_date: birthDate || null,
     death_date: deathDate || null,
     description: description?.trim() || null,
+    cover_photo_path: coverPhotoPath || null,
   }
 
   // Insert profile
@@ -123,6 +125,7 @@ export async function updateProfile(
   const deathDate = formData.get('death_date') as string | null
   const description = formData.get('description') as string | null
   const species = formData.get('species') as string || 'human'
+  const coverPhotoPath = formData.get('cover_photo_path') as string | null
 
   // Validate required fields
   if (!name || name.trim().length === 0) {
@@ -188,6 +191,7 @@ export async function updateProfile(
     birth_date: birthDate || null,
     death_date: deathDate || null,
     description: description?.trim() || null,
+    cover_photo_path: coverPhotoPath || null,
   }
 
   const { error } = await supabase

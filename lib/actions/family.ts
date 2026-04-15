@@ -284,7 +284,7 @@ export async function revokeInvite(
 // Generate invite link (used by invite action in profile)
 export async function generateInviteLink(
   profileId: string,
-  email: string,
+  email: string | null,
   role: FamilyRole = 'viewer'
 ): Promise<{ link: string | null; error: string | null }> {
   const access = await validateOwnerAccess(profileId)
@@ -292,10 +292,12 @@ export async function generateInviteLink(
     return { link: null, error: access.error || '无权限' }
   }
 
-  // Validate email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(email)) {
-    return { link: null, error: '请输入有效的邮箱地址' }
+  // Validate email only if provided
+  if (email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return { link: null, error: '请输入有效的邮箱地址' }
+    }
   }
 
   const supabase = await createClient()

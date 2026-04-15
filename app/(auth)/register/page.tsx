@@ -1,9 +1,10 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { signUp, type SignUpState } from '@/lib/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Card,
   CardContent,
@@ -21,6 +22,7 @@ const initialState: SignUpState = {
 
 export default function RegisterPage() {
   const [state, formAction, isPending] = useActionState(signUp, initialState)
+  const [privacyChecked, setPrivacyChecked] = useState(false)
 
   if (state.emailSent) {
     return (
@@ -120,9 +122,47 @@ export default function RegisterPage() {
             </p>
           )}
 
+          {/* Privacy consent checkbox */}
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id="privacy-consent"
+                checked={privacyChecked}
+                onCheckedChange={(checked) => setPrivacyChecked(checked === true)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-300 text-amber-600 focus-visible:ring-amber-600"
+              />
+              <label
+                htmlFor="privacy-consent"
+                className="text-sm text-stone-600 leading-relaxed cursor-pointer"
+              >
+                我已阅读并同意
+                <Link
+                  href="/privacy"
+                  className="text-amber-600 hover:text-amber-700 underline underline-offset-2 mx-0.5"
+                  target="_blank"
+                >
+                  《隐私政策》
+                </Link>
+                和
+                <Link
+                  href="/terms"
+                  className="text-amber-600 hover:text-amber-700 underline underline-offset-2 mx-0.5"
+                  target="_blank"
+                >
+                  《用户协议》
+                </Link>
+              </label>
+            </div>
+
+            {/* Warm reassurance text */}
+            <p className="text-xs text-stone-400 pl-7">
+              你的数据只属于你。我们不做 AI 合成，不投广告。
+            </p>
+          </div>
+
           <Button
             type="submit"
-            disabled={isPending}
+            disabled={isPending || !privacyChecked}
             variant="default"
             size="lg"
             className="w-full"

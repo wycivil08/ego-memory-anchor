@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { generateInviteLink, type FamilyState } from '@/lib/actions/family'
+import { generateInviteLink } from '@/lib/actions/family'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog'
 import type { FamilyRole } from '@/lib/types'
 import { FAMILY_ROLE_LABELS } from '@/lib/types'
@@ -21,9 +20,11 @@ interface InviteDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   profileId: string
+  /** The name of the profile (deceased person/pet) for WeChat template text */
+  profileName: string
 }
 
-export function InviteDialog({ open, onOpenChange, profileId }: InviteDialogProps) {
+export function InviteDialog({ open, onOpenChange, profileId, profileName }: InviteDialogProps) {
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<FamilyRole>('viewer')
   const [inviteLink, setInviteLink] = useState<string | null>(null)
@@ -36,7 +37,7 @@ export function InviteDialog({ open, onOpenChange, profileId }: InviteDialogProp
     setIsLoading(true)
     setError(null)
 
-    const result = await generateInviteLink(profileId, email, role)
+    const result = await generateInviteLink(profileId, email || null, role)
 
     if (result.error) {
       setError(result.error)
@@ -47,16 +48,39 @@ export function InviteDialog({ open, onOpenChange, profileId }: InviteDialogProp
     }
   }
 
-  const handleCopy = async () => {
+  const handleCopyLink = async () => {
     if (inviteLink) {
       try {
         await navigator.clipboard.writeText(inviteLink)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
       } catch {
-        // Fallback for older browsers
         const textArea = document.createElement('textarea')
         textArea.value = inviteLink
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      }
+    }
+  }
+
+  // Generate WeChat-friendly invite text template
+  const wechatTemplateText = inviteLink
+    ? `我在整理${profileName}的照片和录音，邀请你一起来补充。点击链接加入：\n${inviteLink}`
+    : null
+
+  const handleCopyTemplate = async () => {
+    if (wechatTemplateText) {
+      try {
+        await navigator.clipboard.writeText(wechatTemplateText)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      } catch {
+        const textArea = document.createElement('textarea')
+        textArea.value = wechatTemplateText
         document.body.appendChild(textArea)
         textArea.select()
         document.execCommand('copy')
@@ -97,14 +121,13 @@ export function InviteDialog({ open, onOpenChange, profileId }: InviteDialogProp
         {!inviteLink ? (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="invite-email">邮箱地址</Label>
+              <Label htmlFor="invite-email">邮箱地址（选填）</Label>
               <Input
                 id="invite-email"
                 type="email"
                 placeholder="family@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
                 disabled={isLoading}
                 className="border-stone-300 bg-white text-stone-800 placeholder:text-stone-400"
               />
@@ -146,27 +169,44 @@ export function InviteDialog({ open, onOpenChange, profileId }: InviteDialogProp
           </form>
         ) : (
           <div className="space-y-4">
+            {/* URL display with character count */}
             <div className="space-y-2">
-              <Label>邀请链接</Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  value={inviteLink}
-                  readOnly
-                  className="border-stone-300 bg-stone-50 text-stone-700 text-sm"
-                />
-                <Button
-                  onClick={handleCopy}
-                  variant="outline"
-                  size="sm"
-                  className="shrink-0 border-stone-300 text-stone-700 hover:bg-stone-100"
+              <div className="flex items-center justify-between">
+                <Label>邀请链接</Label>
+                <span
+                  className={`text-xs ${
+                    (inviteLink?.length || 0) > 100
+                      ? 'text-red-500 font-medium'
+                      : 'text-stone-400'
+                  }`}
                 >
-                  {copied ? '已复制' : '复制'}
-                </Button>
+                  {inviteLink?.length || 0} / 100 字符
+                </span>
               </div>
+              <Input
+                value={inviteLink || ''}
+                readOnly
+                className="border-stone-300 bg-stone-50 text-stone-700 text-sm font-mono"
+              />
               <p className="text-xs text-stone-500">
-                复制链接发送给家人，他们可以直接打开链接加入记忆空间
+                微信内直接粘贴链接，或复制后发送
               </p>
             </div>
+
+            {/* WeChat template text */}
+            {wechatTemplateText && (
+              <div className="space-y-2">
+                <Label>微信分享文案（推荐）</Label>
+                <div className="rounded-lg bg-green-50 p-3 border border-green-200">
+                  <p className="text-sm text-green-800 whitespace-pre-wrap">
+                    {wechatTemplateText}
+                  </p>
+                </div>
+                <p className="text-xs text-stone-500">
+                  一键复制，直接粘贴到微信发送
+                </p>
+              </div>
+            )}
 
             <div className="rounded-lg bg-amber-50 p-3 border border-amber-200">
               <p className="text-xs text-amber-800">
@@ -174,13 +214,22 @@ export function InviteDialog({ open, onOpenChange, profileId }: InviteDialogProp
               </p>
             </div>
 
-            <DialogFooter className="pt-2">
+            <DialogFooter className="pt-2 gap-2">
               <Button
-                onClick={handleCopy}
-                className="bg-amber-600 hover:bg-amber-700 text-white"
+                onClick={handleCopyLink}
+                variant="outline"
+                className="flex-1 border-stone-300 text-stone-700 hover:bg-stone-100"
               >
                 {copied ? '已复制' : '复制链接'}
               </Button>
+              {wechatTemplateText && (
+                <Button
+                  onClick={handleCopyTemplate}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                >
+                  {copied ? '已复制' : '复制微信文案'}
+                </Button>
+              )}
             </DialogFooter>
           </div>
         )}

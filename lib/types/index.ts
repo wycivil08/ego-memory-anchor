@@ -58,6 +58,7 @@ export interface Profile {
   user_id: string
   name: string
   avatar_path: string | null
+  cover_photo_path: string | null
   birth_date: string | null
   death_date: string | null
   relationship: Relationship
@@ -74,6 +75,7 @@ export interface ProfileWithMemoryCount extends Profile {
 export interface CreateProfileInput {
   name: string
   avatar_path?: string | null
+  cover_photo_path?: string | null
   birth_date?: string | null
   death_date?: string | null
   relationship: Relationship
