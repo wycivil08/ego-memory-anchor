@@ -1,5 +1,26 @@
 import { test as base, Page } from '@playwright/test'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { readFileSync, existsSync } from 'fs'
+import { join } from 'path'
+
+// Load .env.local for E2E test context (Playwright workers don't inherit it automatically)
+const envPath = join(process.cwd(), '.env.local')
+if (existsSync(envPath)) {
+  const envContent = readFileSync(envPath, 'utf-8')
+  for (const line of envContent.split('\n')) {
+    const trimmed = line.trim()
+    if (trimmed && !trimmed.startsWith('#')) {
+      const eqIndex = trimmed.indexOf('=')
+      if (eqIndex > 0) {
+        const key = trimmed.slice(0, eqIndex).trim()
+        const value = trimmed.slice(eqIndex + 1).trim()
+        if (!process.env[key]) {
+          process.env[key] = value
+        }
+      }
+    }
+  }
+}
 
 /**
  * Seed data created by this fixture
