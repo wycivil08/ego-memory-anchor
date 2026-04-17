@@ -45,6 +45,7 @@
 Agent 在部署前必须确认：
 - [ ] `pnpm build` 成功
 - [ ] `pnpm test --run` 全部通过
+- [ ] `pnpm lint` 0 errors
 - [ ] 无 console.error
 - [ ] E2E 测试通过（关键流程）
 
@@ -58,24 +59,52 @@ Agent 在部署前必须确认：
 |------|------|--------|----------|
 | 单元测试 | Vitest + jsdom | 工具函数 100% | TDD，先写测试 |
 | 集成测试 | Vitest + 真实 Supabase | Server Actions 80% | 先写测试，真实 DB |
-| E2E 测试 | Playwright | 5 条核心流程 | Agent 生成 + Healer 修复 |
-| 视觉回归 | Playwright screenshot | 关键页面 | Agent 用 vision model 对比 |
-| 可访问性 | axe-core | WCAG 2.1 AA | Agent 运行 scan |
+| E2E 测试 | Playwright | 5 条核心流程 | Sprint 末尾跑 |
+| 视觉回归 | Playwright screenshot | 关键页面 | Sprint 末尾截图对比 |
+| 可访问性 | axe-core | WCAG 2.1 AA | Sprint 末尾扫描 |
 
-### 3.2 TDD 强制流程
+### 3.2 智能测试选择（每次修改后）
+
+**核心原则：不是每次修改跑全部测试，而是只跑受影响的测试。**
+
+```bash
+# 每次代码修改后 — 智能选择（静态依赖图分析，<30s 反馈）
+vitest --changed
+
+# 每个功能点完成后 — 全量单元测试 + lint
+pnpm test --run && pnpm lint
+
+# Sprint/milestone 末尾 — 全量 + lint + E2E
+pnpm test --run && pnpm lint && pnpm playwright test
+```
+
+**为什么 --changed 有效：**
+- Vitest 使用静态依赖图分析（不是运行时分析）
+- 每次修改只跑与修改文件有依赖关系的测试
+- 零维护，无需配置测试选择规则
+
+**测试触发时机：**
+
+| 时机 | 命令 | 反馈速度 | 覆盖范围 |
+|------|------|---------|---------|
+| 每次代码修改 | `vitest --changed` | <30s | 受影响测试 |
+| 功能点完成 | `pnpm test --run && pnpm lint` | ~2-5min | 全量单元+lint |
+| Sprint 末尾 | `pnpm test --run && pnpm lint && pnpm playwright test` | ~10min | 全量+lint+E2E |
+
+### 3.3 TDD 强制流程
 
 ```
 RED    → 先写测试，定义预期行为
-RUN    → 运行测试，确认失败
+RUN    → vitest --changed，确认失败
 GREEN  → 写最少量代码让测试通过
-REFACTOR → 清理代码，测试仍通过
+REFACTOR → 清理代码，vitest --changed 仍通过
 ```
 
 **Agent 专用规则：**
 - 禁止删除或修改测试断言来让测试通过
 - 测试本身有问题时，应汇报而非自行修改
 
-### 3.3 Self-Testing（基于 ReVeal 研究）
+### 3.4 Self-Testing（基于 ReVeal 研究）
 
 Agent 生成自己的验证测试：
 
@@ -94,13 +123,13 @@ Agent 实现代码 → Agent 生成验证测试 → 测试失败
 | 工具 | 用途 | 状态 |
 |------|------|------|
 | Playwright | E2E 测试、截图 | 已安装 |
-| @playwright/mcp | AI 浏览器控制 | 可选安装 |
-| axe-core | 可访问性测试 | 可选安装 |
-| browser-use | 高级浏览器自动化 | 可选安装 |
+| @playwright/mcp | AI 浏览器控制 | **已安装** (`.mcp.json` 配置) |
+| axe-core | 可访问性测试 | 已安装 |
+| ESLint | 代码风格检查 | 已安装 (0 errors) | |
 
 ### 4.2 MCP 工具使用
 
-如果安装了 `@playwright/mcp`，Agent 可以：
+已安装 `@playwright/mcp`，Agent 可以：
 
 ```
 puppeteer_navigate   → 打开页面
@@ -133,6 +162,7 @@ const screenshot = await page.screenshot({ fullPage: true })
 
 ### 验证
 - [x] pnpm test --run: X passed
+- [x] pnpm lint: 0 errors
 - [x] pnpm build: success
 - [x] Deployed to: https://xxx.vercel.app
 
@@ -162,6 +192,7 @@ const screenshot = await page.screenshot({ fullPage: true })
 
 ### 验证
 - [x] pnpm test --run: 全部通过
+- [x] pnpm lint: 0 errors
 - [x] pnpm build: success
 - [x] Deployed to: https://xxx.vercel.app
 
