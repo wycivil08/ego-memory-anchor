@@ -23,8 +23,6 @@ function getDocumentType(mimeType: string | null | undefined): DocumentType {
 export function DocumentViewer({ src, fileName, mimeType, onClose, className }: DocumentViewerProps) {
   const [isLoading, setIsLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
-  const [currentPage, setCurrentPage] = React.useState(1)
-  const [totalPages, setTotalPages] = React.useState(1)
   const containerRef = React.useRef<HTMLDivElement>(null)
 
   const documentType = getDocumentType(mimeType)
@@ -60,7 +58,6 @@ export function DocumentViewer({ src, fileName, mimeType, onClose, className }: 
   React.useEffect(() => {
     setIsLoading(true)
     setError(null)
-    setCurrentPage(1)
   }, [src])
 
   return (
@@ -142,6 +139,7 @@ export function DocumentViewer({ src, fileName, mimeType, onClose, className }: 
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-stone-300 border-t-amber-500" />
               </div>
             )}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={src}
               alt={fileName || '图片文档'}
@@ -173,28 +171,7 @@ export function DocumentViewer({ src, fileName, mimeType, onClose, className }: 
         )}
       </div>
 
-      {/* PDF page navigation (if PDF) */}
-      {isPdf && totalPages > 1 && (
-        <div className="flex items-center justify-center gap-4 border-t border-stone-100 py-3">
-          <button
-            onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-            disabled={currentPage <= 1}
-            className="rounded-md bg-stone-100 px-3 py-1.5 text-sm text-stone-600 hover:bg-stone-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            上一页
-          </button>
-          <span className="text-sm text-stone-500">
-            {currentPage} / {totalPages}
-          </span>
-          <button
-            onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-            disabled={currentPage >= totalPages}
-            className="rounded-md bg-stone-100 px-3 py-1.5 text-sm text-stone-600 hover:bg-stone-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            下一页
-          </button>
-        </div>
-      )}
+      {/* PDF page navigation removed — iframe-based PDF rendering does not expose page count */}
     </div>
   )
 }
