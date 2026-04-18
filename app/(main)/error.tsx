@@ -7,7 +7,9 @@ interface MainErrorProps {
   reset: () => void
 }
 
-export default function MainError({ error, reset }: MainErrorProps) {
+export default function MainError({ error: _error, reset }: MainErrorProps) {
+// _error is intentionally unused - it's part of the Error boundary interface but we display a generic message
+void _error
   return (
     <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">

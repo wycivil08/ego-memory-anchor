@@ -3,6 +3,9 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 
+// Pre-computed skeleton heights for loading animation - deterministic values avoid impure Math.random() in module scope
+const SKELETON_HEIGHTS = Array.from({ length: 50 }, (_, i) => 20 + ((i * 37 + 13) % 60))
+
 interface AudioPlayerProps {
   src: string
   title?: string
@@ -23,6 +26,9 @@ export function AudioPlayer({ src, title, onClose, className }: AudioPlayerProps
   const [duration, setDuration] = React.useState(0)
   const [waveformData, setWaveformData] = React.useState<number[]>([])
   const [isLoading, setIsLoading] = React.useState(true)
+
+  // Skeleton heights for loading animation - using module-level constant
+  // (generated once at module load, not during render)
 
   // Format time as MM:SS
   const formatTime = (seconds: number): string => {
@@ -136,6 +142,7 @@ export function AudioPlayer({ src, title, onClose, className }: AudioPlayerProps
       })
     }
 
+    // eslint-disable-next-line react-hooks/immutability -- recursive RAF is intentional
     animationRef.current = requestAnimationFrame(drawWaveform)
   }, [isPlaying, waveformData, currentTime, duration])
 
@@ -237,7 +244,7 @@ export function AudioPlayer({ src, title, onClose, className }: AudioPlayerProps
             <div
               key={i}
               className="w-1 animate-pulse rounded-full bg-stone-300"
-              style={{ height: `${20 + Math.random() * 60}%` }}
+              style={{ height: `${SKELETON_HEIGHTS[i]}%` }}
             />
           ))}
         </div>
