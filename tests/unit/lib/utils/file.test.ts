@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 import { validateFile, getMemoryType, formatFileSize } from '@/lib/utils/file'
-import type { MemoryType } from '@/lib/types'
 
 describe('file utils', () => {
   describe('validateFile', () => {

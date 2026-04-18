@@ -276,7 +276,7 @@ describe('Memory Actions', () => {
             data: { user: { id: 'user-id', email: 'test@test.com' } },
           }),
         },
-        from: vi.fn((_table: string) => ({
+        from: vi.fn(() => ({
           select: vi.fn().mockReturnValue({
             eq: vi.fn().mockReturnValue({
               single: vi.fn().mockResolvedValue({

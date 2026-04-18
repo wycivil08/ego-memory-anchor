@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { FamilyMemberWithUser, FamilyRole } from '@/lib/types'
+import type { FamilyRole } from '@/lib/types'
 
 // Mock the Supabase client
 vi.mock('@/lib/supabase/server', () => ({

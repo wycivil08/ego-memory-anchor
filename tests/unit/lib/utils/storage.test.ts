@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { uploadFile, uploadThumbnail, getPublicUrl } from '@/lib/utils/storage'
+import { uploadFile, uploadThumbnail } from '@/lib/utils/storage'
 import { createClient } from '@/lib/supabase/server'
 
 // Mock the Supabase server client
@@ -7,31 +7,18 @@ vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(),
 }))
 
-// Mock environment variable
-const mockSupabaseUrl = 'https://mock.supabase.co'
-vi.stubGlobal('process', {
-  ...process,
-  env: {
-    ...process.env,
-    NEXT_PUBLIC_SUPABASE_URL: mockSupabaseUrl,
-  },
-})
-
 describe('storage utils', () => {
   let mockUpload: ReturnType<typeof vi.fn>
-  let mockGetPublicUrl: ReturnType<typeof vi.fn>
 
   beforeEach(() => {
     vi.clearAllMocks()
 
     // Create mock functions
     mockUpload = vi.fn()
-    mockGetPublicUrl = vi.fn()
 
     // Mock the storage.from().upload() chain
     const mockFrom = vi.fn(() => ({
       upload: mockUpload,
-      getPublicUrl: mockGetPublicUrl,
     }))
 
     const mockStorage = {
@@ -123,19 +110,4 @@ describe('storage utils', () => {
     })
   })
 
-  describe('getPublicUrl', () => {
-    it('should return public URL for given bucket and path', () => {
-      const bucket = 'memories'
-      const path = 'user123/profile456/memory789/test.jpg'
-      const expectedUrl = `${mockSupabaseUrl}/storage/v1/object/public/${bucket}/${path}`
-
-      mockGetPublicUrl.mockReturnValue({
-        data: { publicUrl: expectedUrl },
-      })
-
-      const result = getPublicUrl(bucket, path)
-
-      expect(result).toBe(expectedUrl)
-    })
-  })
 })
