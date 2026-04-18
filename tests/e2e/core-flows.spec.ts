@@ -14,7 +14,7 @@ const TEST_PROFILE = {
 async function checkAccessibility(page: Page, url: string) {
   await page.goto(url)
   const results = await new AxeBuilder({ page })
-    .configure({ rules: [{ id: 'color-contrast', enabled: false }] })
+    .disableRules(['color-contrast'])
     .analyze()
   expect(results.violations).toEqual([])
 }
