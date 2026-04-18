@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { SourceBadge } from './SourceBadge'
+import { SinglePhotoViewer } from './PhotoViewer'
+import { WaveformPlayer } from './WaveformPlayer'
 import { formatMemoryDate, MEMORY_TYPE_LABELS, type Memory } from '@/lib/utils/timeline'
+import { getMemoryFileUrl } from '@/lib/utils/storage-urls'
 
 interface MemoryDetailProps {
   memory: Memory
@@ -14,28 +16,8 @@ interface MemoryDetailProps {
   className?: string
 }
 
-// Photo viewer with zoom capability
-function PhotoViewer({ src, alt }: { src: string; alt?: string }) {
-  const [isZoomed, setIsZoomed] = useState(false)
-
-  return (
-    <div
-      className={`relative ${isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
-      onClick={() => setIsZoomed(!isZoomed)}
-    >
-      <img
-        src={src}
-        alt={alt || '照片'}
-        className={`max-h-[70vh] w-full object-contain transition-transform duration-200 ${
-          isZoomed ? 'scale-150' : ''
-        }`}
-      />
-    </div>
-  )
-}
-
 // Video player with controls
-function VideoPlayer({ src, mimeType }: { src: string; mimeType?: string }) {
+function VideoPlayer({ src }: { src: string }) {
   return (
     <video
       src={src}
@@ -48,111 +30,7 @@ function VideoPlayer({ src, mimeType }: { src: string; mimeType?: string }) {
   )
 }
 
-// Audio player with waveform visualization (simplified)
-function AudioPlayer({ src, duration }: { src: string; duration?: number | null }) {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [audioDuration, setAudioDuration] = useState(duration || 0)
-
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60)
-    const secs = Math.floor(seconds % 60)
-    return `${mins}:${secs.toString().padStart(2, '0')}`
-  }
-
-  return (
-    <div className="w-full rounded-xl bg-gradient-to-br from-stone-100 to-stone-50 p-6">
-      {/* Waveform visualization (simplified) */}
-      <div className="mb-4 flex h-16 items-center justify-center gap-1">
-        {Array.from({ length: 40 }).map((_, i) => (
-          <div
-            key={i}
-            className="w-1 rounded-full bg-amber-400 transition-all duration-150"
-            style={{
-              height: `${Math.random() * 100}%`,
-              opacity: i / 40 < currentTime / (audioDuration || 1) ? 1 : 0.4,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Audio element (hidden) */}
-      <audio
-        src={src}
-        onTimeUpdate={(e) => setCurrentTime((e.target as HTMLAudioElement).currentTime)}
-        onLoadedMetadata={(e) => setAudioDuration((e.target as HTMLAudioElement).duration)}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-      />
-
-      {/* Controls */}
-      <div className="flex items-center justify-center gap-4">
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-12 w-12 rounded-full border-stone-300 bg-white hover:bg-stone-50"
-          onClick={() => {
-            const audio = document.querySelector('audio') as HTMLAudioElement
-            if (audio) {
-              audio.currentTime = Math.max(0, audio.currentTime - 10)
-            }
-          }}
-        >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.333 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z" />
-          </svg>
-        </Button>
-
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-16 w-16 rounded-full border-stone-300 bg-white hover:bg-stone-50"
-          onClick={() => {
-            const audio = document.querySelector('audio') as HTMLAudioElement
-            if (audio) {
-              if (isPlaying) {
-                audio.pause()
-              } else {
-                audio.play()
-              }
-            }
-          }}
-        >
-          {isPlaying ? (
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-            </svg>
-          ) : (
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          )}
-        </Button>
-
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-12 w-12 rounded-full border-stone-300 bg-white hover:bg-stone-50"
-          onClick={() => {
-            const audio = document.querySelector('audio') as HTMLAudioElement
-            if (audio) {
-              audio.currentTime = Math.min(audioDuration, audio.currentTime + 10)
-            }
-          }}
-        >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.933 12.8a1 1 0 000-1.6L6.6 7.2A1 1 0 005 8v8a1 1 0 001.6.8l5.333-4zM19.933 12.8a1 1 0 000-1.6l-5.333-4A1 1 0 0013 8v8a1 1 0 001.6.8l5.333-4z" />
-          </svg>
-        </Button>
-      </div>
-
-      {/* Time display */}
-      <div className="mt-4 flex justify-center text-sm text-stone-500">
-        {formatTime(currentTime)} / {formatTime(audioDuration)}
-      </div>
-    </div>
-  )
-}
+// Audio player with waveform visualization using wavesurfer.js
 
 // Text viewer for text memories
 function TextViewer({ content }: { content: string }) {
@@ -208,15 +86,11 @@ export function MemoryDetail({
   canDelete,
   className,
 }: MemoryDetailProps) {
-  // Get file URL
-  const fileUrl = memory.file_path
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${memory.file_path}`
-    : null
+  // Get file URL - use centralized utility to prevent URL construction bugs
+  const fileUrl = memory.file_path ? getMemoryFileUrl(memory.file_path) : null
 
-  // Get thumbnail URL
-  const thumbnailUrl = memory.thumbnail_path
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${memory.thumbnail_path}`
-    : null
+  // Get thumbnail URL - use centralized utility
+  const thumbnailUrl = memory.thumbnail_path ? getMemoryFileUrl(memory.thumbnail_path) : null
 
   // Use thumbnail for display if available, otherwise use file
   const displayUrl = thumbnailUrl || fileUrl
@@ -229,15 +103,15 @@ export function MemoryDetail({
       {/* Media display area */}
       <div className="rounded-xl bg-stone-100 overflow-hidden">
         {memory.type === 'photo' && displayUrl && (
-          <PhotoViewer src={displayUrl} alt={memory.content || '照片'} />
+          <SinglePhotoViewer src={displayUrl} alt={memory.content || '照片'} sourceLabel={memory.source_label || undefined} />
         )}
 
         {memory.type === 'video' && displayUrl && (
-          <VideoPlayer src={displayUrl} mimeType={memory.mime_type || undefined} />
+          <VideoPlayer src={displayUrl} />
         )}
 
         {memory.type === 'audio' && fileUrl && (
-          <AudioPlayer src={fileUrl} duration={memory.duration_seconds} />
+          <WaveformPlayer url={fileUrl} />
         )}
 
         {memory.type === 'text' && memory.content && (
@@ -288,6 +162,7 @@ export function MemoryDetail({
         {(contributorName || contributorAvatar) && (
           <div className="mt-2 flex items-center gap-2">
             {contributorAvatar ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={contributorAvatar}
                 alt={contributorName}

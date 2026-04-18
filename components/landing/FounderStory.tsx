@@ -43,7 +43,7 @@ export function FounderStory() {
                   <p>
                     忆锚就这样诞生了。它不是一个普通的云盘，
                     而是一个专门为纪念逝者设计的记忆空间。
-                    在这里，每一份记忆都被标记为"原始记录"，
+                    在这里，每一份记忆都被标记为{"\u201c"}原始记录{"\u201d"}，
                     永远不会被篡改或生成。
                   </p>
                   <p className="font-medium text-stone-700">
@@ -56,7 +56,7 @@ export function FounderStory() {
             <Button
               variant="link"
               onClick={() => setExpanded(!expanded)}
-              className="mt-4 h-auto p-0 text-amber-600 hover:text-amber-700"
+              className="mt-4 h-auto p-0 text-amber-700 hover:text-amber-800"
             >
               {expanded ? '收起' : '展开全文'}
             </Button>

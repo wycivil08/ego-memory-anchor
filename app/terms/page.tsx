@@ -73,7 +73,7 @@ export default function TermsPage() {
               <ul className="list-disc pl-6 mt-3 space-y-2 text-stone-600">
                 <li>你上传的照片、视频、语音都是真实的原始记录</li>
                 <li>我们不会用 AI 生成任何关于逝者的内容</li>
-                <li>所有记忆都有"原始记录"标签，不可篡改</li>
+                <li>所有记忆都有{"\u201c"}原始记录{"\u201d"}标签，不可篡改</li>
               </ul>
               <p className="text-stone-600 leading-relaxed mt-4">
                 如果你发现任何疑似合成内容，请联系我们，我们会立即调查处理。
