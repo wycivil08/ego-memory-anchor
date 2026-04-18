@@ -44,7 +44,6 @@ if (existsSync(envPath)) {
 
 const URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 if (!URL || !ANON_KEY) {
   console.error('Missing env vars')
@@ -61,23 +60,11 @@ function yellow(t) { return `\x1b[33m${t}\x1b[0m` }
 function cyan(t) { return `\x1b[36m${t}\x1b[0m` }
 
 /**
- * Sanitize filename for storage (replace problematic chars)
- */
-function sanitize(name) {
-  return name
-    .replace(/[/\\:*?"<>|[\]{}%]/g, '_')
-    .replace(/\s+/g, '_')
-    .replace(/_{2,}/g, '_')
-    .replace(/^\.+/, '')
-    .substring(0, 200) || 'file'
-}
-
-/**
  * Get all files from a path (recursive for directories)
  */
 function getFiles(path) {
   const files = []
-  const entries = require('fs').readdirSync(path)
+  const entries = readdirSync(path)
   for (const entry of entries) {
     const full = join(path, entry)
     const stat = statSync(full)
