@@ -2,8 +2,8 @@
 
 import { createClient } from '@/lib/supabase/server'
 import type { ProfileWithMemoryCount, Memory } from '@/lib/types'
-import type { TimelineFilters, TimelineGroup, MemoryWithContributor } from '@/lib/utils/timeline'
-import { groupMemoriesByDate, TIMELINE_PAGE_SIZE } from '@/lib/utils/timeline'
+import type { TimelineFilters, MemoryWithContributor } from '@/lib/utils/timeline'
+import { TIMELINE_PAGE_SIZE } from '@/lib/utils/timeline'
 
 export async function fetchTimelineDataAction(
   profileId: string,

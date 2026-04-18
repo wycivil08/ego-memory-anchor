@@ -73,7 +73,7 @@ export default function UploadPage() {
   const profileId = params.profileId as string
 
   const hasConsented = useUploadConsent()
-  const [showConsentDialog, setShowConsentDialog] = useState(!hasConsented)
+  const [, setShowConsentDialog] = useState(!hasConsented)
   const [isUploadEnabled, setIsUploadEnabled] = useState(hasConsented)
 
   const [state, dispatch] = useReducer(uploadReducer, {
@@ -111,7 +111,7 @@ export default function UploadPage() {
         }
 
         // Step 2: Upload file to Supabase Storage via server action
-        const filePath = `${profileId}/${memoryId}/${item.file.name}`
+        // filePath = `${profileId}/${memoryId}/${item.file.name}`
 
         // Update progress to indicate upload started
         dispatch({

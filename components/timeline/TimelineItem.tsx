@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { MEMORY_TYPE_LABELS, formatMemoryDate, truncateText, getMemoryContributor, type Memory } from '@/lib/utils/timeline'
 import { SourceBadge } from '@/components/memory/SourceBadge'
+import { getMemoryFileUrl } from '@/lib/utils/storage-urls'
 
 interface TimelineItemProps {
   memory: Memory
@@ -95,6 +96,7 @@ function ContributorAvatar({ memory }: { memory: Memory }) {
   return (
     <div className="relative h-5 w-5 flex-shrink-0">
       {contributor.avatarUrl ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
         <img
           src={contributor.avatarUrl}
           alt={contributor.displayName}
@@ -111,13 +113,10 @@ function ContributorAvatar({ memory }: { memory: Memory }) {
 
 // Photo/Video preview
 function MediaPreview({ memory }: { memory: Memory }) {
-  const getMemoryUrl = (path: string) =>
-    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/memories/${path}`
-
   const thumbnailUrl = memory.thumbnail_path
-    ? getMemoryUrl(memory.thumbnail_path)
+    ? getMemoryFileUrl(memory.thumbnail_path)
     : memory.file_path
-      ? getMemoryUrl(memory.file_path)
+      ? getMemoryFileUrl(memory.file_path)
       : null
 
   if (!thumbnailUrl) {
@@ -130,6 +129,7 @@ function MediaPreview({ memory }: { memory: Memory }) {
 
   return (
     <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-[#f0f0f0] max-h-[60vh]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={thumbnailUrl}
         alt=""

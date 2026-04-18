@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import archiver from 'archiver'
-import type { Memory, Profile } from '@/lib/types'
+import type { Memory } from '@/lib/types'
 
 /**
  * Export API Route - generates ZIP stream for profile data export
@@ -54,14 +54,14 @@ export async function GET(
   }
 
   // Fetch family members for this profile
-  const { data: familyMembers, error: familyError } = await supabase
+  const { data: familyMembers } = await supabase
     .from('family_members')
     .select('*')
     .eq('profile_id', profileId)
     .is('deleted_at', null)
 
   // Fetch reminders for this profile
-  const { data: reminders, error: remindersError } = await supabase
+  const { data: reminders } = await supabase
     .from('reminders')
     .select('*')
     .eq('profile_id', profileId)

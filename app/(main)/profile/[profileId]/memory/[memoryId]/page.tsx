@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { notFound, redirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getMemoryById, deleteMemory, updateMemoryAnnotation } from '@/lib/actions/memory'
 import { getProfileById } from '@/lib/actions/profile'

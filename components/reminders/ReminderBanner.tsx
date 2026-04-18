@@ -5,7 +5,6 @@ import Link from 'next/link'
 import type { Reminder, Profile } from '@/lib/types'
 import {
   getNextLunarOccurrence,
-  getLunarDateDisplay,
   parseLunarDate,
 } from '@/lib/reminder-utils'
 
@@ -110,20 +109,36 @@ export function ReminderBanner({ reminders, profile }: ReminderBannerProps) {
         >
           <div className="flex items-start gap-3">
             <div className="flex-shrink-0 mt-0.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-200">
-                <svg
-                  className="h-5 w-5 text-amber-700"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+                {/* Candle with animated flame */}
+                <div className="relative">
+                  {/* Candle body */}
+                  <svg
+                    className="h-7 w-7 text-amber-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <rect x="9" y="10" width="6" height="10" rx="1" fill="currentColor" />
+                    <rect x="8" y="9" width="8" height="2" rx="0.5" fill="currentColor" opacity="0.8" />
+                  </svg>
+                  {/* Animated flame */}
+                  <svg
+                    className="absolute -top-2 left-1/2 -translate-x-1/2 h-4 w-4 animate-flame"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M12 2C12 2 8 6 8 10C8 12.21 9.79 14 12 14C14.21 14 16 12.21 16 10C16 6 12 2 12 2Z"
+                      fill="#f59e0b"
+                      className="animate-flame-inner"
+                    />
+                    <path
+                      d="M12 4C12 4 10 7 10 9C10 10.1 10.9 11 12 11C13.1 11 14 10.1 14 9C14 7 12 4 12 4Z"
+                      fill="#fbbf24"
+                      className="animate-flame-core"
+                    />
+                  </svg>
+                </div>
               </div>
             </div>
             <div className="flex-1 min-w-0">

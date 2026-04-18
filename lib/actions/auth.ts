@@ -32,7 +32,7 @@ export async function signInWithPassword(
   }
 
   revalidatePath('/', 'layout')
-  redirect('/dashboard')
+  return { error: null, success: true }
 }
 
 export type SignUpState = {

@@ -22,6 +22,7 @@ MVP 形态：中文 Web 应用（PWA-ready），海外部署优先。
 - `LANDING_PAGE_SPEC.md` — Landing Page 完整设计规格
 - `MARKETING.md` — 冷启动与增长
 - `CHANGELOG.md` — V1→V2 变更记录
+- **`UI-AUTONOMOUS-GUIDE.md`** — UI/UX Agent 自主开发准则（Stitch 驱动）
 
 ## 技术栈（不可更改）
 - **框架**: Next.js 15 (App Router, Server Components by default)
@@ -58,6 +59,16 @@ MVP 形态：中文 Web 应用（PWA-ready），海外部署优先。
 - Storage 路径规范: `{profile_id}/{memory_id}/{uuid}.{ext}`
 - 原始文件名保存在数据库 memories.file_name，Storage 中使用 UUID 文件名
 - 数据库 migration 文件放在 supabase/migrations/ 目录
+
+### Storage URL 规则（重要！防止 Bug！）
+- **必须**使用 `lib/utils/storage-urls.ts` 中的工具函数构造 URL
+  - `getMemoryFileUrl(path)` - memories bucket 文件
+  - `getAvatarFileUrl(path)` - avatars bucket 文件
+- **禁止**在组件内联构造 storage URL（如 `${SUPABASE_URL}/storage/...`）
+- **禁止**在多个地方重复相同的 URL 构造逻辑
+
+原因：之前 MemoryDetail 缺少 bucket 前缀导致照片 404，
+统一使用工具函数可以确保一致性和可维护性。
 
 ### 测试规则
 - 每个工具函数（lib/utils/*）必须有单元测试
@@ -238,12 +249,22 @@ ego-memory-anchor/
 ## Testing Pipeline
 
 ### 测试分层
-| 层级 | 工具 | 覆盖率目标 | 何时写 |
-|------|------|----------|------|
-| 单元测试 | Vitest + jsdom | 工具函数 100% | 实现前 (TDD) |
-| 集成测试 | Vitest + 真实 Supabase | Server Actions 80% | 实现后立即 |
-| E2E | Playwright | 核心用户流程 (5条) | Sprint 末尾 |
-| 视觉截图 | Playwright | 关键页面 | UI Sprint 末尾 |
+| 层级 | 工具 | 覆盖率目标 | 何时写 | 触发命令 |
+|------|------|----------|--------|---------|
+| 单元测试 | Vitest + jsdom | 工具函数 100% | 实现前 (TDD) | — |
+| 集成测试 | Vitest + 真实 Supabase | Server Actions 80% | 实现后立即 | — |
+| 每次修改 | Vitest (智能选择) | 受影响测试 | 代码修改后 | `vitest --changed` |
+| 功能完成 | Vitest (全量) | 全量单元 | 功能点完成时 | `pnpm test --run` |
+| Sprint 末尾 | Vitest + Playwright | 全量 + E2E | Sprint/milestone | `pnpm test --run && pnpm playwright test` |
+| E2E | Playwright | 核心用户流程 (5条) | Sprint 末尾 | `pnpm playwright test` |
+| 视觉截图 | Playwright | 关键页面 | UI Sprint 末尾 | screenshot + AI 对比 |
+
+### 智能测试选择（vitest --changed）
+
+每次代码修改后使用 `vitest --changed`，Vitest 通过静态依赖图分析只跑受影响的测试：
+- 反馈速度：<30s
+- 无需配置，基于 import 关系自动推断
+- 适合高频修改场景
 
 ### Supabase 测试架构（MVP 简化版）
 

@@ -2,7 +2,6 @@
 
 import { uploadFile } from '@/lib/utils/storage'
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
 
 export type UploadState = {
   error: string | null

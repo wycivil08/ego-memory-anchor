@@ -83,7 +83,7 @@ async function cleanupTestUser(email) {
       }
       await supabaseAdmin.auth.admin.deleteUser(user.id)
     }
-  } catch (_e) {
+  } catch {
     // Ignore cleanup errors
   }
 }

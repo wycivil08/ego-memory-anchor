@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f4f3",
+                        "tertiary-fixed-dim": "#ccc5c1",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#9b4500",
+                        "inverse-primary": "#ffb68e",
+                        "secondary": "#645d58",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "surface-bright": "#f9f9f8",
+                        "on-tertiary-fixed": "#1e1b19",
+                        "primary-fixed": "#ffdbca",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-fixed-variant": "#4b4641",
+                        "on-primary-fixed-variant": "#763300",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeeed",
+                        "on-surface-variant": "#564338",
+                        "surface": "#f9f9f8",
+                        "secondary-fixed": "#eae1da",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#ddc1b3",
+                        "surface-variant": "#e2e2e2",
+                        "tertiary": "#5a5653",
+                        "secondary-container": "#eae1da",
+                        "on-secondary-fixed": "#1f1b17",
+                        "outline": "#897267",
+                        "secondary-fixed-dim": "#cec5bf",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e8e8e7",
+                        "primary": "#903f00",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-tertiary-fixed-variant": "#4a4643",
+                        "primary-container": "#b45309",
+                        "on-secondary-container": "#6a635e",
+                        "tertiary-container": "#736e6b",
+                        "surface-dim": "#dadad9",
+                        "on-primary-container": "#fff1eb",
+                        "primary-fixed-dim": "#ffb68e",
+                        "on-primary-fixed": "#331200",
+                        "on-tertiary-container": "#faf2ed",
+                        "background": "#f9f9f8",
+                        "tertiary-fixed": "#e8e1dd",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e2e2e2",
+                        "inverse-surface": "#2f3130"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "Noto Sans SC", "sans-serif"],
+                        "body": ["Inter", "Noto Sans SC", "sans-serif"],
+                        "label": ["Inter", "Noto Sans SC", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', 'Noto Sans SC', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) - Suppressed for Transactional Focus as per Logic -->
+<main class="flex-grow flex items-center justify-center px-6 py-20 bg-surface">
+<div class="w-full max-w-[560px] flex flex-col gap-12">
+<!-- Header Section -->
+<div class="text-center space-y-4">
+<h1 class="text-3xl font-bold tracking-tight text-on-surface">为 TA 建一个记忆空间</h1>
+<p class="text-on-surface-variant font-body leading-relaxed max-w-sm mx-auto">
+                    在这里，时间会慢下来。让我们用最庄重的方式，铭记那些不曾离去的温暖。
+                </p>
+</div>
+<!-- Form Container -->
+<div class="bg-surface-container-lowest rounded-xl p-8 md:p-10 transition-all duration-300">
+<form class="space-y-8">
+<!-- Avatar Upload -->
+<div class="flex flex-col items-center gap-4">
+<div class="w-24 h-24 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center group cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-3xl" data-icon="add_a_photo">add_a_photo</span>
+<span class="text-[10px] uppercase tracking-widest mt-1 font-medium">上传头像</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant/60">建议使用清晰的正面照片</p>
+</div>
+<!-- Type Selector (Selection Chips) -->
+<div class="space-y-3">
+<label class="text-[11px] uppercase tracking-widest font-semibold text-on-surface-variant block px-1">纪念对象类型</label>
+<div class="flex gap-3">
+<button class="flex-1 py-3 px-4 rounded-lg bg-primary-fixed text-on-primary-fixed border border-primary-container font-medium text-sm flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="person">person</span>
+                                亲人 / 朋友
+                            </button>
+<button class="flex-1 py-3 px-4 rounded-lg bg-surface-container-high text-on-surface-variant hover:bg-surface-container transition-colors font-medium text-sm flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="pets">pets</span>
+                                宠物
+                            </button>
+</div>
+</div>
+<!-- Input Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-[11px] uppercase tracking-widest font-semibold text-on-surface-variant block px-1">姓名 / 昵称</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-surface-bright border-b-2 border-transparent focus:border-primary transition-all text-sm" placeholder="如何称呼 TA" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-[11px] uppercase tracking-widest font-semibold text-on-surface-variant block px-1">TA 与我的关系</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-surface-bright border-b-2 border-transparent focus:border-primary transition-all text-sm" placeholder="例如：父亲、老友" type="text"/>
+</div>
+</div>
+<!-- Dates Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-[11px] uppercase tracking-widest font-semibold text-on-surface-variant block px-1">出生日期</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-surface-bright border-b-2 border-transparent focus:border-primary transition-all text-sm appearance-none" type="date"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-xl" data-icon="calendar_today">calendar_today</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[11px] uppercase tracking-widest font-semibold text-on-surface-variant block px-1">离世日期</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-surface-bright border-b-2 border-transparent focus:border-primary transition-all text-sm" type="date"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-xl" data-icon="event_busy">event_busy</span>
+</div>
+</div>
+</div>
+<!-- Description -->
+<div class="space-y-2">
+<label class="text-[11px] uppercase tracking-widest font-semibold text-on-surface-variant block px-1">一句话描述</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-surface-bright border-b-2 border-transparent focus:border-primary transition-all text-sm resize-none" placeholder="那些深刻的印记，可以用一句话概括..." rows="1"></textarea>
+</div>
+<!-- Submit Button -->
+<div class="pt-4">
+<button class="w-full bg-primary text-on-primary font-bold py-4 rounded-lg shadow-lg shadow-primary/10 hover:bg-primary-container transition-all active:scale-95 flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+                            创建记忆空间
+                        </button>
+</div>
+</form>
+</div>
+<!-- Footer Quote/Tip -->
+<div class="text-center">
+<p class="text-sm font-light italic text-on-surface-variant/40">
+                    "死亡不是终点，遗忘才是。"
+                </p>
+<div class="mt-8">
+<a class="text-[11px] uppercase tracking-[0.2em] font-semibold text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+                        返回个人中心
+                    </a>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-12 flex flex-col items-center justify-center gap-6 border-t border-stone-200/30 bg-surface">
+<div class="flex gap-8">
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-opacity" href="#">Privacy</a>
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-opacity" href="#">Terms</a>
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-opacity" href="#">Contact</a>
+</div>
+<p class="font-inter text-[11px] uppercase tracking-widest text-stone-400">© 2024 Memory Anchor (忆锚)</p>
+</footer>
+<!-- Decorative Elements (The Resonant Archive Aesthetic) -->
+<div class="fixed top-0 right-0 w-96 h-96 bg-primary-container/5 rounded-full blur-[120px] -z-10"></div>
+<div class="fixed bottom-0 left-0 w-96 h-96 bg-primary-fixed/10 rounded-full blur-[120px] -z-10"></div>
+</body></html>

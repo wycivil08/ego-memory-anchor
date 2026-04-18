@@ -10,7 +10,7 @@ export default function MainLoading() {
             <div className="ml-3 h-5 w-16 animate-pulse rounded bg-stone-200" />
           </div>
           {/* Nav items */}
-          <nav className="flex flex-1 flex-col">
+          <nav aria-label="加载导航" className="flex flex-1 flex-col">
             <ul className="flex flex-1 flex-col gap-y-1">
               {[1, 2, 3, 4].map((i) => (
                 <li key={i}>
@@ -44,7 +44,9 @@ export default function MainLoading() {
         </div>
 
         {/* Page content skeleton */}
-        <main className="p-4 lg:p-8">
+        <div className="p-4 lg:p-8">
+          {/* Accessible h1 for loading state */}
+          <h1 className="sr-only">加载中...</h1>
           <div className="mx-auto max-w-4xl">
             {/* Page header skeleton */}
             <div className="mb-8 flex items-center justify-between">
@@ -83,7 +85,7 @@ export default function MainLoading() {
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
 
       {/* Mobile Bottom Nav Skeleton - hidden on desktop */}

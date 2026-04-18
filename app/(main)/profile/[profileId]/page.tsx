@@ -2,10 +2,12 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { getProfileById } from '@/lib/actions/profile'
 import { fetchAllMemoriesForTagsAction } from '@/lib/actions/timeline'
+import { getTodayMemories } from '@/lib/actions/today-memory'
 import { ProfileHeader } from '@/components/profile/ProfileHeader'
 import { TimelineContainer } from '@/components/timeline/TimelineContainer'
 import { TimelineFilters } from '@/components/timeline/TimelineFilters'
 import { TimelineEmpty } from '@/components/timeline/TimelineEmpty'
+import { TodayMemory } from '@/components/memory/TodayMemory'
 
 interface ProfilePageProps {
   params: Promise<{ profileId: string }>
@@ -73,13 +75,21 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   // Check if profile has any memories
   const hasMemories = profile.memory_count > 0
 
+  // Fetch today's memories (same month-day)
+  const todayMemories = await getTodayMemories(profileId)
+
   return (
     <div className="min-h-screen">
       {/* Profile Header */}
       <ProfileHeader profile={profile} />
 
       {/* Timeline Section */}
-      <div className="p-6 lg:p-8">
+      <div className="p-6 lg:p-8 space-y-4">
+        {/* Today's Memory - only shows if there are memories on this day */}
+        {todayMemories.length > 0 && (
+          <TodayMemory memories={todayMemories} profileId={profileId} />
+        )}
+
         {hasMemories ? (
           <Suspense fallback={<TimelineLoading />}>
             <TimelineContent profileId={profileId} profile={profile} />

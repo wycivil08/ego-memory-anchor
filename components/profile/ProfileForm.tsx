@@ -2,13 +2,11 @@
 
 import { useActionState, useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import type { Profile, Relationship, Species, Memory } from '@/lib/types'
+import type { Profile, Relationship, Species } from '@/lib/types'
 import { isPetRelationship } from '@/lib/types'
 import { createProfile, updateProfile, type ProfileState } from '@/lib/actions/profile'
 import { uploadMemoryFile } from '@/lib/actions/upload'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Camera, Sparkles } from 'lucide-react'
 
 interface ProfileFormProps {
   profile?: Profile
@@ -32,7 +30,6 @@ export function ProfileForm({ profile, mode }: ProfileFormProps) {
   // Cover photo state
   const [coverPhotoPath, setCoverPhotoPath] = useState<string | null>(profile?.cover_photo_path || null)
   const [coverPhotoPreview, setCoverPhotoPreview] = useState<string | null>(null)
-  const [existingPhotos, setExistingPhotos] = useState<Memory[]>([])
   const [isUploadingCover, setIsUploadingCover] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -40,41 +37,27 @@ export function ProfileForm({ profile, mode }: ProfileFormProps) {
   const action = mode === 'create' ? createProfile : updateProfile.bind(null, profile?.id || '')
   const [state, formAction, isPending] = useActionState(action, initialState)
 
-  // Build cover photo preview URL
   const getCoverPhotoUrl = (path: string | null): string | null => {
     if (!path) return null
     return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${path}`
   }
 
-  // Get avatar URL as fallback
   const getAvatarUrl = (): string | null => {
     if (!profile?.avatar_path) return null
     return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${profile.avatar_path}`
   }
 
-  // Fetch existing photos when in edit mode
-  useEffect(() => {
-    if (mode === 'edit' && profile?.id) {
-      fetch(`/api/photos?profileId=${profile.id}`)
-        .then(res => res.ok ? res.json() : { photos: [] })
-        .then(data => setExistingPhotos(data.photos || []))
-        .catch(() => setExistingPhotos([]))
-    }
-  }, [mode, profile?.id])
-
-  // Set initial cover photo preview
   useEffect(() => {
     if (coverPhotoPath) {
       setCoverPhotoPreview(getCoverPhotoUrl(coverPhotoPath))
     } else if (profile?.avatar_path) {
-      // Fallback to avatar if no cover photo
       setCoverPhotoPreview(getAvatarUrl())
     } else {
       setCoverPhotoPreview(null)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coverPhotoPath, profile?.avatar_path])
 
-  // Auto-set species when relationship changes
   const handleRelationshipChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const rel = e.target.value as Relationship
     setSelectedRelationship(rel)
@@ -85,7 +68,6 @@ export function ProfileForm({ profile, mode }: ProfileFormProps) {
     }
   }
 
-  // Handle cover photo file selection
   const handleCoverPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file || !profile?.id) return
@@ -94,39 +76,28 @@ export function ProfileForm({ profile, mode }: ProfileFormProps) {
     setIsUploadingCover(true)
 
     try {
-      // Generate a unique filename for the cover photo
       const fileExt = file.name.split('.').pop() || 'jpg'
       const fileName = `cover_${Date.now()}.${fileExt}`
 
-      // Upload to avatars bucket (reuse avatar bucket for profile images)
       const result = await uploadMemoryFile('avatars', profile.id, 'cover', fileName, file)
 
       if (result.success && result.filePath) {
         setCoverPhotoPath(result.filePath)
       } else {
-        setUploadError(result.error || '上传封面照片失败')
+        setUploadError(result.error || '上传照片失败')
       }
-    } catch (err) {
-      setUploadError('上传封面照片失败')
+    } catch {
+      setUploadError('上传照片失败')
     } finally {
       setIsUploadingCover(false)
     }
   }
 
-  // Handle selecting an existing photo as cover
-  const handleSelectExistingPhoto = (photo: Memory) => {
-    if (photo.file_path) {
-      setCoverPhotoPath(photo.file_path)
-    }
-  }
-
-  // Handle removing cover photo
   const handleRemoveCoverPhoto = () => {
     setCoverPhotoPath(null)
-    setCoverPhotoPreview(getAvatarUrl()) // Fall back to avatar
+    setCoverPhotoPreview(getAvatarUrl())
   }
 
-  // Redirect on success
   if (state.success && state.profileId) {
     router.push(`/profile/${state.profileId}`)
     router.refresh()
@@ -137,286 +108,179 @@ export function ProfileForm({ profile, mode }: ProfileFormProps) {
   }
 
   const relationshipOptions: { value: Relationship; label: string }[] = [
-    { value: 'father', label: '父亲' },
-    { value: 'mother', label: '母亲' },
-    { value: 'grandfather', label: '爷爷' },
-    { value: 'grandmother', label: '奶奶' },
-    { value: 'maternal_grandfather', label: '外公' },
-    { value: 'maternal_grandmother', label: '外婆' },
-    { value: 'spouse', label: '配偶' },
-    { value: 'child', label: '子女' },
-    { value: 'sibling', label: '兄弟姐妹' },
-    { value: 'friend', label: '朋友' },
-    { value: 'pet_cat', label: '宠物-猫' },
-    { value: 'pet_dog', label: '宠物-狗' },
-    { value: 'pet_other', label: '宠物-其他' },
-    { value: 'other', label: '其他' },
+    { value: 'father', label: '父亲' }, { value: 'mother', label: '母亲' },
+    { value: 'grandfather', label: '爷爷' }, { value: 'grandmother', label: '奶奶' },
+    { value: 'maternal_grandfather', label: '外公' }, { value: 'maternal_grandmother', label: '外婆' },
+    { value: 'spouse', label: '配偶' }, { value: 'child', label: '子女' },
+    { value: 'sibling', label: '兄弟姐妹' }, { value: 'friend', label: '朋友' },
+    { value: 'pet_cat', label: '宠物-猫' }, { value: 'pet_dog', label: '宠物-狗' },
+    { value: 'pet_other', label: '宠物-其他' }, { value: 'other', label: '其他' },
   ]
 
   return (
-    <form action={formAction} className="space-y-6">
-      {/* Hidden field for cover_photo_path */}
+    <form action={formAction} className="space-y-8">
       <input type="hidden" name="cover_photo_path" value={coverPhotoPath || ''} />
+      <input type="hidden" name="species" value={species} />
 
-      {/* Error Message */}
       {state.error && (
         <div className="rounded-lg bg-red-50 p-4 text-sm text-red-600">
           {state.error}
         </div>
       )}
 
-      {/* Cover Photo Preview Banner */}
-      <div className="relative h-40 overflow-hidden rounded-xl bg-stone-100">
+      {/* Avatar/Cover Upload V2 Profile Creation Style */}
+      <div className="flex flex-col items-center gap-4">
         {coverPhotoPreview ? (
-          <>
-            <img
-              src={coverPhotoPreview}
-              alt="封面照片预览"
-              className="h-full w-full object-cover"
-            />
-            {/* Gradient overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-          </>
+            <div className="w-24 h-24 rounded-full border-2 border-stone-200 overflow-hidden relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+               {/* eslint-disable-next-line @next/next/no-img-element */}
+               <img src={coverPhotoPreview} alt="Preview" className="w-full h-full object-cover" />
+               <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Camera className="w-6 h-6 text-white" />
+               </div>
+            </div>
         ) : (
-          <div className="flex h-full items-center justify-center text-stone-400">
-            <div className="text-center">
-              <svg
-                className="mx-auto h-10 w-10"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-              <p className="mt-2 text-sm">暂无封面照片</p>
+          <div 
+            onClick={() => fileInputRef.current?.click()}
+            className={`w-24 h-24 rounded-full border-2 border-dashed flex items-center justify-center group cursor-pointer transition-colors ${
+              isUploadingCover ? 'border-amber-300 bg-amber-50 animate-pulse' : 'border-stone-300 hover:bg-stone-50/50 hover:border-amber-700/30'
+            }`}
+          >
+            <div className="flex flex-col items-center text-stone-500 group-hover:text-amber-700 transition-colors">
+              <Camera className="w-8 h-8 mb-1" />
+              <span className="text-[10px] uppercase tracking-widest font-medium">
+                 {isUploadingCover ? '上传中...' : '上传照片'}
+              </span>
             </div>
           </div>
         )}
-
-        {/* Cover Photo Controls */}
-        {mode === 'edit' && (
-          <div className="absolute bottom-3 right-3 flex gap-2">
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploadingCover}
-              className="bg-white/90 hover:bg-white border-stone-200 text-stone-700 rounded-lg text-xs"
-            >
-              {isUploadingCover ? '上传中...' : '上传新封面'}
-            </Button>
-            {coverPhotoPath && (
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                onClick={handleRemoveCoverPhoto}
-                disabled={isUploadingCover}
-                className="bg-white/90 hover:bg-white border-stone-200 text-stone-700 rounded-lg text-xs"
-              >
-                移除
-              </Button>
-            )}
-          </div>
+        <p className="text-xs text-stone-500">建议使用清晰的正面照片，也可以稍后在编辑中更新</p>
+        
+        {mode === 'edit' && coverPhotoPath && (
+           <button type="button" onClick={handleRemoveCoverPhoto} className="text-xs text-red-500 hover:underline">
+             移除自定义照片
+           </button>
         )}
-
-        {/* Hidden file input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleCoverPhotoChange}
-          className="hidden"
-        />
+        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleCoverPhotoChange} className="hidden" />
       </div>
 
-      {/* Upload error message */}
       {uploadError && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600 text-center">
           {uploadError}
         </div>
       )}
 
-      {/* Existing Photos Selection */}
-      {mode === 'edit' && existingPhotos.length > 0 && (
+      {/* Input Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label className="text-stone-700">或选择已有照片作为封面</Label>
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {existingPhotos.map((photo) => (
-              <button
-                key={photo.id}
-                type="button"
-                onClick={() => handleSelectExistingPhoto(photo)}
-                className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                  coverPhotoPath === photo.file_path
-                    ? 'border-amber-500 ring-2 ring-amber-200'
-                    : 'border-stone-200 hover:border-stone-300'
-                }`}
-              >
-                {photo.thumbnail_path || photo.file_path ? (
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${photo.thumbnail_path || photo.file_path}`}
-                    alt={photo.file_name || '照片'}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center bg-stone-100 text-stone-400">
-                    <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                )}
-              </button>
+          <label htmlFor="name" className="text-[11px] uppercase tracking-widest font-semibold text-stone-500 block px-1">
+            姓名 / 昵称 <span className="text-amber-600">*</span>
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="如何称呼 TA"
+            defaultValue={profile?.name || ''}
+            required
+            maxLength={100}
+            disabled={isPending}
+            className="w-full bg-stone-100 border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-white border-b-2 border-transparent focus:border-amber-700 transition-all text-sm outline-none"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="relationship" className="text-[11px] uppercase tracking-widest font-semibold text-stone-500 block px-1">
+            TA 与我的关系 <span className="text-amber-600">*</span>
+          </label>
+          <select
+            id="relationship"
+            name="relationship"
+            value={selectedRelationship}
+            onChange={handleRelationshipChange}
+            disabled={isPending}
+            className="w-full bg-stone-100 border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-white border-b-2 border-transparent focus:border-amber-700 transition-all text-sm outline-none appearance-none cursor-pointer"
+          >
+            {relationshipOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Dates Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2 relative">
+          <label htmlFor="birth_date" className="text-[11px] uppercase tracking-widest font-semibold text-stone-500 block px-1">
+            出生日期
+          </label>
+          <div className="relative">
+            <input
+              id="birth_date"
+              name="birth_date"
+              type="date"
+              defaultValue={profile?.birth_date || ''}
+              disabled={isPending}
+              className="w-full bg-stone-100 border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-white border-b-2 border-transparent focus:border-amber-700 transition-all text-sm outline-none cursor-pointer [color-scheme:light]"
+            />
           </div>
         </div>
-      )}
 
-      {/* Name */}
-      <div className="space-y-2">
-        <Label htmlFor="name" className="text-stone-700">
-          姓名 <span className="text-red-500">*</span>
-        </Label>
-        <Input
-          id="name"
-          name="name"
-          type="text"
-          placeholder="请输入姓名"
-          defaultValue={profile?.name || ''}
-          required
-          maxLength={100}
-          disabled={isPending}
-          className="border-stone-300 bg-white text-stone-800 placeholder:text-stone-400 focus-visible:ring-amber-600"
-        />
-      </div>
-
-      {/* Relationship */}
-      <div className="space-y-2">
-        <Label htmlFor="relationship" className="text-stone-700">
-          与 TA 的关系 <span className="text-red-500">*</span>
-        </Label>
-        <select
-          id="relationship"
-          name="relationship"
-          value={selectedRelationship}
-          onChange={handleRelationshipChange}
-          disabled={isPending}
-          className="flex h-10 w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-        >
-          {relationshipOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <input type="hidden" name="species" value={species} />
-      </div>
-
-      {/* Species (hidden, auto-set based on relationship) */}
-      <div className="space-y-2">
-        <Label className="text-stone-700">类型</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              name="species_display"
-              value="human"
-              checked={species === 'human'}
-              onChange={() => setSpecies('human')}
-              disabled={isPending || isPetRelationship(selectedRelationship)}
-              className="h-4 w-4 text-amber-600 focus:ring-amber-600"
-            />
-            <span className="text-sm text-stone-600">人类</span>
+        <div className="space-y-2">
+          <label htmlFor="death_date" className="text-[11px] uppercase tracking-widest font-semibold text-stone-500 block px-1">
+            离世日期
           </label>
-          <label className="flex items-center gap-2">
+          <div className="relative">
             <input
-              type="radio"
-              name="species_display"
-              value="pet"
-              checked={species === 'pet'}
-              onChange={() => setSpecies('pet')}
+              id="death_date"
+              name="death_date"
+              type="date"
+              defaultValue={profile?.death_date || ''}
               disabled={isPending}
-              className="h-4 w-4 text-amber-600 focus:ring-amber-600"
+              className="w-full bg-stone-100 border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-white border-b-2 border-transparent focus:border-amber-700 transition-all text-sm outline-none cursor-pointer [color-scheme:light]"
             />
-            <span className="text-sm text-stone-600">宠物</span>
-          </label>
+          </div>
         </div>
-      </div>
-
-      {/* Birth Date */}
-      <div className="space-y-2">
-        <Label htmlFor="birth_date" className="text-stone-700">
-          出生日期
-        </Label>
-        <Input
-          id="birth_date"
-          name="birth_date"
-          type="date"
-          defaultValue={profile?.birth_date || ''}
-          disabled={isPending}
-          className="border-stone-300 bg-white text-stone-800 focus-visible:ring-amber-600"
-        />
-        <p className="text-xs text-stone-400">如果不确定具体日期，可以只填写知道的范围</p>
-      </div>
-
-      {/* Death Date */}
-      <div className="space-y-2">
-        <Label htmlFor="death_date" className="text-stone-700">
-          去世日期
-        </Label>
-        <Input
-          id="death_date"
-          name="death_date"
-          type="date"
-          defaultValue={profile?.death_date || ''}
-          disabled={isPending}
-          className="border-stone-300 bg-white text-stone-800 focus-visible:ring-amber-600"
-        />
-        <p className="text-xs text-stone-400">如果还在世或不确定，可以不填写</p>
       </div>
 
       {/* Description */}
       <div className="space-y-2">
-        <Label htmlFor="description" className="text-stone-700">
+        <label htmlFor="description" className="text-[11px] uppercase tracking-widest font-semibold text-stone-500 block px-1">
           一句话描述
-        </Label>
+        </label>
         <textarea
           id="description"
           name="description"
-          placeholder='用一句话描述 TA，比如"最爱听京剧的老顽童"'
+          placeholder="那些深刻的印记，可以用一句话概括..."
           defaultValue={profile?.description || ''}
           disabled={isPending}
           maxLength={500}
-          rows={3}
-          className="flex w-full rounded-md border border-stone-300 bg-white px-3 py-2 text-base ring-offset-background placeholder:text-stone-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+          rows={2}
+          className="w-full bg-stone-100 border-none rounded-lg py-3 px-4 focus:ring-0 focus:bg-white border-b-2 border-transparent focus:border-amber-700 transition-all text-sm outline-none resize-none"
         />
-        <p className="text-xs text-stone-400">最多500个字符</p>
       </div>
 
       {/* Submit Button */}
-      <div className="flex gap-4 pt-4">
-        <Button
+      <div className="pt-4 flex flex-col sm:flex-row gap-4">
+        <button
           type="submit"
           disabled={isPending}
-          className="bg-amber-600 hover:bg-amber-700 text-white rounded-xl transition-colors duration-150"
+          className="w-full bg-amber-800 text-white font-bold py-4 rounded-lg shadow-lg shadow-amber-800/20 hover:bg-amber-900 transition-all active:scale-[0.98] flex items-center justify-center gap-2"
         >
-          {isPending ? '保存中...' : mode === 'create' ? '创建记忆空间' : '保存修改'}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.back()}
-          disabled={isPending}
-          className="border-stone-300 text-stone-700 hover:bg-stone-50 rounded-xl"
-        >
-          取消
-        </Button>
+          <Sparkles className="w-5 h-5" />
+          {isPending ? '正在构建...' : mode === 'create' ? '创建记忆空间' : '保存更新'}
+        </button>
+        {mode === 'edit' && (
+           <button
+            type="button"
+            onClick={() => router.back()}
+            disabled={isPending}
+            className="w-full sm:w-1/3 bg-stone-100 text-stone-600 font-bold py-4 rounded-lg hover:bg-stone-200 transition-all flex items-center justify-center"
+           >
+             取消
+           </button>
+        )}
       </div>
     </form>
   )

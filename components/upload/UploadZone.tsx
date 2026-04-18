@@ -3,6 +3,7 @@
 import { useCallback, useState, useRef } from 'react'
 import type { MemoryType } from '@/lib/types'
 import { validateFile, getMemoryType } from '@/lib/utils/file'
+import { CloudUpload, Image as ImageIcon, Video, Mic, FileText, File as FileIcon } from 'lucide-react'
 
 // File type validation
 interface FileValidation {
@@ -94,7 +95,6 @@ export function UploadZone({
       const items = e.dataTransfer.items
       const files: File[] = []
 
-      // Handle both files and directories
       const processEntry = (entry: FileSystemEntry) => {
         if (entry.isFile) {
           (entry as FileSystemFileEntry).file((file) => {
@@ -108,7 +108,6 @@ export function UploadZone({
         }
       }
 
-      // Collect files from data transfer
       if (items) {
         for (let i = 0; i < items.length; i++) {
           const item = items[i]
@@ -124,7 +123,6 @@ export function UploadZone({
         }
       }
 
-      // Fallback to direct files
       if (files.length === 0 && e.dataTransfer.files.length > 0) {
         for (let i = 0; i < e.dataTransfer.files.length; i++) {
           files.push(e.dataTransfer.files[i])
@@ -160,7 +158,6 @@ export function UploadZone({
         onFilesSelected(validatedFiles)
       }
 
-      // Reset input
       if (inputRef.current) {
         inputRef.current.value = ''
       }
@@ -186,7 +183,6 @@ export function UploadZone({
 
   return (
     <div className="w-full">
-      {/* Hidden file input */}
       <input
         ref={inputRef}
         type="file"
@@ -197,7 +193,7 @@ export function UploadZone({
         disabled={disabled}
       />
 
-      {/* Drop zone */}
+      {/* V2 Style Upload Drop zone */}
       <div
         onClick={handleClick}
         onKeyDown={handleKeyDown}
@@ -210,72 +206,66 @@ export function UploadZone({
         aria-label="上传文件区域，点击或拖拽文件到这里上传"
         className={`
           relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed
-          p-8 transition-all duration-150 cursor-pointer
+          p-12 text-center group cursor-pointer transition-all duration-300 overflow-hidden
           ${
             disabled
-              ? 'cursor-not-allowed bg-stone-50 border-stone-300 opacity-60'
+              ? 'cursor-not-allowed bg-stone-50/50 border-stone-200 opacity-60'
               : isDragging
-                ? 'border-amber-500 bg-amber-50'
-                : 'border-stone-300 bg-white hover:border-stone-400 hover:bg-stone-50'
+                ? 'border-amber-500 bg-amber-50/80 scale-[1.01] shadow-inner'
+                : 'border-amber-700/30 bg-stone-50/50 hover:bg-stone-100/80 hover:border-amber-700/50'
           }
         `}
       >
-        {/* Icon */}
+        {/* Glow effect on drag */}
+        {isDragging && <div className="absolute inset-0 bg-amber-200/20 blur-xl rounded-xl -z-10" />}
+
+        {/* Big V2 Icon */}
         <div
           className={`
-            mb-4 flex h-16 w-16 items-center justify-center rounded-full
-            ${isDragging ? 'bg-amber-100 text-amber-600' : 'bg-stone-100 text-stone-400'}
-            transition-colors duration-150
+            mb-6 flex h-20 w-20 items-center justify-center rounded-full
+            transition-all duration-300 group-hover:scale-110
+            ${disabled ? 'bg-stone-200 text-stone-500' : 'bg-amber-100 text-amber-700'}
           `}
         >
-          <svg
-            className="h-8 w-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            />
-          </svg>
+          <CloudUpload className="h-10 w-10" />
         </div>
 
         {/* Text */}
-        <div className="text-center">
-          <p className="text-base font-medium text-stone-700">
-            {isDragging ? '放开以上传文件' : '点击或拖拽文件到这里'}
-          </p>
-          <p className="mt-1 text-sm text-stone-500">
-            支持照片、视频、音频、文字和文档
-          </p>
-        </div>
-
-        {/* File type hints */}
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
-          <FileTypeHint type="photo" />
-          <FileTypeHint type="video" />
-          <FileTypeHint type="audio" />
-          <FileTypeHint type="text" />
-          <FileTypeHint type="document" />
-        </div>
-
-        {/* File size limits */}
-        <p className="mt-3 text-xs text-stone-400">
-          照片最大 50MB，视频最大 500MB，音频最大 100MB
+        <h3 className="text-xl font-semibold mb-2 text-stone-900">
+          {isDragging ? '放开以上传文件' : '点击或拖拽文件至此处'}
+        </h3>
+        <p className="mb-6 text-sm text-stone-500">
+          支持 JPG, PNG, MP4, PDF (最大 100MB)
         </p>
+
+        {/* Button Override */}
+        <button 
+          className={`
+            px-8 py-3 rounded-full font-semibold shadow-md transition-all pointer-events-none
+            ${disabled ? 'bg-stone-300 text-stone-50' : 'bg-amber-700 text-white group-hover:bg-amber-800'}
+          `}
+        >
+          从本地选择
+        </button>
 
         {/* Max files hint */}
         {maxFiles < 100 && (
-          <p className="mt-2 text-xs text-stone-400">最多 {maxFiles} 个文件</p>
+          <p className="absolute bottom-4 left-0 right-0 text-xs text-stone-400">最多支持 {maxFiles} 个文件同时处理</p>
         )}
+      </div>
+
+      {/* File type hints */}
+      <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <FileTypeHint type="photo" />
+        <FileTypeHint type="video" />
+        <FileTypeHint type="audio" />
+        <FileTypeHint type="text" />
+        <FileTypeHint type="document" />
       </div>
 
       {/* Error message */}
       {errorMessage && (
-        <div className="mt-3 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+        <div className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-600 text-center animate-in slide-in-from-top-2">
           {errorMessage}
         </div>
       )}
@@ -283,80 +273,19 @@ export function UploadZone({
   )
 }
 
-// File type hint badge
 function FileTypeHint({ type }: { type: MemoryType }) {
-  const config: Record<MemoryType, { label: string; icon: React.ReactNode }> = {
-    photo: {
-      label: '照片',
-      icon: (
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
-        </svg>
-      ),
-    },
-    video: {
-      label: '视频',
-      icon: (
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-          />
-        </svg>
-      ),
-    },
-    audio: {
-      label: '音频',
-      icon: (
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
-          />
-        </svg>
-      ),
-    },
-    text: {
-      label: '文字',
-      icon: (
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          />
-        </svg>
-      ),
-    },
-    document: {
-      label: '文档',
-      icon: (
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-          />
-        </svg>
-      ),
-    },
+  const config = {
+    photo: { label: '照片', icon: <ImageIcon className="h-3.5 w-3.5" /> },
+    video: { label: '视频', icon: <Video className="h-3.5 w-3.5" /> },
+    audio: { label: '音频', icon: <Mic className="h-3.5 w-3.5" /> },
+    text: { label: '文字', icon: <FileText className="h-3.5 w-3.5" /> },
+    document: { label: '文档', icon: <FileIcon className="h-3.5 w-3.5" /> },
   }
 
   const { label, icon } = config[type]
 
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-stone-100 px-2 py-1 text-xs text-stone-600">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-stone-100/80 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">
       {icon}
       {label}
     </span>

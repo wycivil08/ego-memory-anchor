@@ -110,6 +110,7 @@ export function Timeline({ groups, profileId, hasMore, onLoadMore, isLoading }: 
   }
 
   // Virtual scroll setup
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,

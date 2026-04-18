@@ -102,10 +102,12 @@ function getRecurrenceBadgeColor(recurrence: Recurrence): string {
 }
 
 export function ReminderList({
-  profileId,
+  profileId: _profileId,
   reminders,
   onEdit,
 }: ReminderListProps) {
+// profileId is prepared for future use (filtering by profile)
+void _profileId
   const router = useRouter()
   const [deletingId, setDeletingId] = React.useState<string | null>(null)
   const [togglingId, setTogglingId] = React.useState<string | null>(null)

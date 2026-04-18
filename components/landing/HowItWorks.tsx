@@ -70,7 +70,7 @@ export function HowItWorks() {
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 text-amber-600">
                   {step.icon}
                 </div>
-                <span className="absolute -top-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-600 text-xs font-medium text-white">
+                <span className="absolute -top-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full bg-amber-700 text-xs font-medium text-white">
                   {step.number}
                 </span>
               </div>

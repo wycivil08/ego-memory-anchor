@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Memory Anchor | 忆锚 - 记忆详情</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f4f3",
+                    "tertiary-fixed-dim": "#ccc5c1",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#9b4500",
+                    "inverse-primary": "#ffb68e",
+                    "secondary": "#645d58",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1a1c1c",
+                    "surface-bright": "#f9f9f8",
+                    "on-tertiary-fixed": "#1e1b19",
+                    "primary-fixed": "#ffdbca",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "on-secondary-fixed-variant": "#4b4641",
+                    "on-primary-fixed-variant": "#763300",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeeed",
+                    "on-surface-variant": "#564338",
+                    "surface": "#f9f9f8",
+                    "secondary-fixed": "#eae1da",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#ddc1b3",
+                    "surface-variant": "#e2e2e2",
+                    "tertiary": "#5a5653",
+                    "secondary-container": "#eae1da",
+                    "on-secondary-fixed": "#1f1b17",
+                    "outline": "#897267",
+                    "secondary-fixed-dim": "#cec5bf",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#e8e8e7",
+                    "primary": "#903f00",
+                    "inverse-on-surface": "#f1f1f0",
+                    "on-tertiary-fixed-variant": "#4a4643",
+                    "primary-container": "#b45309",
+                    "on-secondary-container": "#6a635e",
+                    "tertiary-container": "#736e6b",
+                    "surface-dim": "#dadad9",
+                    "on-primary-container": "#fff1eb",
+                    "primary-fixed-dim": "#ffb68e",
+                    "on-primary-fixed": "#331200",
+                    "on-tertiary-container": "#faf2ed",
+                    "background": "#f9f9f8",
+                    "tertiary-fixed": "#e8e1dd",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e2e2e2",
+                    "inverse-surface": "#2f3130"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter", "PingFang SC", "sans-serif"],
+                    "body": ["Inter", "PingFang SC", "sans-serif"],
+                    "label": ["Inter", "PingFang SC", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body { background-color: #1c1917; } /* Dark mode view by default for Detail */
+    </style>
+</head>
+<body class="font-body text-on-surface antialiased overflow-hidden">
+<!-- Top Navigation (Suppressing Global Nav for Focused Task) -->
+<header class="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex justify-between items-center bg-stone-900/60 backdrop-blur-xl">
+<button class="flex items-center gap-2 text-stone-400 hover:text-white transition-colors group">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+<span class="text-sm font-medium">返回档案</span>
+</button>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-stone-800 text-stone-300 hover:bg-stone-700 transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-stone-800 text-stone-300 hover:bg-stone-700 transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Media Canvas (Dark Mode View) -->
+<main class="h-screen w-full flex items-center justify-center bg-stone-900">
+<div class="relative w-full h-full md:h-[870px] max-w-6xl mx-auto flex items-center justify-center">
+<img alt="Memory Archive Detail" class="max-w-full max-h-full object-contain shadow-2xl" data-alt="Vintage sepia-toned family portrait from the 1980s, soft lighting, grainy texture, framed by dark stone background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUkP3KKtWMnSzTGpoMoZpyPsAxoH8Ul_wk_rl_c_jd7trSwfAWYboa1GL9zaPiEcaMmSi0bkFlHXO7uNG-1z38w4ge2u0pajoESgGDDkVsk67JFsvAGAZh1sdOlbKYdbpPDb25KXYp7uf5am5SpbWMvtQfRdPs7zOMfmqhf-Fn7pOfG5HmF6C5IJpijAQPhJGGGz-XfrSs7TYn5lE89lA4nkiWYBM_KIF5NpHePhZxUPn8PrvTfnBa2T6HoUQye3e2wgGd9rCO5kFj"/>
+<!-- Floating Indicator for Media Type -->
+<div class="absolute top-8 left-8 flex items-center gap-3">
+<span class="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[10px] uppercase tracking-widest text-white border border-white/20">
+                    Image File
+                </span>
+<span class="px-3 py-1 bg-primary text-on-primary rounded-full text-[10px] font-bold uppercase tracking-widest">
+                    原始记录
+                </span>
+</div>
+</div>
+</main>
+<!-- Info Panel: Slides up from bottom -->
+<section class="fixed bottom-0 left-0 right-0 z-40 max-h-[716px] overflow-y-auto bg-surface/95 backdrop-blur-2xl rounded-t-[2.5rem] shadow-[0_-20px_50px_rgba(0,0,0,0.2)]">
+<!-- Drag Handle -->
+<div class="w-12 h-1.5 bg-stone-300/50 rounded-full mx-auto mt-4 mb-8"></div>
+<div class="max-w-3xl mx-auto px-8 pb-20">
+<!-- Header Info -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<p class="text-primary font-semibold tracking-wider text-xs uppercase mb-2">1984年10月12日</p>
+<h1 class="text-3xl font-bold text-on-background tracking-tight">秋日公园里的家庭野餐</h1>
+</div>
+<div class="flex items-center gap-2 text-stone-500">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span class="text-sm">北京，地坛公园</span>
+</div>
+</div>
+<!-- Annotation Section -->
+<div class="mb-12">
+<div class="relative py-8 px-10 bg-surface-container-low rounded-3xl italic text-on-surface-variant leading-loose text-lg">
+<span class="absolute top-4 left-4 text-primary opacity-30 text-5xl font-serif">「</span>
+                    那是一个难得的晴天，父亲借来了相机。照片里的笑容还没褪色，虽然现在的公园已经大不相同。
+                    <span class="absolute bottom-4 right-4 text-primary opacity-30 text-5xl font-serif">」</span>
+</div>
+</div>
+<!-- Add Annotation / Comments -->
+<div class="mb-12">
+<h3 class="text-sm font-bold uppercase tracking-widest text-stone-400 mb-4">补充家书与注脚</h3>
+<div class="space-y-4">
+<div class="p-6 bg-white rounded-2xl border border-stone-100 shadow-sm">
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-on-surface placeholder-stone-300 resize-none" placeholder="为此瞬间添加更多家族回忆..." rows="3"></textarea>
+<div class="mt-4 flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-stone-200"></div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-stone-300"></div>
+</div>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-bold transition-transform active:scale-95">
+                                保存感悟
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Metadata: Expandable Section -->
+<details class="group border-t border-stone-200/50 py-6">
+<summary class="flex items-center justify-between cursor-pointer list-none">
+<span class="text-sm font-bold uppercase tracking-widest text-stone-500">技术档案与元数据</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="mt-8 grid grid-cols-2 md:grid-cols-3 gap-8">
+<div>
+<p class="text-[10px] text-stone-400 uppercase tracking-widest mb-1">文件名</p>
+<p class="text-sm font-medium text-stone-700">IMG_1984_OCT_012.JPG</p>
+</div>
+<div>
+<p class="text-[10px] text-stone-400 uppercase tracking-widest mb-1">文件大小</p>
+<p class="text-sm font-medium text-stone-700">4.2 MB</p>
+</div>
+<div>
+<p class="text-[10px] text-stone-400 uppercase tracking-widest mb-1">分辨率</p>
+<p class="text-sm font-medium text-stone-700">3200 x 2400 PX</p>
+</div>
+<div>
+<p class="text-[10px] text-stone-400 uppercase tracking-widest mb-1">数字化日期</p>
+<p class="text-sm font-medium text-stone-700">2023年05月20日</p>
+</div>
+<div>
+<p class="text-[10px] text-stone-400 uppercase tracking-widest mb-1">扫描设备</p>
+<p class="text-sm font-medium text-stone-700">Epson V600 Archive</p>
+</div>
+<div>
+<p class="text-[10px] text-stone-400 uppercase tracking-widest mb-1">颜色配置</p>
+<p class="text-sm font-medium text-stone-700">sRGB IEC61966-2.1</p>
+</div>
+</div>
+<!-- Map integration placeholder -->
+<div class="mt-8 rounded-2xl h-48 overflow-hidden relative">
+<img alt="Location Map" class="w-full h-full object-cover grayscale opacity-60" data-alt="Subtle monochromatic map view of a city park area with elegant typography and minimalist markers" data-location="Beijing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJhgmab2DHSaDPeT07HBPto9jdVDKdS7Gna5wSsgBfXecqtK1MEO5qkTpWXlSCoDcGsD2hwS8Y-7V7L_U8058FgMyabo29LAoa_JLJnTpmVLfOl5LJBFwQ4hWX3e_J_TSI-MzkGZeTz3PtMGBgykc9KobjZkgWxsgVONS04TIs1ALvphUtqzwvycE55CL_v1EHsf0v2t4Gkd9DkjOimSElvDw4jjywKvU-G6SGbjjetgbBAgPuS0q_oR2AkBv7u-Bho0QxvxZ4SQyR"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="px-4 py-2 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">location_on</span>
+<span class="text-xs font-bold text-stone-800">查看位置详情</span>
+</div>
+</div>
+</div>
+</details>
+</div>
+</section>
+<!-- Decorative Audio Wave (Hidden on small screens) -->
+<div class="fixed right-10 bottom-32 hidden xl:flex flex-col items-center gap-1">
+<div class="w-1 h-8 bg-primary/20 rounded-full"></div>
+<div class="w-1 h-12 bg-primary/40 rounded-full"></div>
+<div class="w-1 h-16 bg-primary rounded-full"></div>
+<div class="w-1 h-12 bg-primary/40 rounded-full"></div>
+<div class="w-1 h-8 bg-primary/20 rounded-full"></div>
+<span class="material-symbols-outlined text-primary mt-4" style="font-variation-settings: 'FILL' 1;">mic</span>
+</div>
+</body></html>

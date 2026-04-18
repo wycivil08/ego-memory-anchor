@@ -35,20 +35,6 @@ function createQueryBuilderMock(data: unknown, error: unknown = null) {
   return chain
 }
 
-function createSelectMock(data: unknown, error: unknown = null) {
-  const selectChain: Record<string, ReturnType<typeof vi.fn>> = {}
-  const methods = ['eq', 'is', 'not', 'single', 'order']
-
-  methods.forEach((method) => {
-    selectChain[method] = vi.fn(() => createQueryBuilderMock(data, error))
-  })
-
-  selectChain['single'] = vi.fn().mockResolvedValue({ data, error })
-  selectChain['order'] = vi.fn().mockResolvedValue({ data: [], error: null })
-
-  return selectChain
-}
-
 describe('Family Actions', () => {
   beforeEach(() => {
     vi.clearAllMocks()

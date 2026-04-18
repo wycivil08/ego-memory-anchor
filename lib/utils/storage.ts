@@ -118,20 +118,37 @@ export async function getSignedUrl(
 }
 
 /**
- * Get the public URL for a file in Supabase Storage.
- * Note: Only works for public buckets. For private buckets, use getSignedUrl() instead.
+ * Get a public URL for a file in Supabase Storage.
+ * This is the SINGLE SOURCE OF TRUTH for constructing storage URLs.
+ * Using this function prevents bugs from inconsistent URL construction.
  *
- * @param bucket - Storage bucket name
- * @param path - Path within bucket
- * @returns Public URL string
+ * @param bucket - Storage bucket name ('memories' | 'avatars')
+ * @param path - Path within bucket (e.g., 'profileId/memoryId/file.jpg')
+ * @returns Full public URL string
  */
-export function getPublicUrl(bucket: string, path: string): string {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+export function getStoragePublicUrl(bucket: string, path: string): string {
+  if (!path) return ''
+  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`
+}
 
-  if (!supabaseUrl) {
-    throw new Error('NEXT_PUBLIC_SUPABASE_URL is not configured')
-  }
+/**
+ * Get a public URL for a memory file (stored in 'memories' bucket).
+ * Convenience wrapper for memory-specific file paths.
+ *
+ * @param path - Path within memories bucket
+ * @returns Full public URL string
+ */
+export function getMemoryFileUrl(path: string): string {
+  return getStoragePublicUrl('memories', path)
+}
 
-  // Construct public URL directly without needing a client
-  return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`
+/**
+ * Get a public URL for an avatar file (stored in 'avatars' bucket).
+ * Convenience wrapper for avatar-specific file paths.
+ *
+ * @param path - Path within avatars bucket
+ * @returns Full public URL string
+ */
+export function getAvatarFileUrl(path: string): string {
+  return getStoragePublicUrl('avatars', path)
 }

@@ -58,6 +58,7 @@ export function ProfileHeader({ profile, className }: ProfileHeaderProps) {
       <div className="h-40 lg:h-48 relative">
         {hasCustomCover ? (
           <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={coverPhotoUrl}
               alt=""
@@ -77,6 +78,7 @@ export function ProfileHeader({ profile, className }: ProfileHeaderProps) {
           {/* Avatar - positioned to overlap the cover photo */}
           <div className="flex-shrink-0">
             {avatarUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={avatarUrl}
                 alt={`${profile.name}的头像`}

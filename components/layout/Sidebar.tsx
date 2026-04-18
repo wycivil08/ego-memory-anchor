@@ -17,7 +17,7 @@ export function Sidebar({ user }: SidebarProps) {
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 space-y-1 px-3 py-4">
+      <nav aria-label="主导航" className="flex-1 space-y-1 px-3 py-4">
         <Link
           href="/dashboard"
           className="flex items-center gap-3 rounded-lg px-3 py-2 text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-800"

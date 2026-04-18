@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f4f3",
+                    "tertiary-fixed-dim": "#ccc5c1",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#9b4500",
+                    "inverse-primary": "#ffb68e",
+                    "secondary": "#645d58",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1a1c1c",
+                    "surface-bright": "#f9f9f8",
+                    "on-tertiary-fixed": "#1e1b19",
+                    "primary-fixed": "#ffdbca",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "on-secondary-fixed-variant": "#4b4641",
+                    "on-primary-fixed-variant": "#763300",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeeed",
+                    "on-surface-variant": "#564338",
+                    "surface": "#f9f9f8",
+                    "secondary-fixed": "#eae1da",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#ddc1b3",
+                    "surface-variant": "#e2e2e2",
+                    "tertiary": "#5a5653",
+                    "secondary-container": "#eae1da",
+                    "on-secondary-fixed": "#1f1b17",
+                    "outline": "#897267",
+                    "secondary-fixed-dim": "#cec5bf",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#e8e8e7",
+                    "primary": "#903f00",
+                    "inverse-on-surface": "#f1f1f0",
+                    "on-tertiary-fixed-variant": "#4a4643",
+                    "primary-container": "#b45309",
+                    "on-secondary-container": "#6a635e",
+                    "tertiary-container": "#736e6b",
+                    "surface-dim": "#dadad9",
+                    "on-primary-container": "#fff1eb",
+                    "primary-fixed-dim": "#ffb68e",
+                    "on-primary-fixed": "#331200",
+                    "on-tertiary-container": "#faf2ed",
+                    "background": "#f9f9f8",
+                    "tertiary-fixed": "#e8e1dd",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e2e2e2",
+                    "inverse-surface": "#2f3130"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter", "PingFang SC", "sans-serif"],
+                    "body": ["Inter", "PingFang SC", "sans-serif"],
+                    "label": ["Inter", "PingFang SC", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f9f9f8;
+            color: #1a1c1c;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f9f9f8]/80 backdrop-blur-md dark:bg-stone-900/80">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-stone-900 dark:text-stone-50">Memory Anchor (忆锚)</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-amber-800 dark:text-amber-400 font-semibold font-inter body-lg tracking-tight" href="#">Home</a>
+<a class="text-stone-600 dark:text-stone-400 font-inter body-lg tracking-tight hover:bg-stone-100 transition-colors px-2 py-1 rounded" href="#">Profile Archive</a>
+<a class="text-stone-600 dark:text-stone-400 font-inter body-lg tracking-tight hover:bg-stone-100 transition-colors px-2 py-1 rounded" href="#">Settings</a>
+</div>
+<div class="flex gap-4 items-center">
+<button class="px-4 py-2 text-stone-600 font-medium hover:bg-stone-100 rounded-lg transition-colors">Login</button>
+<button class="px-4 py-2 bg-primary text-on-primary rounded-lg font-medium shadow-sm hover:opacity-90 active:scale-95 transition-all">Register</button>
+</div>
+</div>
+<div class="bg-stone-200/50 dark:bg-stone-800/50 h-[1px]"></div>
+</nav>
+<!-- Sidebar (Web) -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-[#f3f4f3] dark:bg-stone-950 pt-24 pb-8 px-4 gap-4 z-40">
+<div class="px-2 mb-4">
+<h2 class="text-lg font-bold text-stone-900 dark:text-stone-50">Memory Anchor</h2>
+<p class="text-sm text-stone-500 font-inter">忆锚 Archive</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-amber-800 dark:text-amber-400 font-bold border-r-2 border-amber-700 bg-stone-200/50 transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-lg ease-in-out duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Profile Archive</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-lg ease-in-out duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 pt-24 pb-20 px-6 max-w-5xl mx-auto">
+<!-- Profile Header -->
+<header class="flex flex-col md:flex-row items-center md:items-end gap-6 mb-16 pb-12 border-b border-stone-200/30">
+<div class="relative">
+<div class="w-24 h-24 rounded-full overflow-hidden ring-4 ring-white shadow-lg">
+<img alt="Grandpa's Portrait" class="w-full h-full object-cover" data-alt="Close-up portrait of a kind elderly Chinese man with gentle eyes and a warm smile, wearing a traditional grey cotton jacket, soft natural morning light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBryFZbX822INCklxI45qZ-uVJOpxK_-3jnIMqEMJZ24LcsikGbd5ACTFY0VGT3rW9ELkHs6IvBqPhAkLoGjMr5JDeZL5YButexFViItsxoHE7vHphVr_ezlVmBTaTlXAlDY-fQpRhq3w2nBjO4rnMQyR0gRhkDET8VySSnYgCZjoZM4bm3Ew3tGpb_BOts4Jjoau-GhawAqMJcGPNBhvnVERYZXQJBbSjmnTNdndkyKl2sjmpggra9wxJuRaNm6pZvOPcAa9nXwy-p"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary-fixed p-1.5 rounded-full text-on-primary-fixed shadow-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+</div>
+<div class="flex-1 text-center md:text-left">
+<h1 class="text-3xl font-bold tracking-tight text-on-surface mb-1">爷爷 · 张建国</h1>
+<p class="text-sm text-on-surface-variant font-medium mb-2">1945年3月12日 — 2023年11月8日</p>
+<p class="text-stone-500 italic">“永远笑眯眯的老爷子”</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-lg font-medium shadow-sm hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-lg">upload</span>
+                    上传记忆
+                </button>
+<button class="flex items-center gap-2 px-5 py-2.5 border-2 border-outline-variant text-on-surface rounded-lg font-medium hover:bg-surface-container-low active:scale-95 transition-all">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                    邀请家人
+                </button>
+</div>
+</header>
+<!-- Timeline Section -->
+<div class="relative">
+<!-- Vertical Line -->
+<div class="absolute left-4 md:left-8 top-0 bottom-0 w-[2px] bg-stone-200/80"></div>
+<!-- Timeline Entries -->
+<div class="space-y-16 relative">
+<!-- Entry 1: Photo Memory -->
+<article class="relative pl-12 md:pl-20">
+<!-- Marker -->
+<div class="absolute left-3 md:left-7 top-0 w-3 h-3 rounded-full bg-primary ring-4 ring-surface shadow-sm z-10"></div>
+<time class="block text-sm font-bold uppercase tracking-widest text-primary mb-4 font-inter">1992 Autumn</time>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(144,63,0,0.04)] max-w-2xl group transition-transform hover:-translate-y-1">
+<div class="flex justify-between items-start mb-4">
+<span class="px-2.5 py-1 bg-stone-100 text-stone-500 text-[10px] font-bold uppercase tracking-widest rounded-md">原始记录</span>
+<button class="text-stone-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<div class="rounded-lg overflow-hidden mb-6">
+<img alt="Family Garden" class="w-full aspect-[4/3] object-cover transition-transform group-hover:scale-105 duration-700" data-alt="Vintage film photograph of a sun-drenched family garden in late autumn, golden marigolds in bloom, soft hazy atmosphere, warm nostalgic tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBR62B76W7mN-pcLd-cC7DSdTrlmdtzvgyMDCd1NjRscpmf1vn1nf8qj0sTDLGF7Cvo8NwmAoGRuexnELhLSAeprshld-dAGGOtCvtMT8Ejy8idcwkm2YrMsVyZvaUkQhKQCpcfinpxRB2wmzgt6PKbGnCY-Rt_Ku4RRVUenkQp6ZIYubyn1Elp7HD6fOPcpQzapxjHcTuUcmdxd-tDV4GKObuKiO_AMXSL0dXPunLSmjaHLPyjOr5Kk3kEGqTLybPGDY0ToE-J7Q3M"/>
+</div>
+<div class="border-l-4 border-primary-fixed pl-4 mb-2">
+<h3 class="text-lg font-semibold text-on-surface mb-2">在旧宅的小院子里</h3>
+<p class="text-on-surface-variant leading-relaxed">
+                                那个下午，爷爷就在这棵石榴树下坐了很久。他话不多，但眼神里全是温柔。手里摇着那把破蒲扇，像是要把所有时光都摇慢。
+                            </p>
+</div>
+<div class="mt-6 flex items-center gap-4 text-xs text-stone-400 border-t border-stone-100 pt-4">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">favorite</span> 12</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">chat_bubble</span> 4</span>
+</div>
+</div>
+</article>
+<!-- Entry 2: Audio Memory -->
+<article class="relative pl-12 md:pl-20">
+<!-- Marker -->
+<div class="absolute left-3 md:left-7 top-0 w-3 h-3 rounded-full bg-primary ring-4 ring-surface shadow-sm z-10"></div>
+<time class="block text-sm font-bold uppercase tracking-widest text-primary mb-4 font-inter">2018 Chinese New Year</time>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(144,63,0,0.04)] max-w-2xl">
+<div class="flex items-center gap-4 mb-6">
+<button class="w-14 h-14 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="flex-1">
+<h3 class="text-base font-semibold mb-1">除夕夜的叮嘱 (语音)</h3>
+<div class="flex items-end gap-1 h-8">
+<div class="w-1 bg-primary-container h-[40%] rounded-full"></div>
+<div class="w-1 bg-primary h-[70%] rounded-full"></div>
+<div class="w-1 bg-primary-container h-[50%] rounded-full"></div>
+<div class="w-1 bg-primary h-[90%] rounded-full"></div>
+<div class="w-1 bg-primary-container h-[30%] rounded-full"></div>
+<div class="w-1 bg-primary h-[60%] rounded-full"></div>
+<div class="w-1 bg-primary-container h-[80%] rounded-full"></div>
+<div class="w-1 bg-primary h-[40%] rounded-full"></div>
+<div class="w-1 bg-primary-container h-[60%] rounded-full"></div>
+<div class="w-1 bg-primary h-[90%] rounded-full"></div>
+<div class="w-1 bg-primary-container h-[50%] rounded-full"></div>
+<div class="w-1 bg-primary h-[70%] rounded-full"></div>
+<div class="w-1 bg-primary-container h-[30%] rounded-full"></div>
+<div class="w-1 bg-primary h-[85%] rounded-full"></div>
+<div class="w-1 bg-primary-container h-[45%] rounded-full"></div>
+<div class="w-1 bg-primary h-[65%] rounded-full"></div>
+<div class="w-1 bg-primary-container h-[25%] rounded-full"></div>
+<div class="w-1 bg-stone-200 h-[15%] rounded-full"></div>
+<div class="w-1 bg-stone-200 h-[10%] rounded-full"></div>
+<div class="w-1 bg-stone-200 h-[15%] rounded-full"></div>
+</div>
+</div>
+<span class="text-xs font-mono text-stone-400">00:42</span>
+</div>
+<p class="text-on-surface-variant italic text-sm leading-relaxed bg-surface-container-low p-4 rounded-lg">
+                            “...出门在外要吃饱，别总熬夜。咱家里永远亮着灯，什么时候累了，就回来。”
+                        </p>
+</div>
+</article>
+<!-- Entry 3: Literary Text Memory -->
+<article class="relative pl-12 md:pl-20">
+<!-- Marker -->
+<div class="absolute left-3 md:left-7 top-0 w-3 h-3 rounded-full bg-primary ring-4 ring-surface shadow-sm z-10"></div>
+<time class="block text-sm font-bold uppercase tracking-widest text-primary mb-4 font-inter">Last Writing · 2023</time>
+<div class="bg-surface-container-lowest p-10 rounded-xl shadow-[0_4px_20px_rgba(144,63,0,0.04)] max-w-2xl relative overflow-hidden">
+<div class="absolute -right-4 -top-4 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]">format_quote</span>
+</div>
+<div class="relative z-10">
+<p class="text-xl md:text-2xl text-on-surface leading-loose font-serif">
+                                「人这一辈子，就像是过了一道又一道的河。有些河深，有些河浅。别怕湿了鞋子，只要心里有个锚，水再大也冲不走。」
+                            </p>
+<div class="mt-8 pt-6 border-t border-stone-100 flex justify-end">
+<p class="text-stone-400 text-sm">— 整理自爷爷的笔记本第24页</p>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 bg-[#f9f9f8] dark:bg-stone-900 border-t border-stone-200/30 dark:border-stone-800/30">
+<div class="flex flex-col items-center justify-center gap-6 max-w-7xl mx-auto px-6">
+<div class="flex gap-8">
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Privacy</a>
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Terms</a>
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Contact</a>
+</div>
+<p class="text-stone-400 font-inter text-[11px] uppercase tracking-widest">© 2024 Memory Anchor (忆锚)</p>
+</div>
+</footer>
+<!-- Bottom Nav Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center bg-[#f9f9f8]/90 backdrop-blur-xl px-6 py-3 rounded-full shadow-[0_8px_32px_rgba(144,63,0,0.15)] z-50 gap-8">
+<a class="flex flex-col items-center gap-1 text-amber-800 font-bold transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-400 hover:text-stone-600 transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-400 hover:text-stone-600 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+</a>
+</nav>
+</body></html>

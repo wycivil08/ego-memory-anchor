@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>设置 - Memory Anchor (忆锚)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f4f3",
+                    "tertiary-fixed-dim": "#ccc5c1",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#9b4500",
+                    "inverse-primary": "#ffb68e",
+                    "secondary": "#645d58",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1a1c1c",
+                    "surface-bright": "#f9f9f8",
+                    "on-tertiary-fixed": "#1e1b19",
+                    "primary-fixed": "#ffdbca",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "on-secondary-fixed-variant": "#4b4641",
+                    "on-primary-fixed-variant": "#763300",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeeed",
+                    "on-surface-variant": "#564338",
+                    "surface": "#f9f9f8",
+                    "secondary-fixed": "#eae1da",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#ddc1b3",
+                    "surface-variant": "#e2e2e2",
+                    "tertiary": "#5a5653",
+                    "secondary-container": "#eae1da",
+                    "on-secondary-fixed": "#1f1b17",
+                    "outline": "#897267",
+                    "secondary-fixed-dim": "#cec5bf",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#e8e8e7",
+                    "primary": "#903f00",
+                    "inverse-on-surface": "#f1f1f0",
+                    "on-tertiary-fixed-variant": "#4a4643",
+                    "primary-container": "#b45309",
+                    "on-secondary-container": "#6a635e",
+                    "tertiary-container": "#736e6b",
+                    "surface-dim": "#dadad9",
+                    "on-primary-container": "#fff1eb",
+                    "primary-fixed-dim": "#ffb68e",
+                    "on-primary-fixed": "#331200",
+                    "on-tertiary-container": "#faf2ed",
+                    "background": "#f9f9f8",
+                    "tertiary-fixed": "#e8e1dd",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e2e2e2",
+                    "inverse-surface": "#2f3130"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter", "PingFang SC", "sans-serif"],
+                    "body": ["Inter", "PingFang SC", "sans-serif"],
+                    "label": ["Inter", "PingFang SC", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', 'PingFang SC', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- TopNavBar (Fixed/Floating Shell) -->
+<header class="fixed top-0 w-full z-50 bg-[#f9f9f8]/80 backdrop-blur-md dark:bg-stone-900/80">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-stone-900 dark:text-stone-50 tracking-tight">Memory Anchor (忆锚)</div>
+<nav class="hidden md:flex items-center gap-8 font-inter body-lg tracking-tight">
+<a class="text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-1 rounded-lg" href="#">Home</a>
+<a class="text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-1 rounded-lg" href="#">Profile Archive</a>
+<a class="text-amber-800 dark:text-amber-400 font-semibold px-3 py-1 rounded-lg" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant">search</button>
+<div class="h-8 w-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold">L</div>
+</div>
+</div>
+<div class="bg-stone-200/50 dark:bg-stone-800/50 h-[1px]"></div>
+</header>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden lg:flex flex-col h-screen w-64 fixed left-0 top-0 bg-[#f3f4f3] dark:bg-stone-950 pt-24 pb-8 px-4 gap-4">
+<div class="px-4 mb-6">
+<div class="text-lg font-bold text-stone-900 dark:text-stone-50">Memory Anchor</div>
+<div class="text-xs text-stone-500 uppercase tracking-widest mt-1">忆锚 Archive</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 hover:bg-stone-200 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">home</span>
+<span>Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 hover:bg-stone-200 transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>Profile Archive</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-amber-800 dark:text-amber-400 font-bold border-r-2 border-amber-700 bg-surface-container-highest/30" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 pb-20 px-6 max-w-5xl mx-auto">
+<!-- Header Section -->
+<header class="mb-12">
+<h1 class="text-3xl font-headline font-bold text-on-surface tracking-tight mb-2">设置中心</h1>
+<p class="text-on-surface-variant leading-relaxed">管理您的账户偏好、数据资产与安全选项。</p>
+</header>
+<!-- Section 1: Data Export (The Trust Anchor) -->
+<section class="mb-12">
+<div class="relative overflow-hidden rounded-xl border-2 border-primary-container bg-surface-container-lowest p-8 shadow-sm">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">cloud_download</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<h2 class="text-xl font-bold text-on-surface">你的数据，随时带走</h2>
+</div>
+<p class="text-on-surface-variant max-w-lg">我们承诺用户的数据自主权。您可以随时导出存储在“忆锚”中的所有个人档案、记忆碎片与关联资产。导出的文件采用标准的 JSON 与媒体包格式。</p>
+</div>
+<button class="bg-primary hover:bg-primary-container text-on-primary px-6 py-3 rounded-lg font-medium transition-all flex items-center gap-2 whitespace-nowrap shadow-md">
+<span class="material-symbols-outlined text-sm">download</span>
+                        导出全部数据
+                    </button>
+</div>
+<div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="close-up portrait of an elderly woman with kind eyes and grey hair in soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWfpVJFYpt7qoEQ9W_JYdNygbaqChfU5traWYQb8w3tQMIVGOTifyuPD-DbDxYv0s-3PCSHCosqNz-b-OEzms3ISQAYij-H3cVDmo2VT1OpFPKGbO_xgrESA-lL-sljYZEMzvrukjw0IkgLPte40JiN8wQbRJZfBI3wxtBQjKtZFUHwa6oxtR2Rf8mru2BJBjsXbfgI5gLCb5RYKLLZt8RXPTEANQETcJX6WymT10cLzcGjuZ0gEWj9G9gTwCRJJyWJwFWkdXehVXm"/>
+</div>
+<div>
+<div class="text-sm font-semibold">档案：祖母的记忆</div>
+<div class="text-[10px] text-stone-500 uppercase tracking-wider">最后更新: 2024.03.12</div>
+</div>
+</div>
+<button class="text-primary hover:text-primary-container material-symbols-outlined">download</button>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-stone-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-stone-500">folder_shared</span>
+</div>
+<div>
+<div class="text-sm font-semibold">个人日记存证</div>
+<div class="text-[10px] text-stone-500 uppercase tracking-wider">42 个条目</div>
+</div>
+</div>
+<button class="text-primary hover:text-primary-container material-symbols-outlined">download</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Account Settings (Editorial Layout) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+<div class="md:col-span-1">
+<h3 class="text-lg font-bold mb-2">账户与安全</h3>
+<p class="text-sm text-on-surface-variant">更新您的基本信息并确保您的账户安全无虞。</p>
+</div>
+<div class="md:col-span-2 space-y-6">
+<!-- Email -->
+<div class="bg-surface-container-lowest rounded-xl p-6 transition-all hover:shadow-sm">
+<label class="block text-[11px] uppercase tracking-widest text-stone-400 mb-2">电子邮箱地址</label>
+<div class="flex items-center justify-between">
+<span class="text-on-surface font-medium">user.memory@anchor.fm</span>
+<button class="text-primary text-sm font-medium hover:underline">更换邮箱</button>
+</div>
+</div>
+<!-- Password -->
+<div class="bg-surface-container-lowest rounded-xl p-6 transition-all hover:shadow-sm">
+<label class="block text-[11px] uppercase tracking-widest text-stone-400 mb-2">登录密码</label>
+<div class="flex items-center justify-between">
+<span class="text-on-surface font-medium">••••••••••••••</span>
+<button class="text-primary text-sm font-medium hover:underline">修改密码</button>
+</div>
+</div>
+<!-- Notifications -->
+<div class="bg-surface-container-lowest rounded-xl p-6 transition-all hover:shadow-sm">
+<label class="block text-[11px] uppercase tracking-widest text-stone-400 mb-2">通知偏好</label>
+<div class="space-y-4 mt-4">
+<div class="flex items-center justify-between">
+<span class="text-sm">档案互动通知</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm">周报与年度总结</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Danger Zone -->
+<section class="border-t border-stone-200/50 pt-12 mb-20">
+<div class="bg-error-container/20 rounded-xl border border-red-200 p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div>
+<h3 class="text-lg font-bold text-red-700 mb-1">危险区域</h3>
+<p class="text-sm text-red-600/80">删除账户将永久移除您的所有数据且不可恢复。请务必先完成数据导出。</p>
+</div>
+<button class="border border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-6 py-2 rounded-lg text-sm font-semibold transition-colors">
+                    注销我的账户
+                </button>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="w-full py-12 bg-[#f9f9f8] dark:bg-stone-900 border-t border-stone-200/30 dark:border-stone-800/30">
+<div class="flex flex-col items-center justify-center gap-6 max-w-7xl mx-auto px-6">
+<div class="flex gap-8">
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Privacy</a>
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Terms</a>
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Contact</a>
+</div>
+<div class="font-inter text-[11px] uppercase tracking-widest text-stone-400">
+                © 2024 Memory Anchor (忆锚)
+            </div>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<div class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] z-50">
+<nav class="bg-surface/80 backdrop-blur-md rounded-full flex justify-around items-center py-3 px-6 shadow-xl border border-stone-200/20">
+<a class="flex flex-col items-center gap-1 text-stone-400" href="#">
+<span class="material-symbols-outlined">home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-stone-400" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-amber-700" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+</a>
+</nav>
+</div>
+</body></html>

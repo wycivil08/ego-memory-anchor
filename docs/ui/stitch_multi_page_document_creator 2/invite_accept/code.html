@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>加入记忆空间 - 忆锚 (Memory Anchor)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f4f3",
+                        "tertiary-fixed-dim": "#ccc5c1",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#9b4500",
+                        "inverse-primary": "#ffb68e",
+                        "secondary": "#645d58",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "surface-bright": "#f9f9f8",
+                        "on-tertiary-fixed": "#1e1b19",
+                        "primary-fixed": "#ffdbca",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-fixed-variant": "#4b4641",
+                        "on-primary-fixed-variant": "#763300",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeeed",
+                        "on-surface-variant": "#564338",
+                        "surface": "#f9f9f8",
+                        "secondary-fixed": "#eae1da",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#ddc1b3",
+                        "surface-variant": "#e2e2e2",
+                        "tertiary": "#5a5653",
+                        "secondary-container": "#eae1da",
+                        "on-secondary-fixed": "#1f1b17",
+                        "outline": "#897267",
+                        "secondary-fixed-dim": "#cec5bf",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e8e8e7",
+                        "primary": "#903f00",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-tertiary-fixed-variant": "#4a4643",
+                        "primary-container": "#b45309",
+                        "on-secondary-container": "#6a635e",
+                        "tertiary-container": "#736e6b",
+                        "surface-dim": "#dadad9",
+                        "on-primary-container": "#fff1eb",
+                        "primary-fixed-dim": "#ffb68e",
+                        "on-primary-fixed": "#331200",
+                        "on-tertiary-container": "#faf2ed",
+                        "background": "#f9f9f8",
+                        "tertiary-fixed": "#e8e1dd",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e2e2e2",
+                        "inverse-surface": "#2f3130"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "PingFang SC", "sans-serif"],
+                        "body": ["Inter", "PingFang SC", "sans-serif"],
+                        "label": ["Inter", "PingFang SC", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    vertical-align: middle
+    }
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+    }
+.grainy-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBm-A32bo8rlpTWlDfGDYsB1pgTU9n0FxucI89R2GEMngZxQTmM76Ipw-zdFQPqr2n6Wl0IuOY7eYaRH86dMZCLTAt7LnypA-nYWaA43ortctDrGBTzzwxZEns6M4Njhpb9qxODjQacHsTxc6lhZVyYSpmujNLiwketcaoT9w7o-WMRs0q5ZH64XqkV33KVJ8XHx7DYAVcu4i-ZV1Phib9VhfhpfDveXO8umyRtxP-_iQjVp0b_tS98HDyjP-wtOeXR6WZS342Qh5FZ)
+    }</style>
+</head>
+<body class="bg-surface font-body text-on-surface min-h-screen flex flex-col items-center justify-center p-6 grainy-bg">
+<!-- Header / Brand Branding -->
+<header class="fixed top-0 w-full py-6 px-8 flex justify-center items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="anchor">anchor</span>
+<span class="text-xl font-bold tracking-tight text-on-surface">Memory Anchor (忆锚)</span>
+</div>
+</header>
+<main class="w-full max-w-md mt-12 mb-8">
+<!-- Main Acceptance Card -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_40px_80px_rgba(144,63,0,0.08)] flex flex-col items-center text-center relative overflow-hidden">
+<!-- Subtle Tonal Background Element -->
+<div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-primary-fixed/30 to-transparent pointer-events-none"></div>
+<!-- Inviter Message -->
+<div class="mb-8 relative z-10">
+<div class="flex items-center justify-center gap-2 mb-2">
+<img alt="Inviter Avatar" class="w-8 h-8 rounded-full border border-outline-variant/30" data-alt="Close-up portrait of a young woman with a gentle expression in soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5I-DYogdF5Zt-Pk70CY2Zj8deXrChp7I2JfpPucV5bjKdfhopmRm_EXwl8rTwLpAeCycf6RFBZ5usTp2iUR7DqkRpL4h4SHHut_pra8o7ZOpCAvOuhf7K9vOdF7sLhwGZmFwHR09d31fM0p8DqNq8abx2X7GEf4iCToF_fFZYUdDwiaKItrrryIMdkfufAfBgbOYxrehMx5JjkzrMJzMeb8xR86EjRs5byNE87dtN8VqU9wKbuNcvV6QV8MvtqhoDMxF30SuGpF2P"/>
+<span class="text-on-surface-variant text-sm font-medium">小雨 邀请你一起守护这段记忆</span>
+</div>
+</div>
+<!-- Deceased Persona Section -->
+<div class="flex flex-col items-center mb-8 relative z-10">
+<div class="w-32 h-32 rounded-full overflow-hidden mb-6 p-1 border-2 border-primary/20">
+<img alt="Deceased Avatar" class="w-full h-full rounded-full object-cover grayscale-[0.3]" data-alt="Dignified black and white portrait of an elderly man with kind eyes and a warm smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-yrYLmwjVDMxjNYOYmtjCNJdYWMPVmx76OnttHe7EJdMymYaeyNONmN88Jl3UiVKr94FTa2J0HkztoEaFsKwUT7QULeI-aPd4IalgaPUwHgcO3bMbZxg_-LK3hj06sJK5-_8Rqu1D7Rf4Oh0No1a9Snq-_WCGpsR1KVmbMn4kKe-xYf4_nmx0X8E-4yeQrYXuULgnflIEVJ5JcQ-K6x2vy6YLXWgAWcNzHD7gAPZrQmK6BdG5i6o0fpbZHqFKIF9iY7hzUkkS9UPA"/>
+</div>
+<h1 class="text-3xl font-bold text-on-surface mb-2 tracking-tight">王立诚</h1>
+<p class="text-tertiary font-medium mb-4 text-sm tracking-widest uppercase">1945.03.12 — 2023.11.20</p>
+<div class="w-12 h-px bg-outline-variant/50 mb-4"></div>
+<p class="text-on-surface-variant leading-relaxed text-balance">
+                    “在这平凡的一生里，他教会了我们如何去爱，如何去珍惜那些不经意的瞬间。”
+                </p>
+</div>
+<!-- Interaction Area -->
+<div class="w-full flex flex-col gap-4 relative z-10">
+<button class="w-full py-4 px-6 bg-primary text-on-primary rounded-lg font-semibold text-lg flex items-center justify-center gap-2 shadow-lg shadow-primary/10 hover:bg-primary-container transition-colors active:scale-[0.98]">
+                    加入记忆空间
+                    <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<p class="text-on-surface-variant/60 text-[11px] leading-tight">
+                    点击加入即代表您同意《服务协议》与《隐私政策》
+                </p>
+</div>
+<!-- Trust Line -->
+<div class="mt-10 pt-6 border-t border-surface-container w-full">
+<div class="flex items-center justify-center gap-2 text-on-surface-variant/80">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user">verified_user</span>
+<span class="text-xs font-medium tracking-wide">忆锚只保存真实记录，不做AI合成</span>
+</div>
+</div>
+</div>
+<!-- Secondary Information / Social Proof -->
+<div class="mt-8 px-4 grid grid-cols-3 gap-4">
+<div class="flex flex-col items-center gap-1 text-center">
+<span class="text-xl font-bold text-primary">124</span>
+<span class="text-[10px] uppercase tracking-tighter text-on-surface-variant/70">珍贵影像</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-center">
+<span class="text-xl font-bold text-primary">8</span>
+<span class="text-[10px] uppercase tracking-tighter text-on-surface-variant/70">挚友守护</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-center">
+<span class="text-xl font-bold text-primary">42</span>
+<span class="text-[10px] uppercase tracking-tighter text-on-surface-variant/70">温暖回忆</span>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto py-12 w-full flex flex-col items-center justify-center gap-6">
+<div class="flex gap-6">
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 transition-opacity duration-300" href="#">Privacy</a>
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 transition-opacity duration-300" href="#">Terms</a>
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 transition-opacity duration-300" href="#">Contact</a>
+</div>
+<div class="text-stone-400 font-inter text-[11px] uppercase tracking-widest">
+            © 2024 Memory Anchor (忆锚)
+        </div>
+</footer>
+<!-- Mobile-Specific Floating Hint for WeChat Context -->
+<div class="md:hidden fixed bottom-8 right-8 pointer-events-none opacity-0 sm:opacity-100">
+<div class="bg-surface-container-high/90 backdrop-blur-md px-4 py-2 rounded-full text-[10px] text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-xs" data-icon="info">info</span>
+            建议在微信内直接完成加入
+        </div>
+</div>
+</body></html>

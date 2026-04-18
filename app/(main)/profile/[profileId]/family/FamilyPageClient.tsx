@@ -19,12 +19,7 @@ export function FamilyPageClient({
   profileId,
 }: FamilyPageClientProps) {
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
-  const [memberListKey, setMemberListKey] = useState(0)
-
-  // Refresh member list by incrementing key
-  const refreshMembers = () => {
-    setMemberListKey((k) => k + 1)
-  }
+  const [memberListKey] = useState(0)
 
   return (
     <div className="min-h-screen">

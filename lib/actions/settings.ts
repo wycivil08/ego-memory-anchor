@@ -2,7 +2,6 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { revalidatePath } from 'next/cache'
 
 export type PasswordState = {
   error: string | null

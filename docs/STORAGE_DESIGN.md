@@ -249,44 +249,50 @@ function sanitizeFilename(filename: string): string {
 
 ## 7. 前端组件规范
 
-### 7.1 获取图片 URL
+### 7.1 统一 URL 工具（必须使用！）
 
-**在 Server Components 中：**
+**重要**：必须使用 `lib/utils/storage-urls.ts` 中的工具函数，禁止内联构造 URL。
 
 ```typescript
-// lib/utils/storage.ts
-export function getMemoryPublicUrl(filePath: string): string {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  if (!supabaseUrl) throw new Error('NEXT_PUBLIC_SUPABASE_URL not set')
-  return `${supabaseUrl}/storage/v1/object/public/memories/${filePath}`
-}
+// ✅ 正确：使用统一工具
+import { getMemoryFileUrl, getAvatarFileUrl } from '@/lib/utils/storage-urls'
+
+// memories bucket 文件
+const url = getMemoryFileUrl('profileId/memoryId/photo.jpg')
+
+// avatars bucket 文件
+const avatarUrl = getAvatarFileUrl('userId/avatar.jpg')
 ```
 
-**在 Client Components 中（需要认证）：**
-
 ```typescript
-// 使用 getSignedUrl 动态获取
-async function getImageUrl(filePath: string): Promise<string> {
-  const supabase = createBrowserClient(...)
-  const { data } = await supabase.storage
-    .from('memories')
-    .createSignedUrl(filePath, 3600)
-  return data.signedUrl
-}
+// ❌ 错误：禁止内联构造（曾经导致 MemoryDetail 照片 404）
+const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${filePath}`
 ```
 
 ### 7.2 TimelineItem 示例
 
 ```typescript
+// ✅ 正确：使用 getMemoryFileUrl
+import { getMemoryFileUrl } from '@/lib/utils/storage-urls'
+
 function MediaPreview({ memory }: { memory: Memory }) {
-  // ✅ 正确：包含 bucket 名称
   const imageUrl = memory.file_path
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/memories/${memory.file_path}`
+    ? getMemoryFileUrl(memory.file_path)
     : null
 
   if (!imageUrl) return <Placeholder />
-
   return <img src={imageUrl} alt={memory.file_name || '照片'} />
+}
+```
+
+### 7.3 获取 Signed URL（如需私有访问）
+
+```typescript
+// 使用 lib/utils/storage.ts 中的 getSignedUrl
+import { getSignedUrl } from '@/lib/utils/storage'
+
+async function getPrivateUrl(filePath: string): Promise<string> {
+  return getSignedUrl('memories', filePath, 3600)
 }
 ```
 

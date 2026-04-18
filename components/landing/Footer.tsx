@@ -11,10 +11,10 @@ export function Footer() {
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <div className="flex items-center gap-2">
               <span className="text-lg font-medium text-stone-800">忆锚</span>
-              <span className="text-sm text-stone-400">—</span>
+              <span className="text-sm text-stone-500">—</span>
               <span className="text-sm text-stone-500">守护真实记忆</span>
             </div>
-            <p className="text-sm text-stone-400">
+            <p className="text-sm text-stone-500">
               © {currentYear} 忆锚. 让爱与回忆永不消逝。
             </p>
           </div>
@@ -43,12 +43,12 @@ export function Footer() {
         </div>
 
         {/* ICP备案 - placeholder */}
-        <div className="mt-6 text-center text-xs text-stone-400">
+        <div className="mt-6 text-center text-xs text-stone-500">
           <a
             href="https://beian.miit.gov.cn/"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-stone-500 transition-colors"
+            className="hover:text-stone-600 transition-colors"
           >
             京ICP备XXXXXXXX号
           </a>

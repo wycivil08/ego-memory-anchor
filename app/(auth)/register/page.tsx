@@ -1,7 +1,9 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { signUp, type SignUpState } from '@/lib/actions/auth'
+import { registerSchema, type RegisterInput } from '@/lib/schemas/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -10,9 +12,9 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from '@/components/ui/card'
 import Link from 'next/link'
+import { useActionState } from 'react'
 
 const initialState: SignUpState = {
   error: null,
@@ -22,15 +24,37 @@ const initialState: SignUpState = {
 
 export default function RegisterPage() {
   const [state, formAction, isPending] = useActionState(signUp, initialState)
-  const [privacyChecked, setPrivacyChecked] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      privacyConsent: false,
+    },
+  })
+
+  const onSubmit = (data: RegisterInput) => {
+    const formData = new FormData()
+    formData.append('email', data.email)
+    formData.append('password', data.password)
+    formData.append('confirmPassword', data.confirmPassword)
+    // privacyConsent is not sent to server - handled by Zod validation
+    formAction(formData)
+  }
 
   if (state.emailSent) {
     return (
       <Card className="shadow-sm border-stone-200 rounded-xl">
         <CardHeader className="pb-6">
-          <CardTitle className="text-2xl font-medium text-stone-800">
+          <h2 className="text-2xl font-medium text-stone-800">
             注册成功
-          </CardTitle>
+          </h2>
           <CardDescription className="text-stone-500">
             验证邮件已发送至您的邮箱
           </CardDescription>
@@ -64,21 +88,28 @@ export default function RegisterPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction} className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+        >
           <div className="space-y-1.5">
             <label htmlFor="email" className="text-sm font-medium text-stone-700">
               邮箱
             </label>
             <Input
               id="email"
-              name="email"
               type="email"
               placeholder="your@email.com"
-              required
               autoComplete="email"
               disabled={isPending}
+              {...register('email')}
               className="border-stone-300 bg-white text-stone-800 placeholder:text-stone-400 focus-visible:ring-amber-600"
             />
+            {errors.email && (
+              <p className="text-sm text-red-500" role="alert">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-1.5">
@@ -87,14 +118,18 @@ export default function RegisterPage() {
             </label>
             <Input
               id="password"
-              name="password"
               type="password"
               placeholder="至少 8 位，包含字母和数字"
-              required
               autoComplete="new-password"
               disabled={isPending}
+              {...register('password')}
               className="border-stone-300 bg-white text-stone-800 placeholder:text-stone-400 focus-visible:ring-amber-600"
             />
+            {errors.password && (
+              <p className="text-sm text-red-500" role="alert">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           <div className="space-y-1.5">
@@ -106,14 +141,18 @@ export default function RegisterPage() {
             </label>
             <Input
               id="confirmPassword"
-              name="confirmPassword"
               type="password"
               placeholder="请再次输入密码"
-              required
               autoComplete="new-password"
               disabled={isPending}
+              {...register('confirmPassword')}
               className="border-stone-300 bg-white text-stone-800 placeholder:text-stone-400 focus-visible:ring-amber-600"
             />
+            {errors.confirmPassword && (
+              <p className="text-sm text-red-500" role="alert">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
 
           {state.error && (
@@ -126,13 +165,13 @@ export default function RegisterPage() {
           <div className="space-y-3">
             <div className="flex items-start gap-3">
               <Checkbox
-                id="privacy-consent"
-                checked={privacyChecked}
-                onCheckedChange={(checked) => setPrivacyChecked(checked === true)}
+                id="privacyConsent"
+                disabled={isPending}
+                {...register('privacyConsent')}
                 className="mt-0.5 h-4 w-4 shrink-0 rounded border-stone-300 text-amber-600 focus-visible:ring-amber-600"
               />
               <label
-                htmlFor="privacy-consent"
+                htmlFor="privacyConsent"
                 className="text-sm text-stone-600 leading-relaxed cursor-pointer"
               >
                 我已阅读并同意
@@ -153,16 +192,21 @@ export default function RegisterPage() {
                 </Link>
               </label>
             </div>
+            {errors.privacyConsent && (
+              <p className="text-sm text-red-500 pl-7" role="alert">
+                {errors.privacyConsent.message}
+              </p>
+            )}
 
             {/* Warm reassurance text */}
-            <p className="text-xs text-stone-400 pl-7">
+            <p className="text-xs text-stone-500 pl-7">
               你的数据只属于你。我们不做 AI 合成，不投广告。
             </p>
           </div>
 
           <Button
             type="submit"
-            disabled={isPending || !privacyChecked}
+            disabled={isPending}
             variant="default"
             size="lg"
             className="w-full"

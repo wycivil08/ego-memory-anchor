@@ -4,7 +4,6 @@ import { useState, useCallback, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 
 interface ExportProfile {
   id: string
@@ -26,7 +25,7 @@ export function ExportProgress({ profiles, onExportComplete }: ExportProgressPro
   const [status, setStatus] = useState<ExportStatus>('idle')
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
-  const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
+  const [, setDownloadUrl] = useState<string | null>(null)
   const abortControllerRef = useRef<AbortController | null>(null)
 
   const selectedProfile = profiles.find((p) => p.id === selectedProfileId)

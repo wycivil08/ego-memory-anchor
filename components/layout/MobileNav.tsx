@@ -44,7 +44,7 @@ export function MobileNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="flex h-16 items-center justify-around border-t border-stone-200 bg-white shadow-sm">
+    <nav aria-label="移动端导航" className="flex h-16 items-center justify-around border-t border-stone-200 bg-white shadow-sm">
       {navItems.map((item) => {
         const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
 

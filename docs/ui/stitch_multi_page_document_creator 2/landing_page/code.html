@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Memory Anchor (忆锚) - 永不丢失 关于 TA 的真实记忆</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#736e6b",
+                        "on-tertiary-fixed": "#1e1b19",
+                        "surface-container": "#eeeeed",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#ffdbca",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#cec5bf",
+                        "background": "#f9f9f8",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#1f1b17",
+                        "on-surface": "#1a1c1c",
+                        "secondary-fixed": "#eae1da",
+                        "on-surface-variant": "#564338",
+                        "surface-tint": "#9b4500",
+                        "error-container": "#ffdad6",
+                        "outline": "#897267",
+                        "on-background": "#1a1c1c",
+                        "surface-dim": "#dadad9",
+                        "surface-container-low": "#f3f4f3",
+                        "on-primary-fixed": "#331200",
+                        "surface-bright": "#f9f9f8",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#ffb68e",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#ddc1b3",
+                        "inverse-on-surface": "#f1f1f0",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#eae1da",
+                        "secondary": "#645d58",
+                        "on-tertiary-container": "#faf2ed",
+                        "on-secondary-fixed-variant": "#4b4641",
+                        "primary": "#903f00",
+                        "on-primary-container": "#fff1eb",
+                        "on-primary-fixed-variant": "#763300",
+                        "tertiary-fixed-dim": "#ccc5c1",
+                        "tertiary-fixed": "#e8e1dd",
+                        "surface-container-high": "#e8e8e7",
+                        "surface": "#f9f9f8",
+                        "on-secondary-container": "#6a635e",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#5a5653",
+                        "primary-fixed-dim": "#ffb68e",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#4a4643",
+                        "primary-container": "#b45309"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "PingFang SC", "sans-serif"],
+                        "body": ["Inter", "PingFang SC", "sans-serif"],
+                        "label": ["Inter", "PingFang SC", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { background-color: #f9f9f8; }
+    </style>
+</head>
+<body class="font-body text-on-surface selection:bg-primary-fixed">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f9f9f8]/80 backdrop-blur-md">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto h-16">
+<div class="text-xl font-bold text-stone-900 tracking-tight">Memory Anchor (忆锚)</div>
+<div class="hidden md:flex items-center gap-8 text-stone-600 font-inter body-lg tracking-tight">
+<a class="text-amber-800 font-semibold" href="#">Home</a>
+<a class="hover:bg-stone-100 transition-colors px-3 py-1 rounded-lg" href="#">Product</a>
+<a class="hover:bg-stone-100 transition-colors px-3 py-1 rounded-lg" href="#">Story</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-stone-600 px-4 py-2 hover:bg-stone-100 transition-colors rounded-lg">Login</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-medium shadow-sm hover:opacity-90 transition-opacity">Register</button>
+</div>
+</div>
+<div class="bg-stone-200/50 h-[1px] w-full"></div>
+</nav>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative px-6 py-24 md:py-40 max-w-7xl mx-auto flex flex-col items-center text-center overflow-hidden">
+<div class="mb-6 px-4 py-1.5 rounded-full bg-primary-fixed text-on-primary-fixed text-[11px] font-label uppercase tracking-widest border border-primary/10">
+                不做AI合成 · 只保存真实记忆
+            </div>
+<h1 class="text-5xl md:text-7xl font-extrabold text-on-surface tracking-tighter mb-8 leading-[1.1]">
+                永不丢失 关于 TA 的<br/>
+<span class="text-primary italic">真实记忆</span>
+</h1>
+<p class="text-lg md:text-xl text-on-surface-variant max-w-2xl mb-12 leading-relaxed">
+                一个为您和家人设计的数字档案室。在这里，时间不是线性的流逝，而是被精心锚定的瞬间。
+            </p>
+<div class="flex flex-col items-center gap-6">
+<button class="bg-primary text-on-primary px-10 py-5 rounded-full text-lg font-bold shadow-xl shadow-primary/10 hover:scale-[0.98] transition-transform active:duration-150">
+                    开始守护记忆 →
+                </button>
+<p class="text-stone-500 text-sm tracking-wide">
+                    免费使用 · 数据随时可导出 · 零广告零追踪
+                </p>
+</div>
+<!-- Asymmetric Hero Visual Overlay -->
+<div class="absolute -z-10 top-20 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="absolute -z-10 bottom-10 -left-20 w-[500px] h-[500px] bg-secondary-container/30 rounded-full blur-3xl"></div>
+</section>
+<!-- Bento Value Cards Section -->
+<section class="px-6 py-24 bg-surface-container-low">
+<div class="max-w-7xl mx-auto">
+<div class="mb-16">
+<h2 class="text-3xl font-bold text-on-surface mb-4">锚定那些闪光的瞬间</h2>
+<div class="w-20 h-1 bg-primary rounded-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Card 1: 汇集 -->
+<div class="md:col-span-7 bg-surface-container-lowest rounded-xl p-10 flex flex-col justify-between min-h-[400px] relative overflow-hidden group">
+<div class="z-10">
+<div class="w-12 h-12 bg-primary-fixed rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary text-2xl">all_inbox</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">汇集</h3>
+<p class="text-on-surface-variant leading-relaxed max-w-md">
+                                从碎片化的社交媒体记录到散落在相册里的陈旧合影，将所有关于亲人的记忆集中管理。支持高清原图存储，不丢失任何细节。
+                            </p>
+</div>
+<div class="absolute bottom-0 right-0 w-1/2 h-full opacity-10 group-hover:opacity-20 transition-opacity">
+<img class="w-full h-full object-cover" data-alt="close up of vintage black and white family photographs scattered on a wooden table with soft morning sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN0KgAU8jqyAbPnIo479G9NtaCld7-6QweBVZ61BN-Gi8vUdLtWR821WAfGZoXHSrqrBARhkFt_2fsXFxXYlSd8_OmflZFMGKzWwpoQau3sMdmOzKdNStIytgCzxgm4uUm_KqWCYUmUpR_ypoWMtVqtObqSiskBPs25pEVFfSUl2vefRAbmaXLauB9yonAWGHXJ8w9lxia_bt-8O4gKlr9beRydScm0iHCrHLxYOxE9HTGewyBXRGc4swp-fCNVz6WhidSSipmGVvU"/>
+</div>
+</div>
+<!-- Card 2: 时间线 -->
+<div class="md:col-span-5 bg-primary text-on-primary rounded-xl p-10 flex flex-col justify-center text-center relative overflow-hidden">
+<div class="mb-8">
+<span class="material-symbols-outlined text-5xl mb-4" style="font-variation-settings: 'FILL' 1;">timeline</span>
+<h3 class="text-2xl font-bold">时间线</h3>
+</div>
+<p class="text-primary-fixed leading-relaxed">
+                            以时间为轴，串联起生命中的里程碑与日常。用叙事的方式呈现每一个珍贵的锚点。
+                        </p>
+</div>
+<!-- Card 3: 家人共建 -->
+<div class="md:col-span-12 bg-surface-container-lowest rounded-xl p-10 grid md:grid-cols-2 gap-12 items-center">
+<div>
+<div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-2xl">groups</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">家人共建</h3>
+<p class="text-on-surface-variant leading-relaxed">
+                                记忆不该是孤立的。邀请家庭成员共同补充回忆细节，不同的视角拼凑出最完整的 TA。每一个故事下都可以留下家人的心声。
+                            </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<img class="rounded-lg aspect-square object-cover" data-alt="lifestyle shot of three family members of different generations looking at a photo album together on a cozy sofa" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4xuW9J29e7H4GsdTTOSKpV4Nl5Qo-3phwYZ5yy_puLjdKanrOVXKf-ov1DxR8gwm6o32M2eFYEoe0P_gk9PKycyffzaGdWrgERgb3rn9gpCYZrB7VMZOu5YEdFbeOwLwbgDAlbNRX7OVaUxvTd60_igcE1JHq-SbfA7DATzE_iRJhuPg-ZHuabyeuYkOLamyBX8-INz7Psy81czejyEPke78UK2grPQBCaUODDV_J8jW2JtHe_K7ev6AzMnoh6f1qFmBmno6CzUT1"/>
+<img class="rounded-lg aspect-square object-cover" data-alt="close up of hands holding an old paper letter with warm lighting creating a nostalgic atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqsASuEattGhhfg9Hp0JrtCM2QfsWGISfGvosTJsbr5DXQnsJhKYc9WPsRSMnFHj8BnRouoFsT_tvKLET-4kzS7jM__33yzhpWXKvdi-TtzzHHxAy8wTF42AfCx0pjwUbH-5hJSTN-I9lhd6-WV4PzNLZfLF_bt_Hyev1mJa1XIQVXX0darwJtwKwhoCmW2dV7qeYoumrMIkNlrCJFVy9yzON1bPR9ggTNcsA8H7wswlnfJk96FrbewjVAbgXROv_Jh0kigsND3JF1"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Founder Story Section -->
+<section class="px-6 py-32 bg-surface">
+<div class="max-w-3xl mx-auto">
+<div class="relative p-12 md:p-20 bg-surface-container-lowest rounded-xl border border-stone-100 shadow-sm">
+<!-- Subtle Decorative Corner -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full"></div>
+<h2 class="text-2xl font-bold text-on-surface mb-12">关于“忆锚”的诞生</h2>
+<div class="space-y-6 text-on-surface-variant leading-[1.8] text-lg font-light italic">
+<p>“那是外公离开后的第三个春节，我突然意识到，关于他的声音、他习惯用的那个紫砂壶背后的故事，正在我的记忆中不可逆转地模糊。”</p>
+<p>“我们生活在一个信息爆炸的时代，但最珍贵的私人叙事却往往在社交软件的流转中消散。我不希望用 AI 去合成一个虚假的幻影，我只想要一个地方，能让我诚实地、安静地保存那些真实存在的点滴。”</p>
+<p>“‘忆锚’不仅仅是一个工具，它是我们对抗遗忘的最后防线。它像一枚锚，在时间的洪流中，帮我们钩住那些名为‘思念’的情感。”</p>
+</div>
+<div class="mt-16 flex items-center gap-4">
+<div class="w-14 h-14 rounded-full overflow-hidden grayscale">
+<img class="w-full h-full object-cover" data-alt="professional portrait of a middle-aged man with a thoughtful expression and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKvRQlIwOMJjQjw3aRdD_IGuimHCsmv1OK-3vyYbdYHDNo01XpAynnZxkkVy6Zz1E83mp-bWq8AEYSvFcPkBbCRqLX0_eTXFyVWemHm1wrxXNTj6u5chCZU5pFUPEtGpQdIa2RejFCRzYNxcYydXTLPJ-rYmWRkZ1YddK9TBtkqI_DGTMZGIyV4x2VXw6prn_N5aQ3fK5EiQm4kD982sxLPNtpLrgzq4YZF3HHZoE9DyhCASnRBQoWuhKy-pG74nJJr8llj8QIc02T"/>
+</div>
+<div>
+<p class="font-bold text-on-surface">林向远</p>
+<p class="text-sm text-stone-400">Memory Anchor 创始人</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Privacy Pledge 2x2 Grid -->
+<section class="px-6 py-24 bg-surface-container-low">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-20">
+<h2 class="text-3xl font-extrabold mb-4">隐私与尊严的守护</h2>
+<p class="text-on-surface-variant">记忆是神圣的，安全是我们的底线。</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-1 px-4 max-w-5xl mx-auto bg-stone-200/50">
+<div class="bg-surface-container-lowest p-12">
+<span class="material-symbols-outlined text-primary mb-6 text-3xl" style="font-variation-settings: 'FILL' 1;">security</span>
+<h4 class="text-xl font-bold mb-4 text-on-surface">绝对私有</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">除您授权的家属外，任何人（包括我们）都无法查看您的记忆档案。您的隐私权是绝对的。</p>
+</div>
+<div class="bg-surface-container-lowest p-12">
+<span class="material-symbols-outlined text-primary mb-6 text-3xl" style="font-variation-settings: 'FILL' 1;">cloud_off</span>
+<h4 class="text-xl font-bold mb-4 text-on-surface">无广告追踪</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">我们不利用您的数据进行广告推荐或算法训练。这里是一片纯净的数字墓园与纪念馆。</p>
+</div>
+<div class="bg-surface-container-lowest p-12">
+<span class="material-symbols-outlined text-primary mb-6 text-3xl" style="font-variation-settings: 'FILL' 1;">download</span>
+<h4 class="text-xl font-bold mb-4 text-on-surface">数据自主权</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">您随时可以一键导出所有原图与文本记录。我们不通过“锁定效应”留住用户。</p>
+</div>
+<div class="bg-surface-container-lowest p-12">
+<span class="material-symbols-outlined text-primary mb-6 text-3xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+<h4 class="text-xl font-bold mb-4 text-on-surface">永久性保障</h4>
+<p class="text-on-surface-variant text-sm leading-relaxed">即便服务停止，我们也会确保档案可供下载，因为这是您生命中不可分割的一部分。</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom CTA Banner -->
+<section class="px-6 py-20">
+<div class="max-w-7xl mx-auto bg-stone-900 rounded-[2rem] overflow-hidden relative">
+<!-- Artistic Texture Overlay -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 20% 50%, #903f00 0%, transparent 50%);"></div>
+<div class="relative z-10 px-8 py-20 md:py-28 flex flex-col items-center text-center">
+<h2 class="text-3xl md:text-5xl font-bold text-stone-50 mb-10 tracking-tight leading-tight">
+                        从今天起，开始构建属于你们的<br/>家族精神岛屿。
+                    </h2>
+<button class="bg-stone-50 text-stone-900 px-12 py-5 rounded-full text-lg font-bold hover:bg-primary hover:text-white transition-all duration-300">
+                        立即开启 免费体验
+                    </button>
+<p class="mt-8 text-stone-400 text-sm tracking-widest uppercase">
+                        Memory Anchor · Since 2024
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 bg-[#f9f9f8] border-t border-stone-200/30 flex flex-col items-center justify-center gap-6">
+<div class="flex gap-8">
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 transition-opacity duration-300" href="#">Privacy</a>
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 transition-opacity duration-300" href="#">Terms</a>
+<a class="text-stone-400 font-inter text-[11px] uppercase tracking-widest hover:text-stone-900 transition-opacity duration-300" href="#">Contact</a>
+</div>
+<p class="text-stone-400 font-inter text-[11px] uppercase tracking-widest">© 2024 Memory Anchor (忆锚)</p>
+</footer>
+</body></html>

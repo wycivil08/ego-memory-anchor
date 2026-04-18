@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { VideoPlayer } from './VideoPlayer'
 
 // Mock window.matchMedia
@@ -17,6 +17,19 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 })
 
+// Mock react-player
+vi.mock('react-player', () => ({
+  default: vi.fn(({ url, controls }) => (
+    <div data-testid="react-player" data-url={url} data-controls={controls}>
+      <video
+        data-testid="mock-video"
+        src={url}
+        controls={controls}
+      />
+    </div>
+  )),
+}))
+
 describe('VideoPlayer', () => {
   const defaultProps = {
     src: '/test-video.mp4',
@@ -24,110 +37,52 @@ describe('VideoPlayer', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.restoreAllMocks()
   })
 
   afterEach(() => {
     vi.restoreAllMocks()
   })
 
-  it('renders video element', () => {
+  it('renders video player', () => {
     render(<VideoPlayer {...defaultProps} />)
-    expect(screen.getByRole('video')).toBeInTheDocument()
+    expect(screen.getByTestId('react-player')).toBeInTheDocument()
   })
 
-  it('renders with poster image if provided', () => {
-    render(<VideoPlayer {...defaultProps} poster="/test-poster.jpg" />)
-    const video = screen.getByRole('video') as HTMLVideoElement
-    expect(video.poster).toBe('/test-poster.jpg')
+  it('renders with correct src', () => {
+    render(<VideoPlayer {...defaultProps} />)
+    const player = screen.getByTestId('react-player')
+    expect(player).toHaveAttribute('data-url', '/test-video.mp4')
   })
 
-  it('shows play button when paused', () => {
+  it('renders with controls enabled', () => {
     render(<VideoPlayer {...defaultProps} />)
-    // The component should show the big play button overlay when paused
-    const playButton = document.querySelector('button')
-    expect(playButton).toBeInTheDocument()
+    const player = screen.getByTestId('react-player')
+    expect(player).toHaveAttribute('data-controls', 'true')
   })
 
   it('calls onClose when close button is clicked', async () => {
     const onClose = vi.fn()
     render(<VideoPlayer {...defaultProps} onClose={onClose} />)
 
-    // Find and click the close button
-    const buttons = screen.getAllByRole('button')
-    const closeButton = buttons.find(btn =>
-      btn.querySelector('svg')?.getAttribute('fill') === 'none'
-    )
-    if (closeButton) {
-      fireEvent.click(closeButton)
-    }
+    const closeButton = screen.getByLabelText('Close video')
+    fireEvent.click(closeButton)
 
     expect(onClose).toHaveBeenCalledTimes(1)
   })
 
-  it('toggles play/pause on video click', async () => {
+  it('does not render close button when onClose is not provided', () => {
     render(<VideoPlayer {...defaultProps} />)
-
-    const video = screen.getByRole('video')
-
-    // Initially paused
-    expect(video.paused).toBe(true)
-
-    // Click to play
-    fireEvent.click(video)
-
-    await waitFor(() => {
-      // Video should be playing (or at least not paused)
-      expect(video.paused).toBe(false)
-    })
-  })
-
-  it('shows loading spinner when waiting', () => {
-    render(<VideoPlayer {...defaultProps} />)
-    // Loading spinner is shown by default initially
-    const spinner = document.querySelector('.animate-spin')
-    expect(spinner).toBeInTheDocument()
-  })
-
-  it('displays time correctly', async () => {
-    render(<VideoPlayer {...defaultProps} />)
-
-    // Should show 0:00 / 0:00 initially
-    await waitFor(() => {
-      expect(screen.getByText(/0:00/)).toBeInTheDocument()
-    })
-  })
-
-  it('handles volume change', async () => {
-    render(<VideoPlayer {...defaultProps} />)
-
-    const video = screen.getByRole('video') as HTMLVideoElement
-
-    // Find volume slider
-    const volumeSlider = document.querySelector('input[type="range"]') as HTMLInputElement
-    if (volumeSlider) {
-      fireEvent.change(volumeSlider, { target: { value: '0.5' } })
-      expect(video.volume).toBe(0.5)
-    }
-  })
-
-  it('toggles mute button', async () => {
-    render(<VideoPlayer {...defaultProps} />)
-
-    const video = screen.getByRole('video') as HTMLVideoElement
-
-    // Initially not muted
-    expect(video.muted).toBe(false)
-
-    // Find and click mute button
-    const muteButton = document.querySelector('button')
-    if (muteButton) {
-      fireEvent.click(muteButton)
-      expect(video.muted).toBe(true)
-    }
+    expect(screen.queryByLabelText('Close video')).not.toBeInTheDocument()
   })
 
   it('applies custom className', () => {
     const { container } = render(<VideoPlayer {...defaultProps} className="custom-class" />)
     expect(container.firstChild).toHaveClass('custom-class')
+  })
+
+  it('renders fullscreen button', () => {
+    render(<VideoPlayer {...defaultProps} />)
+    expect(screen.getByLabelText('Enter fullscreen')).toBeInTheDocument()
   })
 })

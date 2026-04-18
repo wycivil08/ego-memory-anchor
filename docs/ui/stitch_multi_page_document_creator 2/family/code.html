@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f4f3",
+                        "tertiary-fixed-dim": "#ccc5c1",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#9b4500",
+                        "inverse-primary": "#ffb68e",
+                        "secondary": "#645d58",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "surface-bright": "#f9f9f8",
+                        "on-tertiary-fixed": "#1e1b19",
+                        "primary-fixed": "#ffdbca",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-fixed-variant": "#4b4641",
+                        "on-primary-fixed-variant": "#763300",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeeed",
+                        "on-surface-variant": "#564338",
+                        "surface": "#f9f9f8",
+                        "secondary-fixed": "#eae1da",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#ddc1b3",
+                        "surface-variant": "#e2e2e2",
+                        "tertiary": "#5a5653",
+                        "secondary-container": "#eae1da",
+                        "on-secondary-fixed": "#1f1b17",
+                        "outline": "#897267",
+                        "secondary-fixed-dim": "#cec5bf",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e8e8e7",
+                        "primary": "#903f00",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-tertiary-fixed-variant": "#4a4643",
+                        "primary-container": "#b45309",
+                        "on-secondary-container": "#6a635e",
+                        "tertiary-container": "#736e6b",
+                        "surface-dim": "#dadad9",
+                        "on-primary-container": "#fff1eb",
+                        "primary-fixed-dim": "#ffb68e",
+                        "on-primary-fixed": "#331200",
+                        "on-tertiary-container": "#faf2ed",
+                        "background": "#f9f9f8",
+                        "tertiary-fixed": "#e8e1dd",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e2e2e2",
+                        "inverse-surface": "#2f3130"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "PingFang SC", "sans-serif"],
+                        "body": ["Inter", "PingFang SC", "sans-serif"],
+                        "label": ["Inter", "PingFang SC", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', 'PingFang SC', sans-serif; background-color: #f9f9f8; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar Implementation -->
+<header class="fixed top-0 w-full z-50 bg-[#f9f9f8]/80 backdrop-blur-md dark:bg-stone-900/80">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-stone-900 dark:text-stone-50">Memory Anchor (忆锚)</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-stone-600 dark:text-stone-400 font-inter body-lg tracking-tight hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-1 rounded-lg" href="#">首页</a>
+<a class="text-amber-800 dark:text-amber-400 font-semibold font-inter body-lg tracking-tight px-3 py-1 rounded-lg" href="#">家人</a>
+<a class="text-stone-600 dark:text-stone-400 font-inter body-lg tracking-tight hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-1 rounded-lg" href="#">档案</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-stone-600 dark:text-stone-400 font-inter body-lg tracking-tight px-4 py-2 hover:bg-stone-100 rounded-lg transition-colors">Login</button>
+<button class="bg-primary-container text-on-primary-container font-inter body-lg tracking-tight px-6 py-2 rounded-lg font-semibold scale-95 active:duration-150 transition-transform">Register</button>
+</div>
+</div>
+<div class="bg-stone-200/50 dark:bg-stone-800/50 h-[1px]"></div>
+</header>
+<main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+<!-- Page Header -->
+<div class="mb-12">
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">家人</h1>
+<p class="text-lg text-on-surface-variant font-light tracking-wide">共同守护这段记忆</p>
+</div>
+<!-- Family Management Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Main Content Area: Members List -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Action Header -->
+<div class="flex items-center justify-between bg-surface-container-low p-6 rounded-xl">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="group">group</span>
+<div>
+<p class="text-sm font-label uppercase tracking-widest text-on-surface-variant">家庭成员</p>
+<p class="text-xl font-bold">5 位成员已加入</p>
+</div>
+</div>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-5 py-2.5 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-lg" data-icon="person_add">person_add</span>
+                        邀请家人
+                    </button>
+</div>
+<!-- Members Bento Grid/List -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Member Card 1 (Owner) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col justify-between min-h-[180px] group transition-all hover:bg-surface-container-high">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-stone-100">
+<img class="w-full h-full object-cover" data-alt="portrait of an elderly man with warm eyes and grey hair in natural morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeFmqUkEyiILj9WvJVozFGkhg8i6_seMfG8i3BN5ncVSwwaxdnhQM5Wgf69SR6CcUR3hekWfD0eTcNE1amMoOyKKEXrncqbVSiqt7H7TD1e6wqoBHoe8zPxGVvoTENjfnlgx94RuEzBA2mdg2JsFGH5GPHWUZbg1pegU1Tr2SeQABjQEx43eG3QZqCyX5-8WCw_mToOkMzp7hize6tOjo__H_bak6y2PX3DeNO1UGz8Es54hxG7ulhsiMDjNZUB6mYrVeVuX7Hicpy"/>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">张建设</h3>
+<p class="text-xs text-on-surface-variant">zhang.js@memory.cn</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700">OWNER</span>
+</div>
+<div class="mt-8 flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-amber-700 text-xs font-semibold hover:underline">更改权限</button>
+</div>
+</div>
+<!-- Member Card 2 (Editor) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col justify-between min-h-[180px] group transition-all hover:bg-surface-container-high">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-stone-100">
+<img class="w-full h-full object-cover" data-alt="candid portrait of a woman smiling softly wearing a beige linen shirt in a sunlit interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_q-qmFY873p0ZRxY7GFS4IKVmGWYeWPhaRQhyvosIlkQeiLQC89SGGA7kptlMtlxlrzUxkmIXdXtkhylCNdNKulWZf3nPKu86uBFEGnnKmT7ZT_WBKJOa-FmtrIH1pJOQONZ4RjPxOtDj0weJWOZWS9u41H6XGRFyXvg1eyNwpXakKeqK0RB1m13p-40Q9M-g6eCj4OFAg8tWcoqXnQAYUJEC4lMMlYRmo13OsJOjJXXTL75DuLNU9dU5R5ByxjJLfbyY8-VlEauZ"/>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">李明华</h3>
+<p class="text-xs text-on-surface-variant">limh_92@family.com</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700">EDITOR</span>
+</div>
+<div class="mt-8 flex justify-end gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-amber-700 text-xs font-semibold hover:underline">更改权限</button>
+<button class="text-error text-xs font-semibold hover:underline">移除</button>
+</div>
+</div>
+<!-- Member Card 3 (Editor) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col justify-between min-h-[180px] group transition-all hover:bg-surface-container-high">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-stone-100">
+<img class="w-full h-full object-cover" data-alt="professional headshot of a middle-aged man in a soft knit sweater against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5K29NXyqs36Po4z7KptkG0NFPtWuGDMVyWZGbwe0WE74LFRsNthT4UPMRhhuNplEGwblWUJ_1KwFy9rEKyCIuMr5MjuTjWXi54tlAzyiAzqPn_clSnJjn-BiDL5dq6JG-syxMO1tkxmcEBQnYDwFucOnpziMpVK84djFssdZ9ZiS8PVnNHOD4EzuKGXhgANVOzAcEYcWS1nhD3UmFDxSSnB92TSvESqBCCe6mDmVzV7GP4gl5sB5uZ2hKaYtBpB9t30_37zqkuJ5e"/>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">张思源</h3>
+<p class="text-xs text-on-surface-variant">siyuan_z@archive.net</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700">EDITOR</span>
+</div>
+<div class="mt-8 flex justify-end gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-amber-700 text-xs font-semibold hover:underline">更改权限</button>
+<button class="text-error text-xs font-semibold hover:underline">移除</button>
+</div>
+</div>
+<!-- Member Card 4 (Viewer) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex flex-col justify-between min-h-[180px] group transition-all hover:bg-surface-container-high">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-stone-100">
+<img class="w-full h-full object-cover" data-alt="cheerful young woman with braided hair and minimal jewelry in a warm outdoor setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQp-eSmqFrI7TUqYcWMWXC3Be8f9as4J0A3lusm3Ie8WJ3KPBaL63YFdHkrpnl9JDcSMtEWY1j3uErZX6ii8OsUKsONedv0x2NFY5yDXu5fnkhDDGkwpec0oD3wjpIoiVljbGKURbgSkSA61CBdm4tGd0VsrWeZjCurLVWI9zDZejY2iGkEuJAQmdgxMHd0Ry_dwYLeV7aGypAdmA9YDW_z3GuSEQh6xJA5nPBT-uL35xkxa_AVu9tiHtwIytYDBM6fpl709bgSk1Z"/>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">王晓雅</h3>
+<p class="text-xs text-on-surface-variant">xiaoya_w@outlook.com</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-600">VIEWER</span>
+</div>
+<div class="mt-8 flex justify-end gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-amber-700 text-xs font-semibold hover:underline">更改权限</button>
+<button class="text-error text-xs font-semibold hover:underline">移除</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar: Archive Stats & Settings -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container-low p-8 rounded-xl">
+<h4 class="font-bold text-lg mb-6">访问权限说明</h4>
+<div class="space-y-6">
+<div class="flex gap-4">
+<span class="w-2 h-2 mt-2 rounded-full bg-amber-500 shrink-0"></span>
+<div>
+<p class="font-semibold text-sm">所有者 (Owner)</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">拥有对档案的全权控制，包括删除档案和管理家庭成员。</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="w-2 h-2 mt-2 rounded-full bg-emerald-500 shrink-0"></span>
+<div>
+<p class="font-semibold text-sm">编辑者 (Editor)</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">可以添加和编辑回忆条目、上传照片和修改现有记录。</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="w-2 h-2 mt-2 rounded-full bg-stone-400 shrink-0"></span>
+<div>
+<p class="font-semibold text-sm">查看者 (Viewer)</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">仅限浏览和评论回忆内容，无法进行任何修改。</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Invite History / Pending -->
+<div class="p-8 border border-outline-variant/20 rounded-xl bg-surface">
+<h4 class="font-bold text-lg mb-4">待处理的邀请</h4>
+<div class="flex items-center justify-between py-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-stone-400" data-icon="mail">mail</span>
+</div>
+<div>
+<p class="text-sm font-medium">chen.y@family.com</p>
+<p class="text-[10px] text-stone-400">已发送 2 天前</p>
+</div>
+</div>
+<button class="text-xs text-stone-400 hover:text-primary transition-colors">撤回</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Implementation -->
+<footer class="w-full py-12 bg-[#f9f9f8] dark:bg-stone-900 border-t border-stone-200/30 dark:border-stone-800/30">
+<div class="flex flex-col items-center justify-center gap-6">
+<div class="flex gap-8">
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Privacy</a>
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Terms</a>
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Contact</a>
+</div>
+<p class="font-inter text-[11px] uppercase tracking-widest text-stone-400">© 2024 Memory Anchor (忆锚)</p>
+</div>
+</footer>
+<!-- SideNavBar (Hidden by default, used for structure guidance) -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-[#f3f4f3] dark:bg-stone-950 py-8 px-4 gap-4 z-[60] -translate-x-full lg:hidden">
+<div class="mb-8">
+<h2 class="text-lg font-bold text-stone-900 dark:text-stone-50">Memory Anchor</h2>
+<p class="text-xs text-stone-500">忆锚 Archive</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-stone-500 dark:text-stone-400 font-inter body-md hover:bg-stone-200 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+                Home
+            </a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-amber-800 dark:text-amber-400 font-bold border-r-2 border-amber-700 bg-stone-200/50" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Profile Archive
+            </a>
+<a class="flex items-center gap-3 py-3 px-4 rounded-lg text-stone-500 dark:text-stone-400 font-inter body-md hover:bg-stone-200 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+</aside>
+</body></html>

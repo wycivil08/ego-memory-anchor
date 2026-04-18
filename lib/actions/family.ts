@@ -1,9 +1,8 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import type { FamilyMember, FamilyMemberWithUser, FamilyRole, InviteDetails } from '@/lib/types'
+import type { FamilyMemberWithUser, FamilyRole, InviteDetails } from '@/lib/types'
 
 export type FamilyState = {
   error: string | null

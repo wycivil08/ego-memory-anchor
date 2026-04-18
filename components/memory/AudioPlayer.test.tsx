@@ -17,12 +17,13 @@ class MockAudioContext {
   close = vi.fn()
 }
 
-class MockAnalyserNode {
-  fftSize = 256
-  frequencyBinCount = 128
-  getByteTimeDomainData = vi.fn()
-  connect = vi.fn()
-}
+// MockAnalyserNode is kept for potential future use
+// class MockAnalyserNode {
+//   fftSize = 256
+//   frequencyBinCount = 128
+//   getByteTimeDomainData = vi.fn()
+//   connect = vi.fn()
+// }
 
 Object.defineProperty(window, 'AudioContext', {
   writable: true,

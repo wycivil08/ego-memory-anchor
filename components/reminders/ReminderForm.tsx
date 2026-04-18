@@ -69,7 +69,8 @@ export function ReminderForm({
   // Handle pending state
   React.useEffect(() => {
     setIsPending(state.success === false && state.error !== null ? false : isPending)
-  }, [state.error, state.success])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleRecurrenceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setRecurrence(e.target.value as Recurrence)

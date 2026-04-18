@@ -15,6 +15,7 @@
 | `COMPLIANCE_GLOBAL.md` | 全球合规 | GDPR、CCPA |
 | `LANDING_PAGE_SPEC.md` | Landing Page 规格 | 完整设计规格 |
 | `CHANGELOG.md` | 变更记录 | V1→V2 全部变更清单 |
+| **`UI-AUTONOMOUS-GUIDE.md`** | UI/UX Agent 自主开发准则 | Stitch 驱动、多模态设计流程、微交互规范 |
 
 ## V2 核心变更摘要
 

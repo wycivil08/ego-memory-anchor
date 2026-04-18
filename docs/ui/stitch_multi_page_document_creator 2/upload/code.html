@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>上传记忆 - Memory Anchor (忆锚)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f4f3",
+                    "tertiary-fixed-dim": "#ccc5c1",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#9b4500",
+                    "inverse-primary": "#ffb68e",
+                    "secondary": "#645d58",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1a1c1c",
+                    "surface-bright": "#f9f9f8",
+                    "on-tertiary-fixed": "#1e1b19",
+                    "primary-fixed": "#ffdbca",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "on-secondary-fixed-variant": "#4b4641",
+                    "on-primary-fixed-variant": "#763300",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeeed",
+                    "on-surface-variant": "#564338",
+                    "surface": "#f9f9f8",
+                    "secondary-fixed": "#eae1da",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#ddc1b3",
+                    "surface-variant": "#e2e2e2",
+                    "tertiary": "#5a5653",
+                    "secondary-container": "#eae1da",
+                    "on-secondary-fixed": "#1f1b17",
+                    "outline": "#897267",
+                    "secondary-fixed-dim": "#cec5bf",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#e8e8e7",
+                    "primary": "#903f00",
+                    "inverse-on-surface": "#f1f1f0",
+                    "on-tertiary-fixed-variant": "#4a4643",
+                    "primary-container": "#b45309",
+                    "on-secondary-container": "#6a635e",
+                    "tertiary-container": "#736e6b",
+                    "surface-dim": "#dadad9",
+                    "on-primary-container": "#fff1eb",
+                    "primary-fixed-dim": "#ffb68e",
+                    "on-primary-fixed": "#331200",
+                    "on-tertiary-container": "#faf2ed",
+                    "background": "#f9f9f8",
+                    "tertiary-fixed": "#e8e1dd",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e2e2e2",
+                    "inverse-surface": "#2f3130"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter", "PingFang SC", "sans-serif"],
+                    "body": ["Inter", "PingFang SC", "sans-serif"],
+                    "label": ["Inter", "PingFang SC", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f9f9f8;
+            color: #1a1c1c;
+        }
+        .upload-dashed {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='24' ry='24' stroke='%23897267' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f9f9f8]/80 backdrop-blur-md dark:bg-stone-900/80">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-stone-900 dark:text-stone-50 font-headline tracking-tight">Memory Anchor (忆锚)</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-stone-600 dark:text-stone-400 font-inter body-lg tracking-tight hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-1 rounded-lg" href="#">Home</a>
+<a class="text-amber-800 dark:text-amber-400 font-semibold font-inter body-lg tracking-tight px-3 py-1 rounded-lg" href="#">Upload</a>
+<a class="text-stone-600 dark:text-stone-400 font-inter body-lg tracking-tight hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors px-3 py-1 rounded-lg" href="#">Archive</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 text-stone-600 dark:text-stone-400 font-medium hover:bg-stone-100 rounded-lg transition-colors">Login</button>
+<button class="px-5 py-2 bg-primary text-on-primary rounded-lg font-medium shadow-sm active:scale-95 transition-all">Register</button>
+</div>
+</div>
+<div class="bg-stone-200/50 dark:bg-stone-800/50 h-[1px]"></div>
+</nav>
+<main class="pt-24 pb-20 px-6 max-w-7xl mx-auto">
+<!-- Header Section -->
+<header class="mb-12">
+<h1 class="text-4xl font-bold text-on-surface tracking-tight mb-2">上传记忆</h1>
+<p class="text-on-surface-variant max-w-2xl leading-relaxed">每一个瞬间都值得被铭记。在这里，我们将您的旧照、视频或文字转化为永恒的数字化锚点。</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Left Column: Upload & Source -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Main Upload Zone -->
+<section class="upload-dashed rounded-xl bg-surface-container-low/30 p-12 flex flex-col items-center justify-center text-center group cursor-pointer hover:bg-surface-container-low transition-colors duration-300">
+<div class="w-20 h-20 bg-primary-fixed rounded-full flex items-center justify-center mb-6 text-primary transition-transform duration-300 group-hover:scale-110">
+<span class="material-symbols-outlined text-4xl" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<h3 class="text-xl font-semibold mb-2">点击或拖拽文件至此处</h3>
+<p class="text-on-surface-variant text-sm mb-6">支持 JPG, PNG, MP4, PDF (最大 100MB)</p>
+<button class="px-8 py-3 bg-primary text-on-primary rounded-full font-semibold shadow-md hover:bg-primary-container hover:text-on-primary-container transition-all">
+                        从本地选择
+                    </button>
+</section>
+<!-- Source Options -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col gap-4 hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-amber-700" data-icon="chat">chat</span>
+<div>
+<p class="font-semibold">微信导入</p>
+<p class="text-xs text-on-surface-variant">同步聊天记录中的多媒体</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col gap-4 hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-amber-700" data-icon="photo_library">photo_library</span>
+<div>
+<p class="font-semibold">手机相册</p>
+<p class="text-xs text-on-surface-variant">扫描二维码快速上传</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl flex flex-col gap-4 hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-amber-700" data-icon="cloud">cloud</span>
+<div>
+<p class="font-semibold">云端导入</p>
+<p class="text-xs text-on-surface-variant">支持百度网盘、iCloud</p>
+</div>
+</div>
+</section>
+<!-- Batch List (Waitlist) -->
+<section class="bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-8 shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h4 class="text-lg font-bold">待处理队列 (3)</h4>
+<span class="text-xs font-label uppercase tracking-widest text-primary font-bold">3 文件已就绪</span>
+</div>
+<div class="space-y-4">
+<!-- File Card 1 -->
+<div class="flex items-center gap-4 p-4 bg-surface-container-low rounded-xl group transition-all">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="vintage black camera lens on a wooden table with soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvX_ni5xSGsJ1dQ5xDIqVzSy86Xr7zZKd09sqeld5ZJ7ZuWhzP0FqBIRmGythybLwOS5K-LoPLgkGE6WCeW8fC1ah8-FPyCJwE85jvoGNaeSG8_HYANG8HZI_rVmaaQejzczeUmyK3Y-Gs_Sn6U7YxgUU6tPGvWsZowB0HOV03jfEAtdZi4Giro_bQy3NcthXfADXaRHQbr3sbLPiYAjxStJej9kdhorcnBvweGMN9gAoUHhsDRREuuaEkONjN0QKvemtUTFLD22tE"/>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold truncate">IMG_20240315.jpg</p>
+<p class="text-xs text-on-surface-variant">4.2 MB • 已检测到 EXIF 日期</p>
+</div>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs font-medium">✓ 已选择</span>
+</div>
+</div>
+<!-- File Card 2 -->
+<div class="flex items-center gap-4 p-4 bg-surface-container-low rounded-xl group transition-all">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="old typewriter with yellowed paper inside resting on a dark rustic desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBpmSjvMf5t-QlpE76MFH0VprVipdL3KCo-ijc2XckEeif9nZgD0a_TxrMVcWNpghVor09oNnp_SNzLWxb5aDduDAi4ePzN_cleaQRpiKZSIhLmlpHDf_oNpc0J45BNHtz46t0NwjL_qSrEn2m-r0qXx5VhkLaL2F9LQmZHbFNyfb2tjxLIfUTz2zJr-Gk9QP8fv2FLEc3qH5Blf0dE3VHreQhfRgDH8PNrraOBB1I1vxz7sbIbWNdEM_o1FhZIj2mOcBf47WtgyYZ"/>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold truncate">Summer_Memory_Video.mp4</p>
+<p class="text-xs text-on-surface-variant">12.8 MB • 视频流</p>
+</div>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs font-medium">✓ 已选择</span>
+</div>
+</div>
+<!-- File Card 3 -->
+<div class="flex items-center gap-4 p-4 bg-surface-container-low rounded-xl group transition-all border-2 border-primary/20">
+<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-stone-300 flex items-center justify-center">
+<span class="material-symbols-outlined text-stone-600" data-icon="description">description</span>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold truncate">奶奶的故事.txt</p>
+<p class="text-xs text-on-surface-variant">12 KB • 待补充日期</p>
+</div>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-xs font-medium">✓ 已选择</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Settings & Meta -->
+<aside class="lg:col-span-4 space-y-6 sticky top-24">
+<div class="bg-surface-container-high rounded-xl p-6 shadow-sm">
+<h4 class="font-bold text-lg mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="event">event</span>
+                        记忆日期分配
+                    </h4>
+<div class="space-y-4">
+<label class="flex items-start gap-3 p-4 rounded-lg bg-surface-bright cursor-pointer border-2 border-transparent hover:border-primary-fixed transition-all">
+<input checked="" class="mt-1 text-primary focus:ring-primary" name="date_assign" type="radio"/>
+<div>
+<p class="text-sm font-semibold">自动提取 EXIF</p>
+<p class="text-xs text-on-surface-variant">优先使用文件内置拍摄时间</p>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg bg-surface-bright cursor-pointer border-2 border-transparent hover:border-primary-fixed transition-all">
+<input class="mt-1 text-primary focus:ring-primary" name="date_assign" type="radio"/>
+<div>
+<p class="text-sm font-semibold">统一手动指定</p>
+<div class="mt-2 flex items-center gap-2">
+<input class="w-full text-xs rounded-lg border-none bg-surface-container-low p-2 focus:ring-1 focus:ring-primary" type="date" value="2024-03-20"/>
+</div>
+</div>
+</label>
+<label class="flex items-start gap-3 p-4 rounded-lg bg-surface-bright cursor-pointer border-2 border-transparent hover:border-primary-fixed transition-all">
+<input class="mt-1 text-primary focus:ring-primary" name="date_assign" type="radio"/>
+<div>
+<p class="text-sm font-semibold">日期不详</p>
+<p class="text-xs text-on-surface-variant">归类为“未知年代”，稍后整理</p>
+</div>
+</label>
+</div>
+<hr class="my-8 border-outline-variant/30"/>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<label class="text-sm font-medium">归档到合集</label>
+<span class="material-symbols-outlined text-sm text-on-surface-variant cursor-pointer" data-icon="add_circle">add_circle</span>
+</div>
+<select class="w-full rounded-lg border-none bg-surface-bright text-sm py-3 px-4 focus:ring-1 focus:ring-primary appearance-none">
+<option>默认归档 - 散落的记忆</option>
+<option>2024年春季游记</option>
+<option>旧物志系列</option>
+</select>
+</div>
+<button class="w-full mt-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                        开始安全上传
+                    </button>
+<p class="mt-4 text-center text-[10px] uppercase tracking-widest text-on-surface-variant flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="verified_user">verified_user</span>
+                        数据已进行端到端加密保护
+                    </p>
+</div>
+<!-- Tips / Editorial style -->
+<div class="p-6 bg-primary-fixed/30 rounded-xl">
+<p class="text-xs font-label text-on-primary-fixed-variant uppercase tracking-widest mb-2">小贴士</p>
+<p class="text-sm leading-relaxed text-on-primary-fixed-variant">
+                        上传带有位置信息和日期的照片，系统将自动在“记忆地图”中为您生成时间足迹。
+                    </p>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 bg-[#f9f9f8] dark:bg-stone-900 border-t border-stone-200/30 dark:border-stone-800/30">
+<div class="flex flex-col items-center justify-center gap-6 max-w-7xl mx-auto px-6">
+<div class="flex gap-8">
+<a class="text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300 font-inter text-[11px] uppercase tracking-widest" href="#">Privacy</a>
+<a class="text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300 font-inter text-[11px] uppercase tracking-widest" href="#">Terms</a>
+<a class="text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300 font-inter text-[11px] uppercase tracking-widest" href="#">Contact</a>
+</div>
+<p class="font-inter text-[11px] uppercase tracking-widest text-stone-400">© 2024 Memory Anchor (忆锚)</p>
+</div>
+</footer>
+</body></html>

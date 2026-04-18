@@ -185,10 +185,6 @@ async function testUpload(profileId, options = {}, supabaseOverride) {
     const finalName = applySanitize ? sanitizeFilename(originalName) : originalName
     const storagePath = `${profileId}/${memoryId}/${finalName}`
 
-    const displayName = applySanitize && finalName !== originalName
-      ? `${originalName} → ${finalName}`
-      : originalName
-
     process.stdout.write(`  ${testFile.label}\n`)
     process.stdout.write(`    Path: ${storagePath}\n    `)
 

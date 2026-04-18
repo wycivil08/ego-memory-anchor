@@ -14,7 +14,9 @@ interface SettingsClientProps {
   profiles: Pick<Profile, 'id' | 'name' | 'species'>[]
 }
 
-export function SettingsClient({ profiles }: SettingsClientProps) {
+// profiles is prepared for future use (profile management in settings)
+export function SettingsClient({ profiles: _profiles }: SettingsClientProps) {
+void _profiles
   const [passwordState, passwordFormAction, isPasswordPending] = useActionState<PasswordState, FormData>(
     updatePassword,
     { error: null, success: false }
@@ -34,6 +36,31 @@ export function SettingsClient({ profiles }: SettingsClientProps) {
 
   return (
     <div className="space-y-6 max-w-2xl">
+      {/* Data Export Section - Trust Anchor (Top Priority) */}
+      <Card className="border-amber-300 bg-gradient-to-br from-amber-50/50 to-orange-50/30">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <svg className="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            数据导出
+          </CardTitle>
+          <CardDescription>将记忆空间导出为 ZIP 文件备份 — 您的数据随时可导出</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-stone-600 mb-4">
+            选择要导出的记忆空间，导出内容包含：
+          </p>
+          <ul className="text-sm text-stone-500 list-disc list-inside mb-4 space-y-1">
+            <li>所有记忆素材（照片、视频、音频、文字）</li>
+            <li>元数据（日期、标签、注释）</li>
+            <li>家庭成员和提醒设置</li>
+          </ul>
+          {/* Export component will be rendered by parent */}
+          <div id="export-section" />
+        </CardContent>
+      </Card>
+
       {/* Password Update Section */}
       <Card>
         <CardHeader>
@@ -94,26 +121,6 @@ export function SettingsClient({ profiles }: SettingsClientProps) {
               {isPasswordPending ? '更新中...' : '更新密码'}
             </Button>
           </form>
-        </CardContent>
-      </Card>
-
-      {/* Data Export Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">数据导出</CardTitle>
-          <CardDescription>将记忆空间导出为 ZIP 文件备份</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-stone-600 mb-4">
-            选择要导出的记忆空间，导出内容包含：
-          </p>
-          <ul className="text-sm text-stone-500 list-disc list-inside mb-4 space-y-1">
-            <li>所有记忆素材（照片、视频、音频、文字）</li>
-            <li>元数据（日期、标签、注释）</li>
-            <li>家庭成员和提醒设置</li>
-          </ul>
-          {/* Export component will be rendered by parent */}
-          <div id="export-section" />
         </CardContent>
       </Card>
 

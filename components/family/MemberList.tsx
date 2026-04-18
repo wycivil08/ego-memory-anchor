@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import type { FamilyMemberWithUser, FamilyRole } from '@/lib/types'
 import { FAMILY_ROLE_LABELS } from '@/lib/types'
@@ -124,6 +124,7 @@ function MemberCard({ member, isOwner, profileId }: MemberCardProps) {
             {/* Avatar */}
             <div className="flex-shrink-0">
               {avatarUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={avatarUrl}
                   alt={displayName}

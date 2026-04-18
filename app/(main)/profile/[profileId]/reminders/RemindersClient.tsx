@@ -34,12 +34,6 @@ export function RemindersClient({
     setShowForm(false)
   }
 
-  const handleFormSuccess = () => {
-    setEditingReminder(null)
-    setShowForm(false)
-    // Refresh will happen via router.refresh() in the form
-  }
-
   return (
     <div className="space-y-8">
       {/* Add/Edit Form Section */}

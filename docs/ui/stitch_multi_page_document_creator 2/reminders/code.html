@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Memory Anchor (忆锚) - Reminders</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f4f3",
+                    "tertiary-fixed-dim": "#ccc5c1",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#9b4500",
+                    "inverse-primary": "#ffb68e",
+                    "secondary": "#645d58",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1a1c1c",
+                    "surface-bright": "#f9f9f8",
+                    "on-tertiary-fixed": "#1e1b19",
+                    "primary-fixed": "#ffdbca",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "on-secondary-fixed-variant": "#4b4641",
+                    "on-primary-fixed-variant": "#763300",
+                    "on-error": "#ffffff",
+                    "surface-container": "#eeeeed",
+                    "on-surface-variant": "#564338",
+                    "surface": "#f9f9f8",
+                    "secondary-fixed": "#eae1da",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#ddc1b3",
+                    "surface-variant": "#e2e2e2",
+                    "tertiary": "#5a5653",
+                    "secondary-container": "#eae1da",
+                    "on-secondary-fixed": "#1f1b17",
+                    "outline": "#897267",
+                    "secondary-fixed-dim": "#cec5bf",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#e8e8e7",
+                    "primary": "#903f00",
+                    "inverse-on-surface": "#f1f1f0",
+                    "on-tertiary-fixed-variant": "#4a4643",
+                    "primary-container": "#b45309",
+                    "on-secondary-container": "#6a635e",
+                    "tertiary-container": "#736e6b",
+                    "surface-dim": "#dadad9",
+                    "on-primary-container": "#fff1eb",
+                    "primary-fixed-dim": "#ffb68e",
+                    "on-primary-fixed": "#331200",
+                    "on-tertiary-container": "#faf2ed",
+                    "background": "#f9f9f8",
+                    "tertiary-fixed": "#e8e1dd",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e2e2e2",
+                    "inverse-surface": "#2f3130"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter", "PingFang SC", "sans-serif"],
+                    "body": ["Inter", "PingFang SC", "sans-serif"],
+                    "label": ["Inter", "PingFang SC", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .body-lg { font-size: 1rem; line-height: 1.6; }
+        .body-md { font-size: 0.875rem; line-height: 1.6; }
+        .candle-glow {
+            box-shadow: 0 0 20px 5px rgba(180, 83, 9, 0.3);
+        }
+        @keyframes subtle-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        .animate-candle {
+            animation: subtle-pulse 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f9f9f8]/80 backdrop-blur-md dark:bg-stone-900/80">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-stone-900 dark:text-stone-50 font-headline">Memory Anchor (忆锚)</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-stone-400 hover:text-stone-900 transition-colors font-inter body-lg tracking-tight" href="#">Home</a>
+<a class="text-stone-400 hover:text-stone-900 transition-colors font-inter body-lg tracking-tight" href="#">Archive</a>
+<a class="text-amber-800 dark:text-amber-400 font-semibold font-inter body-lg tracking-tight" href="#">Reminders</a>
+<div class="flex gap-4 ml-4">
+<button class="px-4 py-2 text-stone-600 dark:text-stone-400 font-medium">Login</button>
+<button class="px-6 py-2 bg-primary text-on-primary rounded-lg font-medium shadow-sm active:scale-95 transition-all">Register</button>
+</div>
+</div>
+<button class="md:hidden p-2 text-stone-600">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+<div class="bg-stone-200/50 dark:bg-stone-800/50 h-[1px]"></div>
+</nav>
+<main class="pt-24 pb-20 px-6 max-w-7xl mx-auto min-h-screen">
+<!-- Hero: Upcoming Ritual Banner -->
+<section class="relative mb-16 overflow-hidden rounded-3xl bg-surface-container-low min-h-[320px] flex items-center">
+<div class="absolute inset-0 z-0 opacity-10">
+<img alt="Atmospheric warm background" class="w-full h-full object-cover" data-alt="soft focus background of golden light filtering through warm fabric with subtle dust motes and organic textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhRbn4G6qXVLNLogP7y6a1KkEjB7FcnLMKpM6CXiXCIpq2LIYbRvqPD7q5R2WiNwpKUBBn4lE9p-tXxxuCBkFyB4gpTzsboBHJeEoXa8KeCSTiLmbFsopeZVSIBF3agpfHdmUDRSWtTq5z1qMs1wxf710cSOG9wXd2kLGHnZ0riHYxTyMN0jprzmB0uZpFfaZwvA7dsSD37YxH71KoGF2Qg2UfBcTkzLwNRuw8_kt4SrZjfp_3WEeJLmTR7DYGU474Usvd99BnH6I9"/>
+</div>
+<div class="relative z-10 w-full px-8 md:px-16 grid md:grid-cols-2 gap-12 items-center">
+<div>
+<span class="inline-block px-3 py-1 bg-primary-fixed text-on-primary-fixed-variant text-[11px] uppercase tracking-widest font-bold rounded-full mb-6">即将到来</span>
+<h1 class="text-4xl md:text-5xl font-bold text-on-background tracking-tight mb-4 font-headline">后天是爷爷的生日</h1>
+<p class="text-on-surface-variant body-lg mb-8 max-w-md">时间沉淀了思念，让我们用一个小小的仪式，在记忆的锚点重新相遇。</p>
+<div class="flex flex-wrap gap-4">
+<button class="flex items-center gap-2 px-8 py-3 bg-primary text-on-primary rounded-lg font-semibold hover:bg-primary-container transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="light_mode">light_mode</span>
+                            点亮蜡烛
+                        </button>
+<button class="flex items-center gap-2 px-8 py-3 bg-surface-container-high text-on-surface rounded-lg font-semibold hover:bg-surface-container transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+                            查看这天的记忆
+                        </button>
+</div>
+</div>
+<div class="flex justify-center md:justify-end">
+<div class="relative group">
+<!-- Ritualistic Interactive Candle -->
+<div class="w-48 h-48 rounded-full bg-surface-container-highest/30 backdrop-blur-xl flex items-center justify-center border border-outline-variant/20 shadow-2xl transition-all duration-700 hover:scale-105">
+<div class="text-7xl animate-candle transition-all duration-1000 relative">
+<span class="relative z-10">🕯️</span>
+<!-- Flame Glow when lit (simulated active state) -->
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-60"></div>
+</div>
+</div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-on-surface-variant font-label text-[11px] tracking-widest uppercase bg-surface px-4 py-1 rounded-full border border-outline-variant/30">
+                            仪式感 · 仪式准备中
+                        </div>
+</div>
+</div>
+</div>
+</section>
+<!-- Reminder Management Header -->
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div class="space-y-2">
+<h2 class="text-3xl font-bold text-on-background font-headline tracking-tight">记忆提醒</h2>
+<p class="text-on-surface-variant body-md">在喧嚣的日常中，为您守护那些不该被遗忘的时刻。</p>
+</div>
+<div class="flex gap-2 p-1 bg-surface-container-low rounded-xl">
+<button class="px-6 py-2 bg-surface text-primary font-semibold rounded-lg shadow-sm">即将到来</button>
+<button class="px-6 py-2 text-on-surface-variant font-medium rounded-lg hover:bg-surface-container transition-colors">所有周期</button>
+<button class="px-6 py-2 text-on-surface-variant font-medium rounded-lg hover:bg-surface-container transition-colors">归档</button>
+</div>
+</div>
+<!-- Reminder Grid (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Important Upcoming Card -->
+<div class="md:col-span-8 bg-surface-container-lowest p-8 rounded-3xl border border-outline-variant/10 shadow-[0_4px_20px_rgba(144,63,0,0.04)] group hover:shadow-lg transition-all duration-300">
+<div class="flex justify-between items-start mb-8">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-2xl bg-secondary-container flex flex-col items-center justify-center text-on-secondary-container">
+<span class="text-xs font-bold uppercase">DEC</span>
+<span class="text-2xl font-black">28</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-surface font-headline">爷爷的生日</h3>
+<p class="text-on-surface-variant body-md">年度纪念 · 剩余 2 天</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+<span class="ml-3 text-sm font-medium text-on-surface-variant font-label uppercase tracking-wider">提醒我</span>
+</label>
+</div>
+<div class="aspect-[21/9] w-full rounded-2xl overflow-hidden mb-6">
+<img alt="Memories related to grandpa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="vintage leather bound photo album and an old pocket watch on a rustic wooden table in soft warm sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASAO4inr6syrBRZu2mz66sN662p0a8zXExAZZrKAlKjT21B7RwmkGqS3mxW4mX1K8KzBuMxjBT2TfOI7C09kFJ_L7iPj9K3Vx9xtiT0ELbLMbZLCg0MHWcqO0mRWQbLN6BgOFN8mYHQ9jwDPUa0TYQBDQtBhMdpjZ7TWE8ojAeU30URQ67nYHqxGKRDJlT1s9dp2pJTh_XSeMBv7IwLhldorb6RlLdtDBYx5ox7dXYDZGrPps15edhv_ByKoyNjePqzSkl8eft-cET"/>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-3 overflow-hidden">
+<img alt="Family member" class="inline-block h-8 w-8 rounded-full ring-4 ring-surface" data-alt="portrait of a middle aged man with a kind smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe4s6CLWYwIp6BL_il5Ssnxpf0IySZ225fVDfrtiSdQfWykGNqxTrj9Sl2HsTP6zG7woLxEdGrZpBfFFz0r4BpmrvjwhQp2xZ_UIttLgLEcFhSj04VvvJjYbW8AuIc6IhQtJ8WaCdYhOxaf-uw-ZeiuMRjMhgCgSfV2G9xufBV9coM_MGRRfmUrgl6jbpMBR3D2Hc56yRfm9muZCkE-an-ti0yNB3TtM9UfhiawThWthVUhMplDxxqwoyW4NzQxW0Xs8s5wjNpJNMA"/>
+<img alt="Family member" class="inline-block h-8 w-8 rounded-full ring-4 ring-surface" data-alt="portrait of a smiling woman in warm light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjY0u3Z94lwnJjpn-th5isPaq3Su-Xm9D1mWbbuI76rKH9UbxJ523Z_HVN1L-lWieURC4tUZ6ovcS1B7dAfUf3DhB6db7jV-fHhinnD0V_g1ixhvRBpMrP4NH9Ogf0dlSMmjXnk_frMFskhQwYenm4EQizu80z3m62rmAKyGtXdorBycZKD-B69QT84cRFZtXFNsufmnjRzOgtrIEkORmChEbq2X5pc0qAMRXGGpSBIu35-QYllK6eZ1c_ULSnLS2oRexX23iWRzOx"/>
+<div class="flex items-center justify-center h-8 w-8 rounded-full bg-surface-container-high ring-4 ring-surface text-[10px] font-bold">+3</div>
+</div>
+<button class="text-primary font-semibold flex items-center gap-1 hover:gap-2 transition-all">
+                        编辑详情 <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Side Cards -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Reminder Item 2 -->
+<div class="bg-surface-container-low p-6 rounded-3xl border border-transparent hover:border-outline-variant/30 transition-all">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center">
+<span class="material-symbols-outlined text-xs" data-icon="more_horiz">more_horiz</span>
+</div>
+</div>
+<h4 class="font-bold text-lg mb-1">结婚纪念日</h4>
+<p class="text-on-surface-variant body-md mb-6">1月12日 · 15天后</p>
+<div class="flex justify-between items-center">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">通知已开启</span>
+<div class="w-8 h-4 bg-primary/20 rounded-full relative">
+<div class="absolute right-0 top-0 w-4 h-4 bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Add New Reminder (Dashed) -->
+<button class="flex-grow flex flex-col items-center justify-center p-8 border-2 border-dashed border-outline-variant/50 rounded-3xl bg-surface-bright hover:bg-surface-container-low hover:border-primary/30 transition-all group">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="add">add</span>
+</div>
+<span class="font-bold text-on-surface tracking-tight">添加新提醒</span>
+<span class="text-on-surface-variant body-md">创建一个新的记忆锚点</span>
+</button>
+</div>
+<!-- Additional Small Cards -->
+<div class="md:col-span-4 bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-xl bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="camera">camera</span>
+</div>
+<h4 class="font-bold">洗照片提醒</h4>
+</div>
+<p class="text-on-surface-variant body-md mb-6">定期将数字记忆转化为实物触感。</p>
+<div class="flex items-center justify-between text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+<span>每月 15 号</span>
+<span class="text-primary">开启</span>
+</div>
+</div>
+<div class="md:col-span-4 bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+</div>
+<h4 class="font-bold">年度回顾</h4>
+</div>
+<p class="text-on-surface-variant body-md mb-6">在冬至那天，写下一封给未来的信。</p>
+<div class="flex items-center justify-between text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+<span>12月 21 号</span>
+<span class="text-primary">开启</span>
+</div>
+</div>
+<div class="md:col-span-4 bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant/10 shadow-sm">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-xl bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant">
+<span class="material-symbols-outlined" data-icon="diversity_3">diversity_3</span>
+</div>
+<h4 class="font-bold">老友聚会</h4>
+</div>
+<p class="text-on-surface-variant body-md mb-6">不让忙碌冲淡曾经并肩的岁月。</p>
+<div class="flex items-center justify-between text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+<span>每半年</span>
+<span class="text-on-surface-variant/40">已关闭</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 bg-[#f9f9f8] dark:bg-stone-900 border-t border-stone-200/30 dark:border-stone-800/30">
+<div class="flex flex-col items-center justify-center gap-6 max-w-7xl mx-auto px-6">
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Privacy</a>
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Terms</a>
+<a class="font-inter text-[11px] uppercase tracking-widest text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-opacity duration-300" href="#">Contact</a>
+</div>
+<p class="font-inter text-[11px] uppercase tracking-widest text-stone-400">© 2024 Memory Anchor (忆锚)</p>
+</div>
+</footer>
+<!-- SideNavBar (Hidden on desktop for this view) -->
+<aside class="hidden h-screen w-64 fixed left-0 top-0 bg-[#f3f4f3] dark:bg-stone-950 lg:flex flex-col py-8 px-4 gap-4 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-200">
+<div class="mb-8 px-4">
+<h3 class="text-lg font-bold text-stone-900 dark:text-stone-50 font-headline">Memory Anchor</h3>
+<p class="text-xs text-stone-500 font-inter">忆锚 Archive</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-inter body-md">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-inter body-md">Profile Archive</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-amber-800 dark:text-amber-400 font-bold border-r-2 border-amber-700 bg-stone-200/50" href="#">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-inter body-md">Reminders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-inter body-md">Settings</span>
+</a>
+</nav>
+</aside>
+</body></html>

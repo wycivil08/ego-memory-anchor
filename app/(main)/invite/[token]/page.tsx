@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/server'
 import { getInviteByToken, acceptInvite } from '@/lib/actions/family'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { AcceptInviteState } from '@/lib/actions/family'
 
 interface InvitePageProps {
   params: Promise<{ token: string }>
@@ -75,12 +74,6 @@ export default async function InvitePage({ params }: InvitePageProps) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Handle form submission for accepting invite
-  async function handleAcceptInvite(): Promise<AcceptInviteState> {
-    'use server'
-    return acceptInvite(token)
-  }
-
   // Construct avatar URL if avatar_path exists
   const avatarUrl = invite.profile_avatar_path
     ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${invite.profile_avatar_path}`
@@ -102,6 +95,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
           <div className="rounded-lg bg-stone-100 p-4 text-center">
             <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-amber-100 flex items-center justify-center overflow-hidden">
               {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={avatarUrl}
                   alt={invite.profile_name}

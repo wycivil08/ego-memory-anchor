@@ -30,7 +30,7 @@ describe('UploadZone', () => {
     vi.restoreAllMocks()
   })
 
-  const createMockFile = (name: string, type: string, size: number = 1024): File => {
+  const createMockFile = (name: string, type: string): File => {
     return new File(['content'], name, { type })
   }
 
