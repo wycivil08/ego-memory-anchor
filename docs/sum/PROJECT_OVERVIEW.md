@@ -170,7 +170,7 @@ auth.users (Supabase Auth)
 ## 7. Quality Gates
 
 ```bash
-pnpm test --run          # 222 unit tests must pass
+pnpm test --run          # 221 unit tests must pass
 pnpm build               # Production build must succeed
 npx playwright test      # E2E tests (run with --workers=1)
 ```

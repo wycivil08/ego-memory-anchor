@@ -277,6 +277,8 @@ pnpm test --run && pnpm lint --max-warnings=0
 
 ## 6. Autonomous Workflow (Claude Code)
 
+> **Reference:** See `docs/v2/AGENT_AUTONOMY_PLAYBOOK.md` for the full fact-checked playbook.
+
 ### 6.1 Sprint Execution Flow
 
 ```
@@ -305,7 +307,8 @@ pnpm test --run && pnpm lint --max-warnings=0
 | Commit code | Must follow commit format |
 | Deploy to Vercel Preview | - |
 | UI validation with Playwright MCP | `puppeteer_navigate`, `puppeteer_screenshot`, `puppeteer_click` |
-| Backend verification | `node scripts/verify-all.mjs` (Service Role smoke tests) |
+| Backend verification | `node scripts/verify-all.mjs` (8 Service Role smoke tests) |
+| CI/CD | GitHub Actions runs on every push to master/PR |
 
 ### 6.3 Approval Required Actions
 

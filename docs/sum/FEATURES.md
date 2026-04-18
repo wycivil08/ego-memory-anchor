@@ -228,21 +228,21 @@ components/common/
 | S7.T4 | WeChat parser (TDD) |
 | S7.T5 | WeChatImporter wizard |
 
-### Sprint 8: Landing Page + Settings + Wrap-up
-| Task | Description |
-|------|-------------|
-| S8.T1 | Settings page |
-| S8.T2 | **V2** Data export (prominent in settings) |
-| S8.T3a | **V2** Hero + ValueProps |
-| S8.T3b | **V2** FounderStory |
-| S8.T3c | **V2** PrivacyPledge |
-| S8.T3d | **V2** Footer + SEO |
-| S8.T4 | Global loading/error states |
-| S8.T5 | Responsive + accessibility polish |
-| S8.T6 | Deploy to Vercel |
-| S8.T7 | **V2** Privacy policy + Terms pages |
-| S8.T8 | **V2** Privacy consent dialog |
-| S8.T9 | E2E tests (with seed fixtures for real profile/memory data) |
+### Sprint 8: Landing Page + Settings + Wrap-up (All Complete)
+| Task | Description | Status |
+|------|-------------|--------|
+| S8.T1 | Settings page | ✅ Complete |
+| S8.T2 | **V2** Data export (prominent in settings) | ✅ Complete |
+| S8.T3a | **V2** Hero + ValueProps | ✅ Complete |
+| S8.T3b | **V2** FounderStory | ✅ Complete |
+| S8.T3c | **V2** PrivacyPledge | ✅ Complete |
+| S8.T3d | **V2** Footer + SEO | ✅ Complete |
+| S8.T4 | Global loading/error states | ✅ Complete |
+| S8.T5 | Responsive + accessibility polish | ✅ Complete |
+| S8.T6 | Deploy to Vercel | ✅ Complete |
+| S8.T7 | **V2** Privacy policy + Terms pages | ✅ Complete |
+| S8.T8 | **V2** Privacy consent dialog | ✅ Complete |
+| S8.T9 | E2E tests (22 passed, 0 skipped) | ✅ Complete |
 
 ---
 
