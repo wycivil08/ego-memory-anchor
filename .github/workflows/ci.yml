@@ -31,8 +31,8 @@ jobs:
         run: pnpm lint
 
       - name: Run E2E tests
-        if: env.NEXT_PUBLIC_SUPABASE_URL != ''
         run: pnpm playwright test --workers=1
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.APP_URL }}
